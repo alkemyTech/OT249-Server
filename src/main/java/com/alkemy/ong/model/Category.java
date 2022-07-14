@@ -3,6 +3,7 @@ package com.alkemy.ong.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Table(name = "categories")
 @Entity
@@ -15,4 +16,6 @@ public class Category {
     private String name;
     private String description;
     private String image;
+    private Timestamp timestamp;
+    private Boolean softDelete;
 }
