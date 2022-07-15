@@ -3,6 +3,7 @@ package com.alkemy.ong.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,8 +13,9 @@ import java.time.LocalDateTime;
 @Entity
 public class News {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -21,7 +23,7 @@ public class News {
     @Column(nullable = false)
     private String image;
     private LocalDateTime timestamp;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Category category;
     private boolean softDelete;
 
