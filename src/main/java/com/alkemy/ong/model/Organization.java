@@ -17,8 +17,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "organizations")
-@SQLDelete(sql = "UPDATE organizations SET soft_delete = true WHERE id=?")
-@Where(clause = "softDelete = false")
+@SQLDelete(sql = "UPDATE organizations SET deleted = true WHERE id=?")
+@Where(clause = "deleted = false")
 public class Organization {
 
     @Id
@@ -46,6 +46,6 @@ public class Organization {
 
     private Timestamp timestamp = Timestamp.from(Instant.now());
 
-    private Boolean softDelete = Boolean.FALSE;
+    private Boolean deleted = Boolean.FALSE;
 
 }
