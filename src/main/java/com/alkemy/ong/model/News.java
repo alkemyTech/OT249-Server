@@ -23,7 +23,7 @@ public class News {
     @Column(nullable = false)
     private String image;
     private LocalDateTime timestamp;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     private Category category;
     private boolean softDelete;
 
