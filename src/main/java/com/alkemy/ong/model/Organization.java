@@ -10,6 +10,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
 
 
 @Entity
@@ -23,7 +24,7 @@ public class Organization {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
