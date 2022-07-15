@@ -21,8 +21,9 @@ import java.time.Instant;
 public class Organization {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
 
     @Column(nullable = false)
     private String name;
