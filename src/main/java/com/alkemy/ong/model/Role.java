@@ -11,7 +11,6 @@ import javax.persistence.Table;
 
 import lombok.Data;
 
-
 @Table(name = "roles")
 @Entity
 @Data
@@ -20,11 +19,11 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(nullable = false)
 	private String name;
-	
+
 	private String description;
-	
+
 	private Timestamp timestamp;
 }
