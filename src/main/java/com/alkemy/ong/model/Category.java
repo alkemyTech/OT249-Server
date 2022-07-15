@@ -1,6 +1,8 @@
 package com.alkemy.ong.model;
 
 import lombok.Data;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -8,6 +10,8 @@ import java.sql.Timestamp;
 @Table(name = "categories")
 @Entity
 @Data
+@SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Category {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,5 +21,5 @@ public class Category {
     private String description;
     private String image;
     private Timestamp timestamp;
-    private Boolean softDelete;
+    private Boolean deleted = false;
 }
