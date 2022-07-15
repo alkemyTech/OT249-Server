@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @Where(clause = "deleted=false")
 public class Category {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(nullable = false)
