@@ -15,7 +15,7 @@ import lombok.Data;
 @Table(name = "roles")
 @Entity
 @Data
-public class Rol {
+public class Role {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
