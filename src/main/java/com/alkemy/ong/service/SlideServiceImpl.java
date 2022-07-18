@@ -2,8 +2,11 @@ package com.alkemy.ong.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.alkemy.ong.model.Slide;
 
+@Service
 public class SlideServiceImpl implements SlideService {
 
     @Override
