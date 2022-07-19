@@ -5,8 +5,8 @@ import com.alkemy.ong.model.News;
 import java.util.List;
 
 public interface NewsService {
-    News getNews(Long id);
+    News getNews(String id);
     List<News> getAllNews();
-    void deleteNews(Long id);
-    News updateNews(News news, Long id);
+    void deleteNews(String id);
+    News updateNews(News news, String id);
 }

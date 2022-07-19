@@ -3,19 +3,17 @@ package com.alkemy.ong.service;
 import com.alkemy.ong.model.News;
 import com.alkemy.ong.repository.NewsRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @AllArgsConstructor
-@NoArgsConstructor
 public class NewsServiceImpl implements NewsService {
 
-    private NewsRepository newsRepository;
+    private final NewsRepository newsRepository;
     @Override
-    public News getNews(Long id) {
+    public News getNews(String id) {
 
         return null;
     }
@@ -27,12 +25,12 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void deleteNews(Long id) {
+    public void deleteNews(String id) {
 
     }
 
     @Override
-    public News updateNews(News news, Long id) {
+    public News updateNews(News news, String id) {
 
         return null;
     }
