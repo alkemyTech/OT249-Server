@@ -1,6 +1,6 @@
 package com.alkemy.ong.controller;
 
-import com.alkemy.ong.dtos.LoginDTO;
+import com.alkemy.ong.dtos.LoginRequestDTO;
 import com.alkemy.ong.service.LoginService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import javax.validation.Valid;
 public class LoginController {
     private final LoginService loginService;
     @PostMapping(value = "login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginDTO.LoginRequestDTO loginRequestDTO, BindingResult bindingResult){
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, BindingResult bindingResult){
         return ResponseEntity.ok(loginService.login(loginRequestDTO, bindingResult));
     }
 }
