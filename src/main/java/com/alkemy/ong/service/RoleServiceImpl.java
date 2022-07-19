@@ -10,7 +10,7 @@ import com.alkemy.ong.model.Role;
 public class RoleServiceImpl implements IRoleService{
 
 	@Override
-	public Role getRoleById(Long id) {
+	public Role getRoleById(String id) {
 		
 		return null;
 	}
