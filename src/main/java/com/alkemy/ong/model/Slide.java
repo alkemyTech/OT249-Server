@@ -1,22 +1,13 @@
 package com.alkemy.ong.model;
 
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.alkemy.ong.model.Organization;
 
-import lombok.Getter;
-import lombok.Setter;
+import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "slides")
@@ -31,10 +22,9 @@ public class Slide {
 
     private String imageUrl;
     private String text;
-    private Integer order;
+    private Integer position;
 
     @ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "organization_id")
+    @JoinColumn(name = "organization_id", referencedColumnName = "id" )
     private Organization organization;
-
 }
