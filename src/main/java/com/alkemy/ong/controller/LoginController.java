@@ -16,9 +16,12 @@ import javax.validation.Valid;
 @RequestMapping(value = "/auth/")
 @AllArgsConstructor
 public class LoginController {
+
     private final LoginService loginService;
+
     @PostMapping(value = "login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, BindingResult bindingResult){
-        return ResponseEntity.ok(loginService.login(loginRequestDTO, bindingResult));
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO, BindingResult bindingResult) {
+
+        return ResponseEntity.ok( loginService.login( loginRequestDTO, bindingResult ) );
     }
 }

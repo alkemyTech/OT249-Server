@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface LoginService {
 
-    Map<String,Object> login(LoginRequestDTO loginRequestDTO, BindingResult bindingResult);
+    Map<String, Object> login(LoginRequestDTO loginRequestDTO, BindingResult bindingResult);
 }

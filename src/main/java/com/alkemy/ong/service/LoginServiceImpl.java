@@ -16,15 +16,18 @@ import java.util.Optional;
 public class LoginServiceImpl implements LoginService {
 
     private final BCryptPasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
+
     @Override
-    public Map<String,Object> login(LoginRequestDTO loginRequestDTO, BindingResult bindingResult) {
-        if(bindingResult.hasFieldErrors())
-            return Map.of("ok", false);
+    public Map<String, Object> login(LoginRequestDTO loginRequestDTO, BindingResult bindingResult) {
+
+        if (bindingResult.hasFieldErrors())
+            return Map.of( "ok", false );
 
         Optional<User> byEmail = userRepository.findByEmail( loginRequestDTO.getEmail() );
-        if(byEmail.isPresent() && passwordEncoder.matches( loginRequestDTO.getPassword(), byEmail.get().getPassword() ))
-                return Map.of( "ok", byEmail.get() );
-         return Map.of( "ok", Boolean.FALSE );
+        if (byEmail.isPresent() && passwordEncoder.matches( loginRequestDTO.getPassword(), byEmail.get().getPassword() ))
+            return Map.of( "ok", byEmail.get() );
+        return Map.of( "ok", Boolean.FALSE );
     }
 }
