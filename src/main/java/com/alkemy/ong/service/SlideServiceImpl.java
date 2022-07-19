@@ -1,6 +1,7 @@
 package com.alkemy.ong.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -15,16 +16,16 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public Slide get(Long id) {
+    public Slide get(UUID id) {
         return null;
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(UUID id) {
     }
 
     @Override
-    public Slide update(Long id, Slide slide) {
+    public Slide update(UUID id, Slide slide) {
         return null;
     }
     
