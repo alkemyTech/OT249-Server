@@ -1,6 +1,7 @@
 package com.alkemy.ong.model;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,8 +21,10 @@ public class Member {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	private String id;
+	@Column(nullable = false)
+	private UUID id;
 	
+	@Column(nullable = false)
 	private String name;
 	
 	@Column(name = "facebook_url")
@@ -33,6 +36,7 @@ public class Member {
 	@Column(name = "linkedin_url")
 	private String linkedinUrl;
 	
+	@Column(nullable = false)
 	private String image;
 	
 	private String description;
