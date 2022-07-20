@@ -1,10 +1,11 @@
 package com.alkemy.ong.repository;
 
-import com.alkemy.ong.model.News;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.alkemy.ong.model.Member;
+
 @Repository
-public interface NewsRepository extends JpaRepository<News,String> {
+public interface MemberRepository extends JpaRepository<Member, String>{
 
 }

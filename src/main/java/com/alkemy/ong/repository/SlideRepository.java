@@ -1,10 +1,12 @@
 package com.alkemy.ong.repository;
 
-import com.alkemy.ong.model.News;
+import com.alkemy.ong.model.Slide;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface NewsRepository extends JpaRepository<News,String> {
+import java.util.UUID;
 
+@Repository
+public interface SlideRepository extends JpaRepository<Slide, UUID> {
 }

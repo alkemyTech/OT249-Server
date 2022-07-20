@@ -7,8 +7,7 @@ Como parte de un equipo de desarrolladores, deberas desarrollar un sitio web que
 Las siguientes variables de entorno son necesarias para la correcta ejecución:
 
 - DB_URL
-
 - DB_USER
-
 - DB_PASSWORD
+- SENDGRID.KEY
 
