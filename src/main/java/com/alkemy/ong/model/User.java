@@ -46,10 +46,9 @@ public class User implements Serializable {
 	private String photo;
 	
 	@ManyToOne
-	@JoinColumn(name = "rol_id", referencedColumnName = "id_rol" )
+	@JoinColumn(name = "rol_id", referencedColumnName = "id" )
 	private Role rol;
 	
-	@NotBlank
 	private Timestamp timestamp; 
 	
 	private boolean deleted = Boolean.FALSE;
