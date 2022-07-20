@@ -9,7 +9,7 @@ public interface IRoleService {
 
 	public Role getRoleById(UUID id);
 	public List<Role> getAllRoles();
-	public void deleteRoleById(Long id);
-	public void updateRole(Role role,Long id);
+	public void deleteRoleById(UUID id);
+	public void updateRole(Role role,UUID id);
 	
 }

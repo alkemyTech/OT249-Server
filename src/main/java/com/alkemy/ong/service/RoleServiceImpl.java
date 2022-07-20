@@ -23,12 +23,12 @@ public class RoleServiceImpl implements IRoleService{
 	}
 
 	@Override
-	public void deleteRoleById(Long id) {
+	public void deleteRoleById(UUID id) {
 		
 	}
 
 	@Override
-	public void updateRole(Role role, Long id) {
+	public void updateRole(Role role, UUID id) {
 		
 	}
 
