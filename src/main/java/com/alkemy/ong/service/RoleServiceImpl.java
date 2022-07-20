@@ -1,6 +1,7 @@
 package com.alkemy.ong.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import com.alkemy.ong.model.Role;
 public class RoleServiceImpl implements IRoleService{
 
 	@Override
-	public Role getRoleById(String id) {
+	public Role getRoleById(UUID id) {
 		
 		return null;
 	}
