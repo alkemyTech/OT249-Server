@@ -23,12 +23,12 @@ public class MemberServiceImpl implements IMemberService {
 	}
 
 	@Override
-	public void deleteMemberById(Long id) {
+	public void deleteMemberById(UUID id) {
 
 	}
 
 	@Override
-	public void updateMember(Member member, Long id) {
+	public void updateMember(Member member, UUID id) {
 
 	}
 

@@ -9,7 +9,7 @@ public interface IMemberService {
 
 	public Member getMemberById(UUID id);
 	public List<Member> getAllMembers();
-	public void deleteMemberById(Long id);
-	public void updateMember(Member member,Long id);
+	public void deleteMemberById(UUID id);
+	public void updateMember(Member member,UUID id);
 	
 }
