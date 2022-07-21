@@ -15,9 +15,12 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import lombok.Data;
+
 @Entity
 @SQLDelete(sql = "UPDATE user SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
+@Data
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;	
@@ -47,7 +50,7 @@ public class User implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "rol_id", referencedColumnName = "id" )
-	private Role rol;
+	private Role role;
 	
 	private Timestamp timestamp; 
 	
@@ -63,76 +66,8 @@ public class User implements Serializable {
 		this.email = email;
 		this.password = password;
 		this.photo = photo;
-		this.rol = rol;
+		this.role = rol;
 		this.timestamp = timestamp;
-		this.deleted = deleted;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
-	public Role getRol() {
-		return rol;
-	}
-
-	public void setRol(Role rol) {
-		this.rol = rol;
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public Timestamp getTimestamp() {
-		return timestamp;
-	}
-
-	public void setHoraRegistro(Timestamp timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
 }
