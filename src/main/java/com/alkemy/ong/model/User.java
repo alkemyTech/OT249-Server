@@ -14,14 +14,20 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Data;
+
 @Entity
 @SQLDelete(sql = "UPDATE user SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
+@Getter
+@Setter
 public class User implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;	
@@ -51,7 +57,7 @@ public class User implements Serializable, UserDetails {
 	
 	@ManyToOne
 	@JoinColumn(name = "rol_id", referencedColumnName = "id" )
-	private Role rol;
+	private Role role;
 	
 	private Timestamp timestamp; 
 	
@@ -67,34 +73,11 @@ public class User implements Serializable, UserDetails {
 		this.email = email;
 		this.password = password;
 		this.photo = photo;
-		this.rol = rol;
+		this.role = rol;
 		this.timestamp = timestamp;
 		this.deleted = deleted;
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -102,9 +85,7 @@ public class User implements Serializable, UserDetails {
 		return List.of(this.getRol());
 	}
 
-	public String getPassword() {
-		return password;
-	}
+
 
 	@Override
 	public String getUsername() {
@@ -136,43 +117,5 @@ public class User implements Serializable, UserDetails {
 		return !this.deleted;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
 
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
-	public Role getRol() {
-		return rol;
-	}
-
-	public void setRol(Role rol) {
-		this.rol = rol;
-	}
-
-	public UUID getId() {
-		return id;
-	}
-
-	public Timestamp getTimestamp() {
-		return timestamp;
-	}
-
-	public void setHoraRegistro(Timestamp timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
 }
