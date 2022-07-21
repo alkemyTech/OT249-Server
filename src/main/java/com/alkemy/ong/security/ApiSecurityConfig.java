@@ -37,7 +37,6 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(customExceptionHandler, LogoutFilter.class);
         http.addFilter(customAuthenticationFilter);
         http.authorizeRequests().antMatchers(LOGIN_URL).permitAll();
-        http.authorizeRequests().anyRequest().authenticated();
         http.authorizeRequests().anyRequest().hasRole("USER");
     }
     @Bean
