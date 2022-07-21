@@ -1,19 +1,5 @@
 package com.alkemy.ong.model;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -21,7 +7,14 @@ import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.Data;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
 @SQLDelete(sql = "UPDATE user SET deleted=true WHERE id=?")
@@ -82,7 +75,7 @@ public class User implements Serializable, UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-		return List.of(this.getRol());
+		return List.of(this.getRole());
 	}
 
 
