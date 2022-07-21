@@ -36,7 +36,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException  {
         try {
             byte[] inputStreamBytes = StreamUtils.copyToByteArray(request.getInputStream());
             ObjectMapper objectMapper = new ObjectMapper();
