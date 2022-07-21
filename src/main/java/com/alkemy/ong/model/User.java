@@ -2,6 +2,8 @@ package com.alkemy.ong.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -14,11 +16,13 @@ import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @SQLDelete(sql = "UPDATE user SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;	
 	
@@ -92,8 +96,44 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+
+		return List.of(this.getRol());
+	}
+
 	public String getPassword() {
 		return password;
+	}
+
+	@Override
+	public String getUsername() {
+
+		return this.getEmail();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+
+		return !this.deleted;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+
+		return !this.deleted;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+
+		return !this.deleted;
+	}
+
+	@Override
+	public boolean isEnabled() {
+
+		return !this.deleted;
 	}
 
 	public void setPassword(String password) {
