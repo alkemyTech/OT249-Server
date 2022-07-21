@@ -34,7 +34,7 @@ public class UserController {
 	@PostMapping("/auth/register")
 	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) {
 		UUID uuid = UUID.randomUUID();
-		Role rol = roleService.getRoleById(userDto.getRol());
+		Role rol = roleService.getRoleById(userDto.getRole().getId());
 		boolean deleted = false;
 		User user =  new User(uuid, userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), passwordEncode.encode(userDto.getPassword()), userDto.getPhoto(), rol, new Timestamp(System.currentTimeMillis()), deleted);
 		return new ResponseEntity<>(userService.guardarUsuario(user), HttpStatus.OK);
