@@ -19,7 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 @Table(name = "roles")
 @Entity
 @Data
-public class Role implements GrantedAuthority {
+public class Role {
 
 	@Id
 	@GeneratedValue(generator = "uuid")
@@ -29,13 +29,10 @@ public class Role implements GrantedAuthority {
 	@Column(nullable = false)
 	private String name;
 
+	@OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+	private Set<User> users;
+
 	private String description;
 
 	private Timestamp timestamp;
-
-	@Override
-	public String getAuthority() {
-
-		return this.getName();
-	}
 }
