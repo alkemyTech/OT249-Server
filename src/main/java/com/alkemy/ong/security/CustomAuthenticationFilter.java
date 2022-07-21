@@ -1,9 +1,10 @@
 package com.alkemy.ong.security;
 
-import com.alkemy.ong.dtos.LoginRequestDTO;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.alkemy.ong.dto.LoginRequestDTO;
+import com.alkemy.ong.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RequiredArgsConstructor
+@Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public AuthenticationManager authenticationManager;
@@ -34,7 +36,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
         try {
             byte[] inputStreamBytes = StreamUtils.copyToByteArray(request.getInputStream());
             ObjectMapper objectMapper = new ObjectMapper();
@@ -44,7 +46,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             response.setContentType(APPLICATION_JSON_VALUE);
             return authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         } catch (IOException e) {
-            System.out.println( "e.getMessage() = " + e.getMessage() );
+            log.error( "e.getMessage() = " + e.getMessage() );
         }
         return null;
     }
@@ -60,8 +62,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 
-        User user = (User) authResult.getPrincipal();
-        new ObjectMapper().writeValue(response.getOutputStream(), Map.of("user", user));
+        com.alkemy.ong.model.User user = (com.alkemy.ong.model.User) authResult.getPrincipal();
+        UserDto userDto = new UserDto(user.getFirstName(), user.getLastName(), user.getEmail(), null, user.getPhoto(), user.getRol().getName());
+        new ObjectMapper().writeValue(response.getOutputStream(), Map.of("user", userDto));
     }
 
 }
