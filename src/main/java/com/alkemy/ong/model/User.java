@@ -18,14 +18,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@SQLDelete(sql = "UPDATE user SET deleted=true WHERE id=?")
+@Entity(name = "users")
+@SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable, UserDetails {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,43 +59,6 @@ public class User implements Serializable, UserDetails {
     private Timestamp timestamp;
 
     private boolean deleted = Boolean.FALSE;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return List.of( this.getRole() );
-    }
-
-
-    @Override
-    public String getUsername() {
-
-        return this.getEmail();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-
-        return !this.deleted;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-
-        return !this.deleted;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-
-        return !this.deleted;
-    }
-
-    @Override
-    public boolean isEnabled() {
-
-        return !this.deleted;
-    }
 
 
 }

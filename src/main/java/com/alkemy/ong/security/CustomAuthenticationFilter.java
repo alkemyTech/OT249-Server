@@ -62,9 +62,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 
-        com.alkemy.ong.model.User user = (com.alkemy.ong.model.User) authResult.getPrincipal();
-        UserDto userDto = new UserDto(user.getFirstName(), user.getLastName(), user.getEmail(), null, user.getPhoto(), user.getRol().getName());
-        new ObjectMapper().writeValue(response.getOutputStream(), Map.of("user", userDto));
+        UserDto userDto = (UserDto) authResult.getPrincipal();
+        new ObjectMapper().writeValue(response.getOutputStream(), Map.of("ok", userDto));
     }
 
 }
