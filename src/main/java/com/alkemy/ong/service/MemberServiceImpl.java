@@ -1,6 +1,7 @@
 package com.alkemy.ong.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import com.alkemy.ong.model.Member;
 public class MemberServiceImpl implements IMemberService {
 
 	@Override
-	public Member getMemberById(Long id) {
+	public Member getMemberById(UUID id) {
 
 		return null;
 	}
@@ -22,12 +23,12 @@ public class MemberServiceImpl implements IMemberService {
 	}
 
 	@Override
-	public void deleteMemberById(Long id) {
+	public void deleteMemberById(UUID id) {
 
 	}
 
 	@Override
-	public void updateMember(Member member, Long id) {
+	public void updateMember(Member member, UUID id) {
 
 	}
 
