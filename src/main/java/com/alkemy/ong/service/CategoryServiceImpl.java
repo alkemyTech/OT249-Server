@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -37,9 +38,9 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Page<CategoryDto> getAllCategories(int page, String order) {
+    public Page<Map<String, String>> getAllCategories(int page, String order) {
         Page<Category> category = categoryRepository.findAll( PageUtils.getPageable( page, order ) );
-        Page<CategoryDto> categorDtoPage = category.map( cat -> modelMapper.map( cat, CategoryDto.class));
+        Page<Map<String, String>> categorDtoPage = category.map( cat -> Map.of("name", modelMapper.map( cat, CategoryDto.class).getName()));
         return categorDtoPage;
     }
 }
