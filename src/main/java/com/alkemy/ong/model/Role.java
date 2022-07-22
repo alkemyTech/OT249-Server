@@ -2,6 +2,7 @@ package com.alkemy.ong.model;
 
 import java.sql.Timestamp;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 
 @Table(name = "roles")
 @Entity
@@ -23,7 +25,8 @@ public class Role {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	private String id;
+	@Column(nullable = false)
+	private UUID id;
 
 	@Column(nullable = false)
 	private String name;

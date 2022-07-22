@@ -1,73 +1,64 @@
 package com.alkemy.ong.model;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.Data;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
-@Entity
-@SQLDelete(sql = "UPDATE user SET deleted=true WHERE id=?")
+@Entity(name = "users")
+@SQLDelete(sql = "UPDATE users SET deleted=true WHERE id=?")
 @Where(clause = "deleted=false")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User implements Serializable {
 
-	private static final long serialVersionUID = 1L;	
-	
-	@Id
-	private UUID id;
-	
-	@Column(name = "first_name", nullable = false)
-	@NotBlank(message = "Este campo no puede estar vacio")
-	private String firstName;
-	
-	@Column(name = "last_name", nullable = false)
-	@NotBlank(message = "Este campo no puede estar vacio")
-	private String lastName;
-	
-	@Column(unique = true, nullable = false)
-	@Email(message = "Email no valido")
-	private String email;
-	
-	@Column(nullable = false)
-	@NotBlank(message = "Este campo no puede estar vacio")
-	private String password;
-	
-	@NotBlank(message = "Este campo no puede estar vacio")
-	@Column(nullable = false)
-	private String photo;
-	
-	@ManyToOne
-	@JoinColumn(name = "rol_id", referencedColumnName = "id" )
-	private Role role;
-	
-	private Timestamp timestamp; 
-	
-	private boolean deleted = Boolean.FALSE;
-	
-	public User() {
-	}
+    private static final long serialVersionUID = 1L;
 
-	public User(UUID id ,String firstName, String lastName, String email, String password, String photo, Role rol, Timestamp timestamp, boolean deleted) {
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.photo = photo;
-		this.role = rol;
-		this.timestamp = timestamp;
-		this.deleted = deleted;
-	}
+    @Id
+    private UUID id;
+
+    @Column(name = "first_name", nullable = false)
+    @NotBlank(message = "Este campo no puede estar vacio")
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    @NotBlank(message = "Este campo no puede estar vacio")
+    private String lastName;
+
+    @Column(unique = true, nullable = false)
+    @Email(message = "Email no valido")
+    private String email;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Este campo no puede estar vacio")
+    private String password;
+
+    @NotBlank(message = "Este campo no puede estar vacio")
+    @Column(nullable = false)
+    private String photo;
+
+    @ManyToOne
+    @JoinColumn(name = "rol_id", referencedColumnName = "id")
+    private Role role;
+
+    private Timestamp timestamp;
+
+    private boolean deleted = Boolean.FALSE;
+
+
 }

@@ -1,11 +1,24 @@
 package com.alkemy.ong.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-public class UserDto implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+public class UserDto implements Serializable, UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,56 +39,44 @@ public class UserDto implements Serializable {
 	private String photo;
 	
 	@NotBlank
-	private String rol;
+	private RoleDto role;
 
-	public String getFirstName() {
-		return firstName;
+	private boolean deleted;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+
+		return List.of( this.getRole() );
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+
+	@Override
+	public String getUsername() {
+
+		return this.getEmail();
 	}
 
-	public String getLastName() {
-		return lastName;
+	@Override
+	public boolean isAccountNonExpired() {
+
+		return !this.deleted;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	@Override
+	public boolean isAccountNonLocked() {
+
+		return !this.deleted;
 	}
 
-	public String getEmail() {
-		return email;
+	@Override
+	public boolean isCredentialsNonExpired() {
+
+		return !this.deleted;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	@Override
+	public boolean isEnabled() {
 
-	public String getPassword() {
-		return password;
+		return !this.deleted;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRol() {
-		return rol;
-	}
-
-	public void setRol(String rol) {
-		this.rol = rol;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-	
-	
-	
 }
