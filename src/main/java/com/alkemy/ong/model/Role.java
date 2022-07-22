@@ -2,6 +2,7 @@ package com.alkemy.ong.model;
 
 import java.sql.Timestamp;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +24,8 @@ public class Role {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	private String id;
+	@Column(nullable = false)
+	private UUID id;
 
 	@Column(nullable = false)
 	private String name;
