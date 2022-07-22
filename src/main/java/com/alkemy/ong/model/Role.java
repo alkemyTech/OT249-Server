@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 
 @Table(name = "roles")
 @Entity
