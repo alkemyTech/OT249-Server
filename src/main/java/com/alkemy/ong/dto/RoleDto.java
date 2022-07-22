@@ -8,13 +8,14 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoleDto implements GrantedAuthority {
-    private String id;
+    private UUID id;
 
     private String name;
 
