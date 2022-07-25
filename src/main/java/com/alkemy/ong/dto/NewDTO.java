@@ -6,13 +6,14 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class NewDTO {
 
-    private String id;
+    private UUID id;
     @NotBlank
     private String name;
     @NotBlank
