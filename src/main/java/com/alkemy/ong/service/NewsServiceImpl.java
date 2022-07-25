@@ -18,6 +18,7 @@ public class NewsServiceImpl implements NewsService {
     private final NewsRepository newsRepository;
 
     private final ModelMapper modelMapper;
+
     @Override
     public NewDTO getNews(UUID id) {
 
@@ -33,7 +34,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> getAllNews() {
+    public List<NewDTO> getAllNews() {
 
         return null;
     }
@@ -44,7 +45,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public News updateNews(News news, UUID id) {
+    public NewDTO updateNews(NewDTO news, UUID id) {
 
         return null;
     }
