@@ -1,11 +1,13 @@
 package com.alkemy.ong.service;
 
-import java.util.UUID;
-
+import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.model.User;
+import org.springframework.data.domain.Page;
+import java.util.UUID;
 
 public interface UserService {
 
-	public User guardarUsuario(User user);
+	User guardarUsuario(User user);
+	Page<UserDto> getAllUsers(int page, String order);
 	public User findById(UUID id);
 }
