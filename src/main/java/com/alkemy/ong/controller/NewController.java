@@ -4,6 +4,7 @@ import com.alkemy.ong.dto.NewDTO;
 import com.alkemy.ong.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,7 @@ public class NewController {
 
     }
     @PutMapping("/news/{id}")
+    @PreAuthorize( "hasAuthority('ADMIN')" )
     public ResponseEntity<NewDTO> updateNews(@PathVariable String id, @Valid @RequestBody NewDTO newsDTO, BindingResult bindingResult){
 
         NewDTO newsDTOresponse = newsService.updateNews(id, newsDTO, bindingResult );
