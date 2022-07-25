@@ -42,7 +42,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> getAllNews() {
+    public List<NewDTO> getAllNews() {
 
         return null;
     }
