@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,8 +16,11 @@ import java.time.LocalDateTime;
 public class NewDTO {
 
     private String id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String content;
+    @NotBlank
     private String image;
     private LocalDateTime timestamp;
     private Category category;
