@@ -12,5 +12,5 @@ public interface NewsService {
     List<News> getAllNews();
     void deleteNews(UUID id);
 
-    NewDTO updateNews(String id, NewDTO newsDTO, BindingResult bindingResult);
+    NewDTO updateNews(UUID id, NewDTO newsDTO, BindingResult bindingResult);
 }
