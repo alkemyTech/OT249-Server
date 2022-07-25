@@ -1,13 +1,13 @@
 package com.alkemy.ong.service;
 
 import com.alkemy.ong.model.Organization;
-import com.alkemy.ong.model.PublicOrganization;
+import com.alkemy.ong.dto.PublicOrganizationDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface OrganizationService{
-    PublicOrganization getPublicData();
+    PublicOrganizationDto getPublicData();
     List<Organization> getAll();
     Organization get(UUID id);
     void delete(UUID id);

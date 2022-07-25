@@ -1,28 +1,31 @@
 package com.alkemy.ong.service;
 
 import com.alkemy.ong.model.Organization;
-import com.alkemy.ong.model.PublicOrganization;
+import com.alkemy.ong.dto.PublicOrganizationDto;
 import com.alkemy.ong.repository.OrganizationRepository;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+@Service
+@AllArgsConstructor
 public class OrganizationServiceImpl implements OrganizationService{
 
-    @Autowired
+
     private OrganizationRepository organizationRepository;
+    private ModelMapper modelMapper;
+
 
 
     @Override
-    public PublicOrganization getPublicData() {
+    public PublicOrganizationDto getPublicData() {
         Organization organization = organizationRepository.findAll().get(0);
-        PublicOrganization publicOrganization = new PublicOrganization();
-        publicOrganization.setName(organization.getName());
-        publicOrganization.setAddress(organization.getAddress());
-        publicOrganization.setPhone(organization.getPhone());
-        publicOrganization.setImage(organization.getImage());
-        return publicOrganization;
+        return modelMapper.map(organization,PublicOrganizationDto.class);
     }
 
     @Override
@@ -43,5 +46,12 @@ public class OrganizationServiceImpl implements OrganizationService{
     @Override
     public Organization update(UUID id, Organization organization) {
         return null;
+    }
+
+    public PublicOrganizationDto updatePublicOrg(PublicOrganizationDto publicOrganizationDto){
+        Organization organization = organizationRepository.findAll().get(0);
+        modelMapper.map(publicOrganizationDto, organization);
+        organizationRepository.save(organization);
+        return publicOrganizationDto;
     }
 }
