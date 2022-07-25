@@ -1,9 +1,12 @@
 package com.alkemy.ong.service;
 
+import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.dto.NewDTO;
 import com.alkemy.ong.exceptions.BindingResultException;
 import com.alkemy.ong.exceptions.RecordException;
+import com.alkemy.ong.model.Category;
 import com.alkemy.ong.model.News;
+import com.alkemy.ong.repository.CategoryRepository;
 import com.alkemy.ong.repository.NewsRepository;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,16 +22,19 @@ import java.util.UUID;
 public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
+
+    private final CategoryRepository categoryRepository;
+
     private final ModelMapper modelMapper;
 
     @Override
     public NewDTO getNews(UUID id) {
 
-        Optional<News> answer = newsRepository.findById(id);
+        Optional<News> answer = newsRepository.findById( id );
 
-        if (answer.isPresent()){
+        if (answer.isPresent()) {
             News news = answer.get();
-            NewDTO newDTO = modelMapper.map(news,NewDTO.class);
+            NewDTO newDTO = modelMapper.map( news, NewDTO.class );
 
             return newDTO;
         }
@@ -47,17 +53,28 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewDTO updateNews(String id, NewDTO newsDTO, BindingResult bindingResult) {
-        if(bindingResult.hasFieldErrors())
+    public NewDTO updateNews(UUID id, NewDTO newsDTO, BindingResult bindingResult) {
+
+        if (bindingResult.hasFieldErrors())
             throw new BindingResultException( bindingResult );
         News found = newsRepository.findById( id ).orElseThrow( () -> new RecordException.RecordNotFoundException( "News not found" ) );
-        NewDTO newDTO = this.modelMapper.map(found, NewDTO.class);
+
+        NewDTO newDTO = this.modelMapper.map( found, NewDTO.class );
+        CategoryDto categoryDto = this.modelMapper.map( newsDTO.getCategory(), CategoryDto.class );
+        if (categoryDto.getName() != null) {
+            Category category = categoryRepository.findByName( categoryDto.getName() ).orElseThrow( () -> new RecordException.RecordNotFoundException( "Category not found" ) );
+            categoryDto = this.modelMapper.map( category, CategoryDto.class );
+        }
         newDTO.setContent( newsDTO.getContent() );
         newDTO.setImage( newsDTO.getImage() );
         newDTO.setName( newsDTO.getName() );
-        News newsToSave = this.modelMapper.map(newDTO, News.class);
+        newDTO.setCategory( categoryDto );
+
+        News newsToSave = this.modelMapper.map( newDTO, News.class );
+        if (categoryDto != null)
+            newsToSave.setCategory( this.modelMapper.map( categoryDto, Category.class ) );
         News savedNews = newsRepository.save( newsToSave );
-        return this.modelMapper.map(savedNews, NewDTO.class);
+        return this.modelMapper.map( savedNews, NewDTO.class );
     }
 
 }
