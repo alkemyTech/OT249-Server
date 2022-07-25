@@ -5,11 +5,12 @@ import com.alkemy.ong.model.News;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface NewsService {
-    News getNews(String id);
+    NewDTO getNews(UUID id);
     List<News> getAllNews();
-    void deleteNews(String id);
+    void deleteNews(UUID id);
 
     NewDTO updateNews(String id, NewDTO newsDTO, BindingResult bindingResult);
 }
