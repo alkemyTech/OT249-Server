@@ -8,9 +8,11 @@ import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,11 +25,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService, UserDetailsService {
 	private final ModelMapper modelMapper;
 	private final UserRepository userRepo;
+
+	private final EmailService emailService;
 	
 	@Override
 	@Transactional
-	public User guardarUsuario(User user) {
-		return userRepo.save(user);
+	public User guardarUsuario(User user) throws IOException {
+
+		User userSaved = userRepo.save(user);
+
+		emailService.WelcomeMail(userSaved.getEmail(), user.getFirstName());
+
+		return userSaved;
 	}
 
 	@Override
