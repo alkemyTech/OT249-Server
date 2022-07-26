@@ -3,6 +3,7 @@ package com.alkemy.ong.exceptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
-public class NewsControllerEx {
+public class NewsControllerEx extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BindingResultException.class)
     public ResponseEntity<?> handleValidateExceptions(BindingResultException ex) {
@@ -40,7 +41,7 @@ public class NewsControllerEx {
     }
 
     @ExceptionHandler(RecordException.RecordNotFoundException.class)
-    public Map<String, String> handleValidateExceptionsEmail(SQLIntegrityConstraintViolationException ex) {
+    public Map<String, String> handleValidateExceptionsEmail(RecordException.RecordNotFoundException ex) {
         return Map.of("errors", ex.getMessage());
     }
 
