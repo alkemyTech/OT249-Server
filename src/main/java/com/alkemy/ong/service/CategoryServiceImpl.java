@@ -11,14 +11,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService{
     private final ModelMapper modelMapper;
     private final CategoryRepository categoryRepository;
+
     @Override
-    public Category getCategory(Long id) {
+    public Category getCategory(UUID id) {
         return null;
     }
 
@@ -28,19 +30,19 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public void deleteCategory(Long id) {
+    public void deleteCategory(UUID id) {
 
     }
 
     @Override
-    public Category updateCategory(Category category, Long id) {
+    public Category updateCategory(Category category, UUID id) {
         return null;
     }
+
 
     @Override
     public Page<Map<String, String>> getAllCategories(int page, String order) {
         Page<Category> category = categoryRepository.findAll( PageUtils.getPageable( page, order ) );
-        Page<Map<String, String>> categorDtoPage = category.map( cat -> Map.of("name", modelMapper.map( cat, CategoryDto.class).getName()));
-        return categorDtoPage;
+        return category.map(cat -> Map.of("name", modelMapper.map( cat, CategoryDto.class).getName()));
     }
 }
