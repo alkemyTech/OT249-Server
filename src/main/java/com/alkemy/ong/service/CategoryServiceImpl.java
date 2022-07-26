@@ -4,7 +4,6 @@ import com.alkemy.ong.Utils.PageUtils;
 import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.model.Category;
 import com.alkemy.ong.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;

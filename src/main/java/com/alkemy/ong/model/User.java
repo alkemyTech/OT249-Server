@@ -6,16 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 @Entity(name = "users")
@@ -30,6 +26,7 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @Column(name = "id", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Column(name = "first_name", nullable = false)

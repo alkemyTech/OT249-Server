@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
 
 @Table(name = "roles")
 @Entity
@@ -25,7 +24,7 @@ public class Role {
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(nullable = false)
+	@Column(nullable = false, name = "id", columnDefinition = "BINARY(16)")
 	private UUID id;
 
 	@Column(nullable = false)
