@@ -8,13 +8,14 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class NewDTO {
 
-    private String id;
+    private UUID id;
     private String name;
     private String content;
     private String image;
