@@ -18,7 +18,6 @@ import java.util.UUID;
 public class CategoryDto {
     private UUID id;
     @NotBlank
-    private Long id;
     private String name;
     private String description;
     private String image;
