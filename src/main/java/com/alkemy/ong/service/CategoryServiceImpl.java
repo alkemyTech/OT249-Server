@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService{
     	
     	String queryDeleted = "UPDATE categories SET deleted=1 WHERE Id = " + id;
     	
-    	entityManager.createNativeQuery(queryDeleted);
+    	entityManager.createNativeQuery(queryDeleted).executeUpdate();
     }
 
     @Override
