@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public Category getCategory(UUID id) {
-        return null;
+        return categoryRepository.getById(id);
     }
 
     @Override
@@ -39,6 +39,12 @@ public class CategoryServiceImpl implements CategoryService{
         return null;
     }
 
+	@Override
+	@Transactional
+	//Metodo necesitado
+	public Category createCategory(Category category) {
+		return categoryRepository.save(category);
+	}
 
     @Override
     public Page<Map<String, String>> getAllCategories(int page, String order) {

@@ -15,10 +15,15 @@ import javax.persistence.GeneratedValue;
 @RestController
 public class OrgController {
     @Autowired
-    private OrganizationService organizationService;
-
-    @GetMapping("organization/public")
-    ResponseEntity<PublicOrganization> getPublicDataConfig(){
+    private OrganizationServiceImpl organizationService;
+    
+    @GetMapping("/organization/public")
+    ResponseEntity<PublicOrganizationDto> getPublicDataConfig(){
         return new ResponseEntity<>(organizationService.getPublicData(), HttpStatus.OK);
     }
+    @PutMapping("/organization/public")
+    ResponseEntity<PublicOrganizationDto> updatePublicOrganization(@Valid @RequestBody PublicOrganizationDto publicOrganizationDto){
+        return new ResponseEntity<>(organizationService.updatePublicOrg(publicOrganizationDto), HttpStatus.ACCEPTED);
+    }
+
 }

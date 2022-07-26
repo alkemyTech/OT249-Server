@@ -9,6 +9,7 @@ import java.util.UUID;
 public interface NewsService {
     NewDTO getNews(UUID id);
     List<NewDTO> getAllNews();
-    void deleteNews(UUID id);
+    boolean deleteNews(UUID id);
     NewDTO updateNews(NewDTO news, UUID id);
+    public News findNewsById(UUID id); 
 }
