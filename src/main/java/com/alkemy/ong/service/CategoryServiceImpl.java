@@ -43,6 +43,7 @@ public class CategoryServiceImpl implements CategoryService{
 
 	@Override
 	@Transactional
+	//Metodo necesitado
 	public Category createCategory(Category category) {
 		return categoryRepository.save(category);
 	}
