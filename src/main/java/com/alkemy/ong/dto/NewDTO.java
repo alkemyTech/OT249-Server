@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,8 +16,10 @@ import java.util.UUID;
 @NoArgsConstructor
 public class NewDTO {
 
+    @NotBlank
     private UUID id;
     private String name;
+    @NotBlank
     private String content;
     private String image;
     private LocalDateTime timestamp;
