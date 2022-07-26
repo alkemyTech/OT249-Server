@@ -49,4 +49,11 @@ public class NewsServiceImpl implements NewsService {
 
         return null;
     }
+
+	@Override
+	public void createNews(News news) {
+		
+		newsRepository.save(news);
+		
+	}
 }

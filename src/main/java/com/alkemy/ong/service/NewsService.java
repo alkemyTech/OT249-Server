@@ -11,4 +11,5 @@ public interface NewsService {
     List<NewDTO> getAllNews();
     void deleteNews(UUID id);
     NewDTO updateNews(NewDTO news, UUID id);
+    public void createNews(News news);
 }
