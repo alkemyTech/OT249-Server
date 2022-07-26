@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -15,7 +16,8 @@ public class News {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    private String id;
+    @Column(name = "id", columnDefinition = "BINARY(16)")
+    private UUID id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false, columnDefinition = "TEXT")

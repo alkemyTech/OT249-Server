@@ -7,6 +7,9 @@ import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
 import lombok.AllArgsConstructor;
+
+import java.util.UUID;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,5 +43,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		UserDto userDto = modelMapper.map( found, UserDto.class );
 		userDto.setRole( modelMapper.map(found.getRole(), RoleDto.class  ) );
 		return userDto;
+	}
+
+	@Override
+	public User findById(UUID id) {
+		return userRepo.findByUserId(id);
 	}
 }

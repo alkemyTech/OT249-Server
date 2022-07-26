@@ -1,6 +1,8 @@
 package com.alkemy.ong.controller;
 
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -17,6 +19,13 @@ import com.alkemy.ong.model.Role;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.service.IRoleService;
 import com.alkemy.ong.service.UserService;
+
+import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
@@ -43,5 +52,20 @@ public class UserController {
 	public ResponseEntity<?> getPagedUsers(@RequestParam(defaultValue = "0", name = "page") int page,
 										   @RequestParam(defaultValue = "asc", name = "order") String order) {
 		return ResponseEntity.ok( userService.getAllUsers(page, order) );
+	}
+	
+	@PatchMapping("/users/{id}")
+	public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody Map<Object, Object> fields) {
+		try {
+			User user = userService.findById(id);
+			fields.forEach((key, value) -> {
+				Field field = ReflectionUtils.findField(user.getClass(), (String) key);
+				field.setAccessible(true);
+				ReflectionUtils.setField(field, user, value);
+			});
+			return new ResponseEntity<>(userService.guardarUsuario(user), HttpStatus.OK);
+		} catch (NullPointerException e) {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 }

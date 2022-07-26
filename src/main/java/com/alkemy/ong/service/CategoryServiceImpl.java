@@ -1,22 +1,29 @@
 package com.alkemy.ong.service;
 
+import com.alkemy.ong.Utils.PageUtils;
+import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.model.Category;
 import com.alkemy.ong.repository.CategoryRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService{
 
-	@Autowired
-	private CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
+    private final CategoryRepository categoryRepository;
 
     @Override
-    public Category getCategory(Long id) {
+    public Category getCategory(UUID id) {
         return null;
     }
 
@@ -26,12 +33,12 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public void deleteCategory(Long id) {
+    public void deleteCategory(UUID id) {
 
     }
 
     @Override
-    public Category updateCategory(Category category, Long id) {
+    public Category updateCategory(Category category, UUID id) {
         return null;
     }
 
@@ -40,4 +47,10 @@ public class CategoryServiceImpl implements CategoryService{
 	public Category createCategory(Category category) {
 		return categoryRepository.save(category);
 	}
+
+    @Override
+    public Page<Map<String, String>> getAllCategories(int page, String order) {
+        Page<Category> category = categoryRepository.findAll( PageUtils.getPageable( page, order ) );
+        return category.map(cat -> Map.of("name", modelMapper.map( cat, CategoryDto.class).getName()));
+    }
 }
