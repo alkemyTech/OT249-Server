@@ -13,11 +13,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Service
 @AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService{
     private final ModelMapper modelMapper;
     private final CategoryRepository categoryRepository;
+    
+	@PersistenceContext
+	private EntityManager entityManager;
 
     @Override
     public Category getCategory(UUID id) {
@@ -31,7 +37,13 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public void deleteCategory(UUID id) {
+    	
+    	String query = "FROM Category a WHERE a.id=" + id;
 
+    	Category categoryAux = (Category) entityManager.createQuery(query).getSingleResult();
+    	
+    	
+    	categoryRepository.delete(categoryAux);
     }
 
     @Override
