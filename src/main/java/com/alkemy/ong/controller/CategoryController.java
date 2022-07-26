@@ -6,6 +6,11 @@ import com.alkemy.ong.service.CategoryService;
 import lombok.AllArgsConstructor;
 
 import java.sql.Timestamp;
+
+
+import javax.validation.Valid;
+
+
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -40,7 +45,7 @@ public class CategoryController {
         return ResponseEntity.ok( categoryService.getAllCategories(page, order) );
     }
   
-  @PostMapping("/categories")
+    @PostMapping("/categories")
 	public ResponseEntity<Category> crearCategoria(@Valid @RequestBody CategoryDto categoryDto) {
 		UUID uuid = UUID.randomUUID();
 		boolean deleted = false;
