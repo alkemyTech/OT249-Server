@@ -73,11 +73,10 @@
 			<artifactId>modelmapper-spring</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk -->
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
-			<version>1.12.268</version>
+			<version>1.12.239</version>
 		</dependency>
 	</dependencies>
 
