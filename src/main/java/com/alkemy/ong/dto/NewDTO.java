@@ -1,27 +1,25 @@
 package com.alkemy.ong.dto;
 
+import com.alkemy.ong.model.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class NewDTO {
 
-    private UUID id;
-    @NotBlank
+    private String id;
     private String name;
-    @NotBlank
     private String content;
-    @NotBlank
     private String image;
     private LocalDateTime timestamp;
-    private CategoryDto category;
+    private Category category;
     private boolean softDelete;
 
 }
