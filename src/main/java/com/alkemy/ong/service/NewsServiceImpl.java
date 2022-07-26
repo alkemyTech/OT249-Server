@@ -40,8 +40,13 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void deleteNews(UUID id) {
-
+    public boolean deleteNews(UUID id) {
+    	try {
+    		newsRepository.deleteById(id);
+    		return true;
+    	} catch (Exception e) {
+    		return false;
+    	}
     }
 
     @Override
@@ -49,4 +54,14 @@ public class NewsServiceImpl implements NewsService {
 
         return null;
     }
+
+	@Override
+	public News findNewsById(UUID id) {
+		Optional<News> newsOptional = newsRepository.findById(id);
+		if (newsOptional.isPresent()) {
+			return newsOptional.get();
+		} else {
+			return null;
+		}
+	}
 }
