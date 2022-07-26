@@ -18,12 +18,10 @@ import javax.validation.Valid;
 public class OrgController {
     @Autowired
     private OrganizationServiceImpl organizationService;
-
     @GetMapping("/organization/public")
     ResponseEntity<PublicOrganizationDto> getPublicDataConfig(){
         return new ResponseEntity<>(organizationService.getPublicData(), HttpStatus.OK);
     }
-
     @PutMapping("/organization/public")
     ResponseEntity<PublicOrganizationDto> updatePublicOrganization(@Valid @RequestBody PublicOrganizationDto publicOrganizationDto){
         return new ResponseEntity<>(organizationService.updatePublicOrg(publicOrganizationDto), HttpStatus.ACCEPTED);
