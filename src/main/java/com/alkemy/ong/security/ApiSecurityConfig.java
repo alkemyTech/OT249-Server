@@ -3,6 +3,7 @@ package com.alkemy.ong.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -39,7 +40,9 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(customExceptionHandler, LogoutFilter.class);
         http.addFilter(customAuthenticationFilter);
         http.authorizeRequests().antMatchers(LOGIN_URL).permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.PUT,"/organization/public").hasRole("ADMIN");
         http.authorizeRequests().anyRequest().hasRole("USER");
+
     }
     @Bean
     public AuthenticationManager authenticationManagerBeam(AuthenticationConfiguration authenticationConfiguration) throws Exception {
