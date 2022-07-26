@@ -45,6 +45,7 @@ public class CategoryController {
         return ResponseEntity.ok( categoryService.getAllCategories(page, order) );
     }
   
+    //Metodo funcionando
     @PostMapping("/categories")
 	public ResponseEntity<Category> crearCategoria(@Valid @RequestBody CategoryDto categoryDto) {
 		UUID uuid = UUID.randomUUID();
