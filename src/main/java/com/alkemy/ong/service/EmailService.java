@@ -39,7 +39,7 @@ public class EmailService {
             request.setBody(mail.build());
             return sendGrid.api(request);
         } catch (IOException ex) {
-            log.error("Error al enviar mensaje atravez de sendgrid", ex);
+            log.error("Error al enviar mensaje a través de sendgrid", ex);
             throw ex;
         }
     }
