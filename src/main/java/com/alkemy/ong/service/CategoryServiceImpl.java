@@ -38,11 +38,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void deleteCategory(UUID id) {
     	
-    	String queryFind = "FROM Category a WHERE a.id=" + id;
-
-    	Category categoryAux = (Category) entityManager.createQuery(queryFind).getSingleResult();
-    	
-    	categoryAux.setDeleted(true);
+  
     	
     	String queryDeleted = "UPDATE categories SET deleted=1 WHERE Id = " + id;
     	
