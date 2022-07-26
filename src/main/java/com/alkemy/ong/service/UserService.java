@@ -10,4 +10,5 @@ public interface UserService {
 	User guardarUsuario(User user);
 	Page<UserDto> getAllUsers(int page, String order);
 	public User findById(UUID id);
+	public boolean deleteUser(UUID id);
 }

@@ -3,8 +3,11 @@ package com.alkemy.ong.controller;
 import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.model.Category;
 import com.alkemy.ong.service.CategoryService;
-import com.alkemy.ong.service.UserService;
 import lombok.AllArgsConstructor;
+
+import java.sql.Timestamp;
+
+import javax.validation.Valid;
 
 import java.util.UUID;
 
@@ -14,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +39,7 @@ public class CategoryController {
         return ResponseEntity.ok( categoryService.getAllCategories(page, order) );
     }
   
-  @PostMapping("/categories")
+    @PostMapping("/categories")
 	public ResponseEntity<Category> crearCategoria(@Valid @RequestBody CategoryDto categoryDto) {
 		UUID uuid = UUID.randomUUID();
 		boolean deleted = false;

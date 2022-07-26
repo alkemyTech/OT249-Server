@@ -68,4 +68,14 @@ public class UserController {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
+	
+	@DeleteMapping("/users/{id}")
+	public ResponseEntity<Boolean> deleteUser(@PathVariable("id") UUID id) {
+		boolean userEliminado = userService.deleteUser(id);
+		if (userEliminado) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }
