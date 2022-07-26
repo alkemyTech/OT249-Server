@@ -58,4 +58,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public User findById(UUID id) {
 		return userRepo.findByUserId(id);
 	}
+
+	@Override
+	@Transactional
+	public boolean deleteUser(UUID id) {
+		try {
+			userRepo.deleteById(id);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 }
