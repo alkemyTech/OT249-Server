@@ -14,5 +14,6 @@ public interface CategoryService {
     Category createCategory(Category category);
     void deleteCategory(UUID id);
     Category updateCategory(Category category, UUID id);
+
     Page<Map<String, String>> getAllCategories(int page, String order);
 }
