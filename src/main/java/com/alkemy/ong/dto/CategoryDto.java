@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 public class CategoryDto {
-    private Long id;
+    private UUID id;
     private String name;
     private String description;
     private String image;
