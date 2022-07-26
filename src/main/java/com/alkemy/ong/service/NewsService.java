@@ -1,12 +1,14 @@
 package com.alkemy.ong.service;
 
+import com.alkemy.ong.dto.NewDTO;
 import com.alkemy.ong.model.News;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface NewsService {
-    News getNews(String id);
-    List<News> getAllNews();
-    void deleteNews(String id);
-    News updateNews(News news, String id);
+    NewDTO getNews(UUID id);
+    List<NewDTO> getAllNews();
+    void deleteNews(UUID id);
+    NewDTO updateNews(NewDTO news, UUID id);
 }

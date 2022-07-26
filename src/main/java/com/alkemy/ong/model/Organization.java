@@ -24,6 +24,7 @@ public class Organization {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
+    @Column(name = "id", columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Column(nullable = false)
