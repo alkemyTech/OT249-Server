@@ -22,4 +22,12 @@ public class CategoryController {
                                            @RequestParam(defaultValue = "asc", name = "order") String order) {
         return ResponseEntity.ok( categoryService.getAllCategories(page, order) );
     }
+  
+  @PostMapping("/categories")
+	public ResponseEntity<Category> crearCategoria(@Valid @RequestBody CategoryDto categoryDto) {
+		UUID uuid = UUID.randomUUID();
+		boolean deleted = false;
+		Category category = new Category(uuid, categoryDto.getName(), categoryDto.getDescription(), categoryDto.getImage(), new Timestamp(System.currentTimeMillis()), deleted);
+		return new ResponseEntity<>(categoryService.createCategory(category), HttpStatus.OK);
+	}
 }
