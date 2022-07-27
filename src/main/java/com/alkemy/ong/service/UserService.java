@@ -15,8 +15,8 @@ public interface UserService extends UserDetailsService{
 
 	User guardarUsuario(User user) throws IOException;
 	Page<UserDto> getAllUsers(int page, String order);
-	public Optional<User> findById(UUID id);
-	public boolean deleteUser(UUID id);
+	public Optional<User> findById(String id);
+	public boolean deleteUser(String id);
   
 	public UserResponseDto login(LoginRequestDTO loginRequestDTO);
 }

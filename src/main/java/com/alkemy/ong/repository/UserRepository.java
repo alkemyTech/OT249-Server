@@ -11,7 +11,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 // import org.springframework.data.repository.query.Param;
 
 @Repository
-public interface UserRepository extends PagingAndSortingRepository<User, UUID> {
+public interface UserRepository extends PagingAndSortingRepository<User, String> {
 	Optional<User> findByEmail(String email);
 
 	// @Query("from User u where u.id=:id")

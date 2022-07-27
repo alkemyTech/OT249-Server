@@ -8,7 +8,7 @@ import com.alkemy.ong.model.Slide;
 public interface SlideService {
     
     List<Slide> getAll();
-    Slide get(UUID id);
-    void delete(UUID id);
-    Slide update(UUID id, Slide slide);
+    Slide get(String id);
+    void delete(String id);
+    Slide update(String id, Slide slide);
 }

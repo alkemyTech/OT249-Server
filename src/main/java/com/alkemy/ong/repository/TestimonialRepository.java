@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.alkemy.ong.model.Testimonial;
 
 @Repository
-public interface TestimonialRepository extends JpaRepository<Testimonial, UUID>{
+public interface TestimonialRepository extends JpaRepository<Testimonial, String>{
 
 }

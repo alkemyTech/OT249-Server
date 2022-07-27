@@ -1,19 +1,20 @@
 package com.alkemy.ong.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class NewDTO {
 
-    private UUID id;
+    private String id;
     @NotBlank
     private String name;
     @NotBlank
