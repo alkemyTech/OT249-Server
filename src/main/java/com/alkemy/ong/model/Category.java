@@ -1,5 +1,6 @@
 package com.alkemy.ong.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Table(name = "categories")
 @Entity
 @Data
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 public class Category {

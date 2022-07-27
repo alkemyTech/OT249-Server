@@ -37,7 +37,7 @@ public class User implements Serializable {
     @NotBlank(message = "Este campo no puede estar vacio")
     private String lastName;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     @Email(message = "Email no valido")
     private String email;
 

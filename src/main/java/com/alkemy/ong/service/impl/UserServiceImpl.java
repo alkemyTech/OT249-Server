@@ -1,4 +1,4 @@
-package com.alkemy.ong.service;
+package com.alkemy.ong.service.impl;
 
 
 import com.alkemy.ong.Utils.PageUtils;
@@ -6,6 +6,9 @@ import com.alkemy.ong.dto.RoleDto;
 import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
+import com.alkemy.ong.service.EmailService;
+import com.alkemy.ong.service.UserService;
+
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
@@ -21,12 +24,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
-	private final ModelMapper modelMapper;
-	private final UserRepository userRepo;
+	@Autowired
+	private ModelMapper modelMapper;
 
-	private final EmailService emailService;
+	@Autowired
+	private UserRepository userRepo;
+
+	@Autowired
+	private EmailService emailService;
 	
 	@Override
 	@Transactional
@@ -54,10 +60,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return userDto;
 	}
 
-	@Override
-	public User findById(UUID id) {
-		return userRepo.findByUserId(id);
-	}
+	// @Override
+	// public User findById(UUID id) {
+	// 	return userRepo.findByUserId(id);
+	// }
 
 	@Override
 	@Transactional

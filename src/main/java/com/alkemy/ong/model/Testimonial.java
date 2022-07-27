@@ -23,7 +23,7 @@ public class Testimonial {
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(name = "idTestimonial", updatable = false, nullable = false)
+	@Column(columnDefinition = "BINARY(16)", name = "idTestimonial", updatable = false, nullable = false)
 	private UUID idTestimonial;
 	
 	@Column(nullable = false)

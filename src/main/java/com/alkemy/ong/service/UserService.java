@@ -11,7 +11,7 @@ public interface UserService {
 
 	User guardarUsuario(User user) throws IOException;
 	Page<UserDto> getAllUsers(int page, String order);
-	public User findById(UUID id);
+	// public User findById(UUID id);
 	public boolean deleteUser(UUID id);
   
 }
