@@ -68,11 +68,6 @@ public class UserController {
 										   @RequestParam(defaultValue = "asc", name = "order") String order) {
 		return ResponseEntity.ok( userService.getAllUsers(page, order) );
 	}
-	
-	@PostMapping("/login")
-    public ResponseEntity<UserResponseDto> login(@RequestBody LoginRequestDTO loginRequestDTO){
-        return new ResponseEntity<>(userService.login(loginRequestDTO), HttpStatus.ACCEPTED);
-    }
 
 	@PatchMapping("/users/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody Map<Object, Object> fields) throws IOException {

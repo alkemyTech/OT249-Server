@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String LOGIN_URL = "/auth/login";
+    private static final String REGISTER_URL = "/auth/register";
     private final CustomExceptionHandler customExceptionHandler;
 
     private final AuthenticationConfiguration authenticationConfiguration;
@@ -38,7 +39,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(customExceptionHandler, LogoutFilter.class);
         http.addFilter(customAuthenticationFilter);
-        http.authorizeRequests().antMatchers(LOGIN_URL).permitAll();
+        http.authorizeRequests().antMatchers(LOGIN_URL,REGISTER_URL).permitAll();
         http.authorizeRequests().anyRequest().hasRole("USER");
     }
     @Bean
