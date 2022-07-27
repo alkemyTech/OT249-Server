@@ -12,6 +12,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "testimonials")
 @Getter @Setter @NoArgsConstructor
+@AllArgsConstructor
 public class Testimonial {
 	@Id
     @GeneratedValue(generator = "uuid")

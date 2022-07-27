@@ -1,6 +1,8 @@
 package com.alkemy.ong.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
@@ -17,6 +19,8 @@ import java.util.UUID;
 @Setter
 @SQLDelete(sql = "UPDATE activities SET deleted = true WHERE id=?")
 @Where(clause = "deleted = false")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Activity {
 
     @Id

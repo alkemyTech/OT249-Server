@@ -1,6 +1,8 @@
 package com.alkemy.ong.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -13,6 +15,8 @@ import java.util.UUID;
 @Table(name = "slides")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Slide {
 
     @Id
