@@ -7,8 +7,6 @@ import com.alkemy.ong.dto.UserResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,9 +27,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-    @Autowired
-    JwtUtil jwtUtil;
 
     public AuthenticationManager authenticationManager;
 
@@ -69,7 +64,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 
         UserDto userDto = (UserDto) authResult.getPrincipal();
-        new ObjectMapper().writeValue(response.getOutputStream(),  new UserResponseDto(jwtUtil.generateToken(userDto)));
+        String jwt = JwtUtil.generateToken( userDto );
+        UserResponseDto value = new UserResponseDto( jwt
+        );
+        new ObjectMapper().writeValue(response.getOutputStream(), value );
     }
 
 }

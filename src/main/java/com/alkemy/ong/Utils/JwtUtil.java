@@ -17,15 +17,25 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtil {
     
-    @Value("${jwt.authorities.key}")
-    private String AUTHORITIES_KEY;
+    private static String AUTHORITIES_KEY;
 
+    private static String SECRET_KEY;
+    private static int EXPIRATION_TIME;
     @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    public void setSECRET_KEY(String value) {
 
+        SECRET_KEY = value;
+    }
+    @Value("${jwt.authorities.key}")
+    public void setAUTHORITIES_KEY(String value) {
+
+        AUTHORITIES_KEY = value;
+    }
     @Value("${jwt.expiration}")
-    private int EXPIRATION_TIME;
+    public void setEXPIRATION_TIME(int value) {
 
+        EXPIRATION_TIME = value;
+    }
 
     public String extractUsername(String token){
         return extractClaims(token,Claims::getSubject);
@@ -40,7 +50,7 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    public String extractRole(UserDetails userDetails){
+    public static String extractRole(UserDetails userDetails){
         return userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -53,12 +63,12 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails){
+    public static String generateToken(UserDetails userDetails){
         Map<String,Object> claims = new HashMap<>();
         return createToken(claims,userDetails.getUsername(),extractRole(userDetails));
     }
 
-    private String createToken(Map<String,Object> claims,String subject,String role){
+    private static String createToken(Map<String, Object> claims, String subject, String role){
         return Jwts.builder().setClaims(claims).
                 setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
                 .claim(AUTHORITIES_KEY,role)
