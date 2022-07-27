@@ -12,6 +12,7 @@ import com.alkemy.ong.service.UserService;
 import lombok.AllArgsConstructor;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
@@ -60,10 +61,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return userDto;
 	}
 
-	// @Override
-	// public User findById(UUID id) {
-	// 	return userRepo.findByUserId(id);
-	// }
+	@Override
+	public Optional<User> findById(UUID id) {
+		return userRepo.findById(id);
+	}
 
 	@Override
 	@Transactional
