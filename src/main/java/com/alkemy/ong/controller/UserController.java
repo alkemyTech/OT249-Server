@@ -37,9 +37,6 @@ public class UserController {
 	
 	@Autowired
 	private IRoleService roleService;
-
-	@Autowired
-	private UserRepository userRepository;
 	
 	@Autowired
 	private PasswordEncoder passwordEncode;
@@ -62,7 +59,7 @@ public class UserController {
 	@PatchMapping("/users/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody Map<Object, Object> fields) throws IOException {
 		try {
-			User user = userRepository.findById(id).get();
+			User user = userService.findById(id).get(); 
 			fields.forEach((key, value) -> {
 				Field field = ReflectionUtils.findField(user.getClass(), (String) key);
 				field.setAccessible(true);
