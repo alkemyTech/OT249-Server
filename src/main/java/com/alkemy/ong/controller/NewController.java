@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
@@ -36,5 +38,12 @@ public class NewController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+	@PutMapping("/{id}")
+	@PreAuthorize( "hasAuthority('ADMIN')" )
+	public ResponseEntity<NewDTO> updateNews(@PathVariable UUID id, @Valid @RequestBody NewDTO newsDTO, BindingResult bindingResult){
+
+		NewDTO newsDTOresponse = newsService.updateNews(id, newsDTO, bindingResult );
+		return ResponseEntity.ok( newsDTOresponse );
 	}
 }
