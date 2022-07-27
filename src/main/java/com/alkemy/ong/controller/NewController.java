@@ -11,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/news")
@@ -21,7 +20,7 @@ public class NewController {
 	private NewsService newsService;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<NewDTO> NewDetail(@PathVariable UUID id) {
+	public ResponseEntity<NewDTO> NewDetail(@PathVariable String id) {
 
 		NewDTO newDTO = newsService.getNews(id); // TODO Ver Servicio de News (Id como String)
 
@@ -30,7 +29,7 @@ public class NewController {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/news/{id}")
-	public ResponseEntity<Boolean> deleteNews(@PathVariable UUID id) {
+	public ResponseEntity<Boolean> deleteNews(@PathVariable String id) {
 		News news = newsService.findNewsById(id);
 		if (news != null) {
 			newsService.deleteNews(id);
@@ -41,7 +40,7 @@ public class NewController {
 	}
 	@PutMapping("/{id}")
 	@PreAuthorize( "hasAuthority('ADMIN')" )
-	public ResponseEntity<NewDTO> updateNews(@PathVariable UUID id, @Valid @RequestBody NewDTO newsDTO, BindingResult bindingResult){
+	public ResponseEntity<NewDTO> updateNews(@PathVariable String id, @Valid @RequestBody NewDTO newsDTO, BindingResult bindingResult){
 
 		NewDTO newsDTOresponse = newsService.updateNews(id, newsDTO, bindingResult );
 		return ResponseEntity.ok( newsDTOresponse );

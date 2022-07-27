@@ -43,10 +43,9 @@ public class UserController {
 	
 	@PostMapping("/auth/register")
 	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
-		UUID uuid = UUID.randomUUID();
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
 		boolean deleted = false;
-		User user =  new User(uuid, userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), passwordEncode.encode(userDto.getPassword()), userDto.getPhoto(), rol, new Timestamp(System.currentTimeMillis()), deleted);
+		User user =  new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), passwordEncode.encode(userDto.getPassword()), userDto.getPhoto(), rol, new Timestamp(System.currentTimeMillis()), deleted);
 		return new ResponseEntity<>(userService.guardarUsuario(user), HttpStatus.OK);
 	}
 	@GetMapping(value = "/users")
@@ -57,7 +56,7 @@ public class UserController {
 	}
 	
 	@PatchMapping("/users/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody Map<Object, Object> fields) throws IOException {
+	public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody Map<Object, Object> fields) throws IOException {
 		try {
 			User user = userService.findById(id).get(); 
 			fields.forEach((key, value) -> {
@@ -72,7 +71,7 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/users/{id}")
-	public ResponseEntity<Boolean> deleteUser(@PathVariable("id") UUID id) {
+	public ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
 		boolean userEliminado = userService.deleteUser(id);
 		if (userEliminado) {
 			return new ResponseEntity<>(HttpStatus.OK);

@@ -23,7 +23,6 @@ import java.util.Objects;
 @Service
 public class AmazonClient {
 
-    @Autowired
     private AmazonS3 amazonS3;
 
     @Value("${amazon.endpointUrl}")

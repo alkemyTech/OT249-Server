@@ -9,14 +9,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 public class CategoryDto {
-    private UUID id;
+    private String id;
     @NotBlank
     private String name;
     private String description;

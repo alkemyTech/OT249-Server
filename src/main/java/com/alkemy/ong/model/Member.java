@@ -11,18 +11,21 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Table(name = "members")
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member {
 	
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(nullable = false, name = "id", columnDefinition = "BINARY(16)")
-	private UUID id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String  id;
 	
 	@Column(nullable = false)
 	private String name;
@@ -44,6 +47,19 @@ public class Member {
 	private Timestamp timestamp;
 	
 	private Boolean isDelete;
+
+	public Member(String name, String facebookUrl, String instagramUrl, String linkedinUrl, String image,
+			String description, Timestamp timestamp, Boolean isDelete) {
+		this.name = name;
+		this.facebookUrl = facebookUrl;
+		this.instagramUrl = instagramUrl;
+		this.linkedinUrl = linkedinUrl;
+		this.image = image;
+		this.description = description;
+		this.timestamp = timestamp;
+		this.isDelete = isDelete;
+	}
+	
 	
 
 }

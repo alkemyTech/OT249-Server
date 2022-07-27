@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import com.alkemy.ong.model.Role;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, UUID> {
+public interface RoleRepository extends JpaRepository<Role, String> {
 
 }

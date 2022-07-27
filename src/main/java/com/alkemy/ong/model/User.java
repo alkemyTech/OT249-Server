@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -26,8 +28,9 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "id", columnDefinition = "BINARY(16)")
-    private UUID id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String  id;
 
     @Column(name = "first_name", nullable = false)
     @NotBlank(message = "Este campo no puede estar vacio")
@@ -57,5 +60,22 @@ public class User implements Serializable {
 
     private boolean deleted = Boolean.FALSE;
 
+    public User(@NotBlank(message = "Este campo no puede estar vacio") String firstName,
+            @NotBlank(message = "Este campo no puede estar vacio") String lastName,
+            @Email(message = "Email no valido") String email,
+            @NotBlank(message = "Este campo no puede estar vacio") String password,
+            @NotBlank(message = "Este campo no puede estar vacio") String photo, Role role, Timestamp timestamp,
+            boolean deleted) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.photo = photo;
+        this.role = role;
+        this.timestamp = timestamp;
+        this.deleted = deleted;
+    }
 
+
+    
 }
