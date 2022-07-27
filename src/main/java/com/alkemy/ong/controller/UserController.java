@@ -12,10 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import com.alkemy.ong.Utils.JwtUtil;
+import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.UserDto;
+import com.alkemy.ong.dto.UserResponseDto;
 import com.alkemy.ong.model.Role;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
@@ -40,6 +47,12 @@ public class UserController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncode;
+
+	@Autowired
+	AuthenticationManager authenticationManager;
+
+	@Autowired
+	JwtUtil jwtUtil;
 	
 	@PostMapping("/auth/register")
 	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
@@ -56,6 +69,11 @@ public class UserController {
 		return ResponseEntity.ok( userService.getAllUsers(page, order) );
 	}
 	
+	@PostMapping("/login")
+    public ResponseEntity<UserResponseDto> login(@RequestBody LoginRequestDTO loginRequestDTO){
+        return new ResponseEntity<>(userService.login(loginRequestDTO), HttpStatus.ACCEPTED);
+    }
+
 	@PatchMapping("/users/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody Map<Object, Object> fields) throws IOException {
 		try {

@@ -1,6 +1,8 @@
 package com.alkemy.ong.service;
 
+import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.UserDto;
+import com.alkemy.ong.dto.UserResponseDto;
 import com.alkemy.ong.model.User;
 import org.springframework.data.domain.Page;
 
@@ -15,4 +17,5 @@ public interface UserService {
 	public Optional<User> findById(UUID id);
 	public boolean deleteUser(UUID id);
   
+	public UserResponseDto login(LoginRequestDTO loginRequestDTO);
 }
