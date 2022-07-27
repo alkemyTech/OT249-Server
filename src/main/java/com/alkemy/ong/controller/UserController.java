@@ -1,5 +1,6 @@
 package com.alkemy.ong.controller;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.model.Role;
 import com.alkemy.ong.model.User;
+import com.alkemy.ong.repository.UserRepository;
 import com.alkemy.ong.service.IRoleService;
 import com.alkemy.ong.service.UserService;
 
@@ -40,7 +42,7 @@ public class UserController {
 	private PasswordEncoder passwordEncode;
 	
 	@PostMapping("/auth/register")
-	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) {
+	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
 		UUID uuid = UUID.randomUUID();
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
 		boolean deleted = false;
@@ -55,9 +57,9 @@ public class UserController {
 	}
 	
 	@PatchMapping("/users/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody Map<Object, Object> fields) {
+	public ResponseEntity<User> updateUser(@PathVariable("id") UUID id, @RequestBody Map<Object, Object> fields) throws IOException {
 		try {
-			User user = userService.findById(id);
+			User user = userService.findById(id).get(); 
 			fields.forEach((key, value) -> {
 				Field field = ReflectionUtils.findField(user.getClass(), (String) key);
 				field.setAccessible(true);

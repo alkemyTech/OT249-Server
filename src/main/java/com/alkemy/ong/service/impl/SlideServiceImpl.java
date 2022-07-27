@@ -1,4 +1,4 @@
-package com.alkemy.ong.service;
+package com.alkemy.ong.service.impl;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import com.alkemy.ong.model.Slide;
+import com.alkemy.ong.service.SlideService;
 
 @Service
 public class SlideServiceImpl implements SlideService {

@@ -14,9 +14,9 @@ import java.util.UUID;
 @Table(name = "categories")
 @Entity
 @Data
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
-@AllArgsConstructor
 @NoArgsConstructor
 public class Category {
 

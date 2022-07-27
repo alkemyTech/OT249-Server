@@ -1,4 +1,4 @@
-package com.alkemy.ong.service;
+package com.alkemy.ong.service.impl;
 
 
 import com.alkemy.ong.Utils.PageUtils;
@@ -6,11 +6,17 @@ import com.alkemy.ong.dto.RoleDto;
 import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
+import com.alkemy.ong.service.EmailService;
+import com.alkemy.ong.service.UserService;
+
 import lombok.AllArgsConstructor;
 
+import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,15 +25,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
-	private final ModelMapper modelMapper;
-	private final UserRepository userRepo;
+	@Autowired
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private UserRepository userRepo;
+
+	@Autowired
+	private EmailService emailService;
 	
 	@Override
 	@Transactional
-	public User guardarUsuario(User user) {
-		return userRepo.save(user);
+	public User guardarUsuario(User user) throws IOException {
+
+		User userSaved = userRepo.save(user);
+
+		emailService.WelcomeMail(userSaved.getEmail(), user.getFirstName());
+
+		return userSaved;
 	}
 
 	@Override
@@ -46,8 +62,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	}
 
 	@Override
-	public User findById(UUID id) {
-		return userRepo.findByUserId(id);
+	public Optional<User> findById(UUID id) {
+		return userRepo.findById(id);
 	}
 
 	@Override
