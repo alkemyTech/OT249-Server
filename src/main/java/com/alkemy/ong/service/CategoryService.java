@@ -8,12 +8,12 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface CategoryService {
-    Category getCategory(UUID id);
+    Category getCategory(String id);
     List<Category> getAllCategories();
     //Metodo necesitado
     Category createCategory(Category category);
-    void deleteCategory(UUID id);
-    Category updateCategory(Category category, UUID id);
+    void deleteCategory(String id);
+    Category updateCategory(Category category, String id);
 
     Page<Map<String, String>> getAllCategories(int page, String order);
 }

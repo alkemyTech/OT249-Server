@@ -7,9 +7,9 @@ import com.alkemy.ong.model.Member;
 
 public interface IMemberService {
 
-	public Member getMemberById(UUID id);
+	public Member getMemberById(String id);
 	public List<Member> getAllMembers();
-	public void deleteMemberById(UUID id);
-	public void updateMember(Member member,UUID id);
+	public void deleteMemberById(String id);
+	public void updateMember(Member member,String id);
 	
 }

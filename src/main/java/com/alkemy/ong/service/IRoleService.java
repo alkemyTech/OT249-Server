@@ -7,9 +7,9 @@ import com.alkemy.ong.model.Role;
 
 public interface IRoleService {
 
-	public Role getRoleById(UUID id);
+	public Role getRoleById(String id);
 	public List<Role> getAllRoles();
-	public void deleteRoleById(UUID id);
-	public void updateRole(Role role,UUID id);
+	public void deleteRoleById(String id);
+	public void updateRole(Role role,String id);
 	
 }
