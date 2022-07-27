@@ -29,7 +29,7 @@ public class NewsServiceImpl implements NewsService {
     private final ModelMapper modelMapper;
 
     @Override
-    public NewDTO getNews(UUID id) {
+    public NewDTO getNews(String id) {
 
         Optional<News> answer = newsRepository.findById(id);
 
@@ -49,7 +49,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public boolean deleteNews(UUID id) {
+    public boolean deleteNews(String id) {
     	try {
     		newsRepository.deleteById(id);
     		return true;
@@ -59,7 +59,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewDTO updateNews(UUID id, NewDTO newsDTO, BindingResult bindingResult) {
+    public NewDTO updateNews(String id, NewDTO newsDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors())
             throw new BindingResultException( bindingResult );
         News found = newsRepository.findById( id ).orElseThrow( () -> new RecordException.RecordNotFoundException( "News not found" ) );
@@ -83,7 +83,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
 	@Override
-	public News findNewsById(UUID id) {
+	public News findNewsById(String id) {
 		Optional<News> newsOptional = newsRepository.findById(id);
 		if (newsOptional.isPresent()) {
 			return newsOptional.get();

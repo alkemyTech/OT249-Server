@@ -23,12 +23,20 @@ public class Category {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id", columnDefinition = "BINARY(16)")
-    private UUID id;
+    private String  id;
     @Column(nullable = false)
     private String name;
     private String description;
     private String image;
     private Timestamp timestamp;
     private Boolean deleted = false;
+    public Category(String name, String description, String image, Timestamp timestamp, Boolean deleted) {
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        this.timestamp = timestamp;
+        this.deleted = deleted;
+    }
+
+    
 }

@@ -75,13 +75,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> findById(UUID id) {
+	public Optional<User> findById(String id) {
 		return userRepo.findById(id);
 	}
 
 	@Override
 	@Transactional
-	public boolean deleteUser(UUID id) {
+	public boolean deleteUser(String id) {
 		try {
 			userRepo.deleteById(id);
 			return true;

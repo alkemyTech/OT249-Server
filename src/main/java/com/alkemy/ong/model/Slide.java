@@ -1,6 +1,8 @@
 package com.alkemy.ong.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -13,13 +15,14 @@ import java.util.UUID;
 @Table(name = "slides")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Slide {
 
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id", columnDefinition = "BINARY(16)")
-    private UUID id;
+    private String  id;
 
     private String imageUrl;
     private String text;
@@ -28,4 +31,13 @@ public class Slide {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "organization_id", referencedColumnName = "id" )
     private Organization organization;
+
+    public Slide(String imageUrl, String text, Integer position, Organization organization) {
+        this.imageUrl = imageUrl;
+        this.text = text;
+        this.position = position;
+        this.organization = organization;
+    }
+
+    
 }
