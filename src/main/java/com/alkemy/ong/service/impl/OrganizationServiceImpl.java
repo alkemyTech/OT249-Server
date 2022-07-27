@@ -1,8 +1,11 @@
-package com.alkemy.ong.service;
+package com.alkemy.ong.service.impl;
 
+import com.alkemy.ong.dto.PublicOrganizationDto;
 import com.alkemy.ong.model.Organization;
-import com.alkemy.ong.model.PublicOrganization;
 import com.alkemy.ong.repository.OrganizationRepository;
+import com.alkemy.ong.service.OrganizationService;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +18,18 @@ public class OrganizationServiceImpl implements OrganizationService{
     @Autowired
     private OrganizationRepository organizationRepository;
 
+    @Autowired
+    ModelMapper modelMapper;
 
     @Override
-    public PublicOrganization getPublicData() {
+    public PublicOrganizationDto getPublicData() {
         Organization organization = organizationRepository.findAll().get(0);
-        PublicOrganization publicOrganization = new PublicOrganization();
-        publicOrganization.setName(organization.getName());
-        publicOrganization.setAddress(organization.getAddress());
-        publicOrganization.setPhone(organization.getPhone());
-        publicOrganization.setImage(organization.getImage());
-        return publicOrganization;
+        PublicOrganizationDto publicOrganizationDto = new PublicOrganizationDto();
+        publicOrganizationDto.setName(organization.getName());
+        publicOrganizationDto.setAddress(organization.getAddress());
+        publicOrganizationDto.setPhone(organization.getPhone());
+        publicOrganizationDto.setImage(organization.getImage());
+        return publicOrganizationDto;
     }
 
     @Override
@@ -43,7 +48,7 @@ public class OrganizationServiceImpl implements OrganizationService{
     }
 
     @Override
-    public Organization update(UUID id, Organization organization) {
+    public PublicOrganizationDto update(UUID id, PublicOrganizationDto publicOrganizationDto) {
         return null;
     }
 }

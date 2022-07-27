@@ -1,8 +1,10 @@
-package com.alkemy.ong.service;
+package com.alkemy.ong.service.impl;
 
 import com.alkemy.ong.dto.NewDTO;
 import com.alkemy.ong.model.News;
 import com.alkemy.ong.repository.NewsRepository;
+import com.alkemy.ong.service.NewsService;
+
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

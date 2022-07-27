@@ -1,4 +1,4 @@
-package com.alkemy.ong.service;
+package com.alkemy.ong.service.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.alkemy.ong.model.Role;
 import com.alkemy.ong.repository.RoleRepository;
+import com.alkemy.ong.service.IRoleService;
 
 @Service
 public class RoleServiceImpl implements IRoleService{
