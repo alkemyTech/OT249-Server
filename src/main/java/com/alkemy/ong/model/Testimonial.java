@@ -21,10 +21,9 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class Testimonial {
 	@Id
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-	@Column(columnDefinition = "BINARY(16)", name = "idTestimonial", updatable = false, nullable = false)
-	private UUID idTestimonial;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String  id;
 	
 	@Column(nullable = false)
 	private String name;
@@ -32,4 +31,14 @@ public class Testimonial {
 	private String content;
 	private Timestamp timestamp = Timestamp.from(Instant.now());
 	private Boolean softDelte = Boolean.FALSE;
+	
+	public Testimonial(String name, String image, String content, Timestamp timestamp, Boolean softDelte) {
+		this.name = name;
+		this.image = image;
+		this.content = content;
+		this.timestamp = timestamp;
+		this.softDelte = softDelte;
+	}
+
+	
 }

@@ -7,14 +7,7 @@ import lombok.AllArgsConstructor;
 
 import java.sql.Timestamp;
 
-
 import javax.validation.Valid;
-
-
-import java.util.UUID;
-
-
-
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +40,14 @@ public class CategoryController {
     //Metodo funcionando
     @PostMapping("/categories")
 	public ResponseEntity<Category> crearCategoria(@Valid @RequestBody CategoryDto categoryDto) {
-		UUID uuid = UUID.randomUUID();
 		boolean deleted = false;
-		Category category = new Category(uuid, categoryDto.getName(), categoryDto.getDescription(), categoryDto.getImage(), new Timestamp(System.currentTimeMillis()), deleted);
+		Category category = new Category(categoryDto.getName(), categoryDto.getDescription(), categoryDto.getImage(), new Timestamp(System.currentTimeMillis()), deleted);
 		return new ResponseEntity<>(categoryService.createCategory(category), HttpStatus.OK);
 	}
   
 	  @GetMapping("/categories/{id}")
 	  @PreAuthorize("hasRole('ROLE_ADMIN')")
-	  public ResponseEntity<CategoryDto> getCategoryDetails(@PathVariable("id") UUID id){
+	  public ResponseEntity<CategoryDto> getCategoryDetails(@PathVariable("id") String id){
 	  	try {
 	  		Category category = categoryService.getCategory(id);
 	  		return ResponseEntity.ok(modelMapper.map(category, CategoryDto.class));

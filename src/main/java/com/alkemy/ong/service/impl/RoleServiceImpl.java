@@ -18,7 +18,7 @@ public class RoleServiceImpl implements IRoleService{
 	private RoleRepository roleRepository;
 	
 	@Override
-	public Role getRoleById(UUID id) {
+	public Role getRoleById(String id) {
 		Optional<Role> roleOptional = roleRepository.findById(id);
 		if (roleOptional.isPresent()) {
 			return roleOptional.get();
@@ -34,12 +34,12 @@ public class RoleServiceImpl implements IRoleService{
 	}
 
 	@Override
-	public void deleteRoleById(UUID id) {
+	public void deleteRoleById(String id) {
 		
 	}
 
 	@Override
-	public void updateRole(Role role, UUID id) {
+	public void updateRole(Role role, String id) {
 		
 	}
 

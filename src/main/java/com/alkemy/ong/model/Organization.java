@@ -24,8 +24,7 @@ public class Organization {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id", columnDefinition = "BINARY(16)")
-    private UUID id;
+    private String  id;
 
     @Column(nullable = false)
     private String name;
@@ -48,6 +47,21 @@ public class Organization {
     private Timestamp timestamp = Timestamp.from(Instant.now());
 
     private Boolean deleted = Boolean.FALSE;
+
+    public Organization(String name, String image, String address, Integer phone, String email, String welcomeText,
+            String aboutUsText, Timestamp timestamp, Boolean deleted) {
+        this.name = name;
+        this.image = image;
+        this.address = address;
+        this.phone = phone;
+        this.email = email;
+        this.welcomeText = welcomeText;
+        this.aboutUsText = aboutUsText;
+        this.timestamp = timestamp;
+        this.deleted = deleted;
+    }
+
+    
 
 }
 

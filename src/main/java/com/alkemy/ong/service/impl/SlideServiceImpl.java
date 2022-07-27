@@ -17,16 +17,16 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public Slide get(UUID id) {
+    public Slide get(String id) {
         return null;
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(String id) {
     }
 
     @Override
-    public Slide update(UUID id, Slide slide) {
+    public Slide update(String id, Slide slide) {
         return null;
     }
     

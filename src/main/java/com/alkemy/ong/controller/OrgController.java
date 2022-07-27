@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -27,7 +26,7 @@ public class OrgController {
         return new ResponseEntity<>(organizationService.getPublicData(), HttpStatus.OK);
     }
     @PutMapping("/organization/public/{id}")
-    ResponseEntity<PublicOrganizationDto> updatePublicOrganization(@PathVariable(name = "id") UUID id, @Valid @RequestBody PublicOrganizationDto publicOrganizationDto){
+    ResponseEntity<PublicOrganizationDto> updatePublicOrganization(@PathVariable(name = "id") String id, @Valid @RequestBody PublicOrganizationDto publicOrganizationDto){
         return new ResponseEntity<>(organizationService.update(id, publicOrganizationDto), HttpStatus.ACCEPTED);
     }
 

@@ -19,10 +19,10 @@ public class AmazonConfig {
     private String secretKey;
     
     
-    @Bean//amazonS3Client
-    public AmazonS3 getS3Client() {
-        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
-        return AmazonS3ClientBuilder.standard().withRegion(Regions.fromName("us-east-1"))
-                .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
-    }
+    // @Bean//amazonS3Client
+    // public AmazonS3 getS3Client() {
+    //     BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+    //     return AmazonS3ClientBuilder.standard().withRegion(Regions.fromName("us-east-1"))
+    //             .withCredentials(new AWSStaticCredentialsProvider(credentials)).build();
+    // }
 }

@@ -12,9 +12,9 @@ import java.util.UUID;
 
 
 @Repository
-public interface CategoryRepository extends PagingAndSortingRepository<Category, UUID> {
+public interface CategoryRepository extends PagingAndSortingRepository<Category, String> {
 	@Query(value="from Category c where c.id=:id", nativeQuery = true)
-	Category getById(@Param("id") UUID id);
+	Category getById(@Param("id") String id);
 	
 	Optional<Category> findByName(String id);
 }

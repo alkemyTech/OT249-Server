@@ -16,8 +16,7 @@ public class News {
     @Id
     @GeneratedValue(generator = "uuid")
     @GenericGenerator(name = "uuid", strategy = "uuid2")
-    @Column(name = "id", columnDefinition = "BINARY(16)")
-    private UUID id;
+    private String  id;
     @Column(nullable = false)
     private String name;
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -28,5 +27,16 @@ public class News {
     @ManyToOne
     private Category category;
     private boolean softDelete;
+    
+    public News(String name, String content, String image, LocalDateTime timestamp, Category category,
+            boolean softDelete) {
+        this.name = name;
+        this.content = content;
+        this.image = image;
+        this.timestamp = timestamp;
+        this.category = category;
+        this.softDelete = softDelete;
+    }
 
+    
 }

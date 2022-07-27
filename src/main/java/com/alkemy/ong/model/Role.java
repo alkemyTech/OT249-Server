@@ -22,10 +22,9 @@ import lombok.Data;
 public class Role {
 
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(nullable = false, name = "id", columnDefinition = "BINARY(16)")
-	private UUID id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String  id;
 
 	@Column(nullable = false)
 	private String name;
@@ -36,4 +35,13 @@ public class Role {
 	private String description;
 
 	private Timestamp timestamp;
+
+	public Role(String name, Set<User> users, String description, Timestamp timestamp) {
+		this.name = name;
+		this.users = users;
+		this.description = description;
+		this.timestamp = timestamp;
+	}
+
+	
 }
