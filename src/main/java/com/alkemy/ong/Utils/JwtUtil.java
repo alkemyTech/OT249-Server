@@ -31,21 +31,14 @@ public class JwtUtil {
     static int EXPIRATION_TIME;
 
     public static Authentication getAuthentication(HttpServletRequest request) {
-        // 从Header中拿到token
         String token = request.getHeader(AUTHORIZATION);
 
         if (token != null && !token.isEmpty()) {
             // 解析 Token
             Claims claims = Jwts.parser().setSigningKey(SECRET_KEY)
                     .parseClaimsJws(token.substring( 7 )).getBody();
-            // 获取用户名
             String user = claims.getSubject();
-            log.info( user );
-            // 获取权限（角色）
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES_KEY));
-            log.info( authorities.toString() );
-
-            // 返回验证令牌
             if(user != null){
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken( claims, null, authorities );
                 authenticationToken.setDetails( claims.get("userDetails") );
