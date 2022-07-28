@@ -17,6 +17,7 @@ public class TestimonialDto {
     @NotBlank
     private String name;
     private String image;
+    @NotBlank
     private String content;
     private Timestamp timestamp;
     private Boolean softDelete;
