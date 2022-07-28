@@ -1,21 +1,14 @@
 package com.alkemy.ong.model;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.GenericGenerator;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "testimonials")
@@ -32,14 +25,14 @@ public class Testimonial {
 	private String image;
 	private String content;
 	private Timestamp timestamp = Timestamp.from(Instant.now());
-	private Boolean softDelte = Boolean.FALSE;
+	private Boolean softDelete = Boolean.FALSE;
 	
-	public Testimonial(String name, String image, String content, Timestamp timestamp, Boolean softDelte) {
+	public Testimonial(String name, String image, String content, Timestamp timestamp, Boolean softDelete) {
 		this.name = name;
 		this.image = image;
 		this.content = content;
 		this.timestamp = timestamp;
-		this.softDelte = softDelte;
+		this.softDelete = softDelete;
 	}
 
 	
