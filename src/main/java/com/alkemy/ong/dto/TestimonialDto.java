@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 
 @AllArgsConstructor
@@ -13,6 +14,7 @@ import java.sql.Timestamp;
 @Setter
 public class TestimonialDto {
     private String  id;
+    @NotBlank
     private String name;
     private String image;
     private String content;
