@@ -1,9 +1,11 @@
 package com.alkemy.ong.Utils;
 
+import com.alkemy.ong.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,13 +26,16 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Component
 @Slf4j
 public class JwtUtil {
-    
-    static String AUTHORITIES_KEY;
+    @Value("${jwt.authorities.key}")
+    String AUTHORITIES_KEY;
+    @Value("${jwt.secret}")
+    public String SECRET_KEY;
+    @Value("${jwt.expiration}")
+    int EXPIRATION_TIME;
 
-    public static String SECRET_KEY;
-    static int EXPIRATION_TIME;
-
-    public static Authentication getAuthentication(HttpServletRequest request) {
+    @Autowired
+    UserService userService;
+    public Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(AUTHORIZATION);
 
         if (token != null && !token.isEmpty()) {
@@ -38,10 +43,11 @@ public class JwtUtil {
             Claims claims = Jwts.parser().setSigningKey(SECRET_KEY)
                     .parseClaimsJws(token.substring( 7 )).getBody();
             String user = claims.getSubject();
+            UserDetails userDetails = userService.loadUserByUsername(user);
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES_KEY));
             if(user != null){
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken( claims, null, authorities );
-                authenticationToken.setDetails( claims.get("userDetails") );
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken( userDetails, null, authorities );
+                authenticationToken.setDetails( userDetails );
                 return authenticationToken;
             }
             return null;
@@ -49,33 +55,17 @@ public class JwtUtil {
         return null;
     }
 
-    @Value("${jwt.secret}")
-    public void setSECRET_KEY(String value) {
-
-        SECRET_KEY = value;
-    }
-    @Value("${jwt.authorities.key}")
-    public void setAUTHORITIES_KEY(String value) {
-
-        AUTHORITIES_KEY = value;
-    }
-    @Value("${jwt.expiration}")
-    public void setEXPIRATION_TIME(int value) {
-
-        EXPIRATION_TIME = value;
-    }
     public static String extractRole(UserDetails userDetails){
         return userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
     }
 
-    public static String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails){
         Map<String,Object> claims = new HashMap<>();
         return Jwts.builder().setClaims(claims).
                 setSubject(userDetails.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
                 .claim(AUTHORITIES_KEY,extractRole( userDetails ))
-                .claim( "userDetails", userDetails )
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256,SECRET_KEY).compact();
     }

@@ -1,7 +1,9 @@
 package com.alkemy.ong.security;
 
 import com.alkemy.ong.Utils.JwtUtil;
+import com.alkemy.ong.service.UserService;
 import io.jsonwebtoken.SignatureException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,13 +20,17 @@ import java.io.IOException;
 @Component
 public class CustomAuthorizationFilter extends GenericFilterBean {
 
+    @Autowired
+    UserService userService;
+    @Autowired
+    JwtUtil jwtUtil;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
                          FilterChain filterChain) throws IOException, ServletException {
         try {
             HttpServletRequest r = (HttpServletRequest) request;
-            Authentication authentication = JwtUtil.getAuthentication(r);
+            Authentication authentication = jwtUtil.getAuthentication(r);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (AuthenticationException | SignatureException e) {
             logger.error(e.getMessage());

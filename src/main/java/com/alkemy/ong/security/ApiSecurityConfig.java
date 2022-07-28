@@ -1,5 +1,6 @@
 package com.alkemy.ong.security;
 
+import com.alkemy.ong.Utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,8 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URL = "/auth/login";
     private static final String REGISTER_URL = "/auth/register";
     private final CustomExceptionHandler customExceptionHandler;
+    private final CustomAuthorizationFilter customAuthorizationFilter;
+    private final JwtUtil jwtUtil;
 
     private final AuthenticationConfiguration authenticationConfiguration;
 
@@ -33,13 +36,13 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBeam(authenticationConfiguration));
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBeam(authenticationConfiguration), jwtUtil);
         customAuthenticationFilter.setFilterProcessesUrl(LOGIN_URL);
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(customExceptionHandler, LogoutFilter.class);
         http.addFilter(customAuthenticationFilter);
-        http.addFilterBefore( new CustomAuthorizationFilter(), CustomAuthenticationFilter.class );
+        http.addFilterBefore( customAuthorizationFilter, CustomAuthenticationFilter.class );
         http.authorizeRequests().antMatchers(LOGIN_URL,REGISTER_URL).permitAll();
         http.authorizeRequests().anyRequest().hasAnyRole( "USER", "ADMIN" );
     }
