@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
-public class NewsControllerEx extends ResponseEntityExceptionHandler {
+public class CustomExceptionController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BindingResultException.class)
     public ResponseEntity<?> handleValidateExceptions(BindingResultException ex) {
