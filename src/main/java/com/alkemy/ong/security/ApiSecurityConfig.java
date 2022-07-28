@@ -39,8 +39,9 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(customExceptionHandler, LogoutFilter.class);
         http.addFilter(customAuthenticationFilter);
+        http.addFilterBefore( new CustomAuthorizationFilter(), CustomAuthenticationFilter.class );
         http.authorizeRequests().antMatchers(LOGIN_URL,REGISTER_URL).permitAll();
-        http.authorizeRequests().anyRequest().hasRole("USER");
+        http.authorizeRequests().anyRequest().hasAnyRole( "USER", "ADMIN" );
     }
     @Bean
     public AuthenticationManager authenticationManagerBeam(AuthenticationConfiguration authenticationConfiguration) throws Exception {
