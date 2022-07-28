@@ -6,23 +6,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class NewDTO {
-
-    private String id;
+public class TestimonialDto {
+    private String  id;
     @NotBlank
     private String name;
+    private String image;
     @NotBlank
     private String content;
-    @NotBlank
-    private String image;
-    private LocalDateTime timestamp;
-    private CategoryDto category;
-    private boolean softDelete;
+    private Timestamp timestamp;
+    private Boolean softDelete;
 
 }

@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService{
     private final CategoryRepository categoryRepository;
 
     @Override
-    public Category getCategory(UUID id) {
+    public Category getCategory(String id) {
         return categoryRepository.getById(id);
     }
 
@@ -34,12 +34,12 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public void deleteCategory(UUID id) {
+    public void deleteCategory(String id) {
 
     }
 
     @Override
-    public Category updateCategory(Category category, UUID id) {
+    public Category updateCategory(Category category, String id) {
         return null;
     }
 

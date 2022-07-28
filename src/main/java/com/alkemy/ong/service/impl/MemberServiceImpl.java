@@ -12,7 +12,7 @@ import com.alkemy.ong.service.IMemberService;
 public class MemberServiceImpl implements IMemberService {
 
 	@Override
-	public Member getMemberById(UUID id) {
+	public Member getMemberById(String id) {
 
 		return null;
 	}
@@ -24,12 +24,12 @@ public class MemberServiceImpl implements IMemberService {
 	}
 
 	@Override
-	public void deleteMemberById(UUID id) {
+	public void deleteMemberById(String id) {
 
 	}
 
 	@Override
-	public void updateMember(Member member, UUID id) {
+	public void updateMember(Member member, String id) {
 
 	}
 

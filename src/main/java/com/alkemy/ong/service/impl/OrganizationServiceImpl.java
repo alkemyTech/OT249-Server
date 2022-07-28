@@ -38,17 +38,17 @@ public class OrganizationServiceImpl implements OrganizationService{
     }
 
     @Override
-    public Organization get(UUID id) {
+    public Organization get(String id) {
         return null;
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(String id) {
 
     }
 
     @Override
-    public PublicOrganizationDto update(UUID id, PublicOrganizationDto publicOrganizationDto) {
+    public PublicOrganizationDto update(String id, PublicOrganizationDto publicOrganizationDto) {
         return null;
     }
 }
