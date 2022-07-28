@@ -39,7 +39,6 @@ public class JwtUtil {
         String token = request.getHeader(AUTHORIZATION);
 
         if (token != null && !token.isEmpty()) {
-            // 解析 Token
             Claims claims = Jwts.parser().setSigningKey(SECRET_KEY)
                     .parseClaimsJws(token.substring( 7 )).getBody();
             String user = claims.getSubject();
