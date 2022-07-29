@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,9 @@ public class UserController {
 	@Autowired
 	JwtUtil jwtUtil;
 	
+	@Autowired
+	ModelMapper modelMapper;
+	
 	@PostMapping("/auth/register")
 	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
@@ -69,15 +73,22 @@ public class UserController {
 	}
 
 	@PatchMapping("/users/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody Map<Object, Object> fields) throws IOException {
+	public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody Map<Object, Object> fields) throws IOException {
 		try {
-			User user = userService.findById(id).get(); 
+			User user = userService.findById(id).get();
+			System.out.println(user.getEmail());
 			fields.forEach((key, value) -> {
 				Field field = ReflectionUtils.findField(user.getClass(), (String) key);
 				field.setAccessible(true);
-				ReflectionUtils.setField(field, user, value);
+				if(key=="password") {
+					ReflectionUtils.setField(field, user, passwordEncode.encode((CharSequence) value));
+				}else {
+					ReflectionUtils.setField(field, user, value);
+				}
 			});
-			return new ResponseEntity<>(userService.guardarUsuario(user), HttpStatus.OK);
+			UserDto userDto = modelMapper.map(userService.guardarUsuario(user), UserDto.class);
+			//return new ResponseEntity<>(userService.guardarUsuario(user), HttpStatus.OK);
+			return new ResponseEntity<>(userDto, HttpStatus.OK);
 		} catch (NullPointerException e) {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
