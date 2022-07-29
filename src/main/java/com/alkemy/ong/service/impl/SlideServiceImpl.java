@@ -2,12 +2,12 @@ package com.alkemy.ong.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alkemy.ong.dto.SlideDetailsDto;
 import com.alkemy.ong.dto.SlideDto;
 import com.alkemy.ong.model.Slide;
 import com.alkemy.ong.repository.SlideRepository;
@@ -30,8 +30,8 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public Slide get(String id) {
-        return null;
+    public SlideDetailsDto getById(String id) {
+        return modelMapper.map(slideRepository.getById(id), SlideDetailsDto.class);
     }
 
     @Override
