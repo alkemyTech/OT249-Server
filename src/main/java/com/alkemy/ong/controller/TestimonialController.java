@@ -31,7 +31,7 @@ public class TestimonialController {
         TestimonialDto updateTestimony = testimonialService.updateTestimony(id, testimonialDto, bindingResult );
         return ResponseEntity.ok( updateTestimony );
     }
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize( "hasRole('ADMIN')" )
     public ResponseEntity<?> deleteTestimonial(@PathVariable String id){
 
