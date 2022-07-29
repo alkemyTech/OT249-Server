@@ -14,6 +14,7 @@ import com.alkemy.ong.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,6 +26,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -118,4 +120,18 @@ public class UserServiceImpl implements UserService {
 		return user.getId().equals(id);
 	}
 
+	public UserDto authenticatedUser() throws Exception {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		String email = authentication.getName();
+
+		User user= userRepo.findByEmail(email).orElseThrow(() -> new Exception ("User not Found"));
+
+		return modelMapper.map(user,UserDto.class);
+
+
+
+
+	}
 }
