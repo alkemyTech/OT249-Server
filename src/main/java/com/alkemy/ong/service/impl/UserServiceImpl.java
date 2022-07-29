@@ -14,6 +14,7 @@ import com.alkemy.ong.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -108,8 +109,9 @@ public class UserServiceImpl implements UserService {
 
 	//@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public boolean validarId(String Id){          
-		String username =  SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass().getName();
-		Optional<User> user = userRepository.findByEmail(username);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String email = authentication.getName();
+		Optional<User> user = userRepository.findByEmail(email);
 		if(user.isPresent()){
 			return user.get().getId().equals(Id);
 		}
