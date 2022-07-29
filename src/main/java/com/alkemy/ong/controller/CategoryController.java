@@ -31,7 +31,7 @@ public class CategoryController {
     private ModelMapper modelMapper;
 
     @GetMapping(value = "/categories")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getPagedUsers(@RequestParam(defaultValue = "0", name = "page") int page,
                                            @RequestParam(defaultValue = "asc", name = "order") String order) {
         return ResponseEntity.ok( categoryService.getAllCategories(page, order) );

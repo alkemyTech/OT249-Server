@@ -21,16 +21,16 @@ public class TestimonialServiceImpl implements TestimonialService {
     @Override
     public boolean deleteTestimony(String id) {
 
-        return false;
+        Testimonial testimonial = testimonialRepository.findById( id ).orElseThrow( () -> new RecordException.RecordNotFoundException( "Testimony Not found" ) );
+        testimonialRepository.delete( testimonial );
+        return this.findById( id ).getSoftDelete();
     }
 
     @Override
     public TestimonialDto updateTestimony(String id, TestimonialDto testimonialDto, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors())
             throw new BindingResultException( bindingResult );
-        Testimonial found = testimonialRepository.findById( id ).orElseThrow( () -> new RecordException.RecordNotFoundException( "Testimonial not found" ) );
-
-        TestimonialDto mappedTestimonialDto = this.modelMapper.map( found, TestimonialDto.class );
+        TestimonialDto mappedTestimonialDto = this.findById( id );
         mappedTestimonialDto.setContent( testimonialDto.getContent() );
         mappedTestimonialDto.setImage( testimonialDto.getImage() );
         mappedTestimonialDto.setName( testimonialDto.getName() );
@@ -46,5 +46,12 @@ public class TestimonialServiceImpl implements TestimonialService {
             throw new BindingResultException( bindingResult );
         Testimonial testimonial = testimonialRepository.save( modelMapper.map( testimonialDto, Testimonial.class ) );
         return modelMapper.map( testimonial, TestimonialDto.class);
+    }
+
+    @Override
+    public TestimonialDto findById(String id) {
+
+        Testimonial found = testimonialRepository.findById( id ).orElseThrow( () -> new RecordException.RecordNotFoundException( "Testimonial not found" ) );
+        return this.modelMapper.map( found, TestimonialDto.class );
     }
 }
