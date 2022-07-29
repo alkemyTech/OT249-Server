@@ -29,9 +29,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public AuthenticationManager authenticationManager;
+    public JwtUtil jwtUtil;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManagerBean) {
-
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManagerBean, JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManagerBean;
     }
 
@@ -64,7 +65,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 
         UserDto userDto = (UserDto) authResult.getPrincipal();
-        String jwt = JwtUtil.generateToken( userDto );
+        String jwt = jwtUtil.generateToken( userDto );
         UserResponseDto value = new UserResponseDto( jwt
         );
         new ObjectMapper().writeValue(response.getOutputStream(), value );

@@ -11,13 +11,6 @@ import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
 import com.alkemy.ong.service.EmailService;
 import com.alkemy.ong.service.UserService;
-
-import lombok.AllArgsConstructor;
-
-import java.io.IOException;
-import java.util.Optional;
-import java.util.UUID;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,10 +19,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -69,6 +64,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 		User found = userRepo.findByEmail( s ).orElseThrow( () -> new UsernameNotFoundException( "NOT FOUND" ) );
+		if(found.isDeleted())
+			throw new UsernameNotFoundException( "NOT FOUND" );
 		UserDto userDto = modelMapper.map( found, UserDto.class );
 		userDto.setRole( modelMapper.map(found.getRole(), RoleDto.class  ) );
 		return userDto;
