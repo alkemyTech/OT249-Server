@@ -1,7 +1,9 @@
 package com.alkemy.ong.security;
 
+import com.alkemy.ong.Utils.JwtUtil;
 import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.UserDto;
+import com.alkemy.ong.dto.UserResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +29,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     public AuthenticationManager authenticationManager;
+    public JwtUtil jwtUtil;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManagerBean) {
-
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManagerBean, JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManagerBean;
     }
 
@@ -62,7 +65,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 
         UserDto userDto = (UserDto) authResult.getPrincipal();
-        new ObjectMapper().writeValue(response.getOutputStream(), Map.of("ok", userDto));
+        String jwt = jwtUtil.generateToken( userDto );
+        UserResponseDto value = new UserResponseDto( jwt
+        );
+        new ObjectMapper().writeValue(response.getOutputStream(), value );
     }
 
 }
