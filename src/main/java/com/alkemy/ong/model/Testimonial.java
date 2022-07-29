@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -14,6 +16,8 @@ import java.time.Instant;
 @Table(name = "testimonials")
 @Getter @Setter @NoArgsConstructor
 @AllArgsConstructor
+@SQLDelete(sql = "UPDATE testimonials SET soft_deLete = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Testimonial {
 	@Id
     @GeneratedValue(generator = "uuid")
