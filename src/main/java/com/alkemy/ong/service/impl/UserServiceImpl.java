@@ -108,14 +108,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	//@PreAuthorize("@userServiceImpl.validarId(#id)")
-	public boolean validarId(String Id){          
+	public boolean validarId(String id) throws Exception{          
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
-		Optional<User> user = userRepository.findByEmail(email);
-		if(user.isPresent()){
-			return user.get().getId().equals(Id);
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new Exception("Email no encontrado"));
+		if(user.getRole().getName().equals("ADMIN")){
+			return true;
 		}
-		return false;
+		return user.getId().equals(id);
 	}
 
 }
