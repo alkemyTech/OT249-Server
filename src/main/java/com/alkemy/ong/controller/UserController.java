@@ -28,6 +28,7 @@ import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
 import com.alkemy.ong.service.IRoleService;
 import com.alkemy.ong.service.UserService;
+import com.amazonaws.Response;
 
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -67,6 +68,15 @@ public class UserController {
 										   @RequestParam(defaultValue = "asc", name = "order") String order) {
 		return ResponseEntity.ok( userService.getAllUsers(page, order) );
 	}
+
+
+	@GetMapping("/users/{id}")
+	@PreAuthorize("@userServiceImpl.validarId(#id)")
+	public ResponseEntity<?> getUserById(@PathVariable String id){
+		return ResponseEntity.ok(userService.findById(id).orElseThrow());
+	}
+
+
 
 	@PatchMapping("/users/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") String id, @RequestBody Map<Object, Object> fields) throws IOException {
