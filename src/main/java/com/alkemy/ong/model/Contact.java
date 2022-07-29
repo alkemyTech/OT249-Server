@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @Table(name = "contacts")
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE contacts SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 public class Contact {
     @Id
