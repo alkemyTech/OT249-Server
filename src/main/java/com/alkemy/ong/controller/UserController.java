@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +92,11 @@ public class UserController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+
+	@GetMapping("/auth/me")
+	public ResponseEntity<UserDto>AuthenticatedUser () throws Exception {
+
+		return new ResponseEntity<>(userService.authenticatedUser(),HttpStatus.OK);
 	}
 }
