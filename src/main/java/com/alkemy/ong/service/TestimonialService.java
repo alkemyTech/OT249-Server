@@ -11,4 +11,5 @@ public interface TestimonialService {
 
     TestimonialDto createTestimony(@Valid TestimonialDto testimonialDto, BindingResult bindingResult);
 
+    TestimonialDto findById(String id);
 }
