@@ -25,10 +25,17 @@ public class TestimonialController {
         return new ResponseEntity<>( newTestimonialDto, HttpStatus.CREATED);
     }
     @PutMapping("/{id}")
-    @PreAuthorize( "hasAuthority('ADMIN')" )
-    public ResponseEntity<TestimonialDto> updateNews(@PathVariable String id, @Valid @RequestBody TestimonialDto testimonialDto, BindingResult bindingResult){
+    @PreAuthorize( "hasRole('ADMIN')" )
+    public ResponseEntity<TestimonialDto> updateTestimonial(@PathVariable String id, @Valid @RequestBody TestimonialDto testimonialDto, BindingResult bindingResult){
 
         TestimonialDto updateTestimony = testimonialService.updateTestimony(id, testimonialDto, bindingResult );
+        return ResponseEntity.ok( updateTestimony );
+    }
+    @DeleteMapping("/{id}")
+    @PreAuthorize( "hasRole('ADMIN')" )
+    public ResponseEntity<?> deleteTestimonial(@PathVariable String id){
+
+        boolean updateTestimony = testimonialService.deleteTestimony(id );
         return ResponseEntity.ok( updateTestimony );
     }
 
