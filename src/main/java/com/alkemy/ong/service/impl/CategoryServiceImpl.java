@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 @Service
@@ -22,6 +24,9 @@ import javax.transaction.Transactional;
 public class CategoryServiceImpl implements CategoryService{
     private final ModelMapper modelMapper;
     private final CategoryRepository categoryRepository;
+    
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Category getCategory(String id) {
@@ -35,7 +40,9 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public void deleteCategory(String id) {
-
+ 	String queryDeleted = "UPDATE categories SET deleted=1 WHERE Id = '" + id + "'";
+    	
+    	entityManager.createNativeQuery(queryDeleted).executeUpdate();
     }
 
     @Override
