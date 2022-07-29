@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
     private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Autowired
 	JwtUtil jwtUtil;
@@ -101,4 +105,15 @@ public class UserServiceImpl implements UserService {
 			throw new BadCredentialsException("Email o contraseña incorrecta ", e);
 		}
 	}
+
+	//@PreAuthorize("@userServiceImpl.validarId(#id)")
+	public boolean validarId(String Id){          
+		String username =  SecurityContextHolder.getContext().getAuthentication().getPrincipal().getClass().getName();
+		Optional<User> user = userRepository.findByEmail(username);
+		if(user.isPresent()){
+			return user.get().getId().equals(Id);
+		}
+		return false;
+	}
+
 }
