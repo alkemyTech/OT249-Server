@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +39,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private IRoleService roleService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncode;
 
@@ -53,7 +54,7 @@ public class UserController {
 
 	@Autowired
 	JwtUtil jwtUtil;
-	
+
 	@PostMapping("/auth/register")
 	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
@@ -82,7 +83,7 @@ public class UserController {
 	        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 	}
-	
+
 	@DeleteMapping("/users/{id}")
 	public ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
 		boolean userEliminado = userService.deleteUser(id);
@@ -91,5 +92,11 @@ public class UserController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+
+	@GetMapping("/auth/me")
+	public ResponseEntity<UserDto>AuthenticatedUser () throws Exception {
+
+		return new ResponseEntity<>(userService.authenticatedUser(),HttpStatus.OK);
 	}
 }
