@@ -9,9 +9,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SlideDto {
-    
+public class SlideDetailsDto {
+
     private String  id;
     private String imageUrl;
+    private String text;
     private Integer position;
+    private PublicOrganizationDto publicOrganizationDto;
 }
