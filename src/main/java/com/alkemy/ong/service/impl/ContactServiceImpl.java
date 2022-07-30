@@ -13,6 +13,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+
 public class ContactServiceImpl implements ContactService {
 
     ModelMapper modelMapper;
@@ -23,8 +24,12 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Contact saveContact() {
-        return null;
+    public ContactDto saveContact(ContactDto contactDto) {
+        Contact contact = new Contact();
+        modelMapper.map(contactDto,contact);
+        contact.setDeleted(false);
+        contactRepository.save(contact);
+        return contactDto;
     }
 
     @Override
