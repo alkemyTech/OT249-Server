@@ -10,8 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SlideRequestDto {
-    private String  id;
-    private String imageUrl;
+    private String base64Img;
     private String text;
     private Integer position;
     private String orgId;

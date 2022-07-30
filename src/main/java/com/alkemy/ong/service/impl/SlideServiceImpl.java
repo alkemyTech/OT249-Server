@@ -1,19 +1,21 @@
 package com.alkemy.ong.service.impl;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alkemy.ong.Utils.CustomMultipartFile;
 import com.alkemy.ong.dto.PublicOrganizationDto;
 import com.alkemy.ong.dto.SlideResponseDto;
 import com.alkemy.ong.dto.SlideDto;
 import com.alkemy.ong.dto.SlideRequestDto;
-import com.alkemy.ong.model.Organization;
 import com.alkemy.ong.model.Slide;
 import com.alkemy.ong.repository.SlideRepository;
+import com.alkemy.ong.service.AmazonClient;
 import com.alkemy.ong.service.OrganizationService;
 import com.alkemy.ong.service.SlideService;
 
@@ -28,6 +30,9 @@ public class SlideServiceImpl implements SlideService {
 
     @Autowired
     private OrganizationService organizationService;
+
+    @Autowired
+    AmazonClient amazonClient;
 
     @Override
     public List<SlideDto> getAll() {
@@ -46,6 +51,7 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public void delete(String id) {
+      // TODO document why this method is empty
     }
 
     @Override
@@ -55,11 +61,22 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public SlideResponseDto save(SlideRequestDto slideRequestDto) {
+        CustomMultipartFile customMultipartFile = new CustomMultipartFile();
+        String fileUrl = amazonClient.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
+        if(slideRequestDto.getPosition() == null) {
+            slideRequestDto.setPosition(this.lastPosition() + 1);
+        }
         Slide entity = modelMapper.map(slideRequestDto, Slide.class);
         entity.setOrganization(organizationService.get(slideRequestDto.getOrgId()));
-        SlideResponseDto dto = modelMapper.map(entity, SlideResponseDto.class);
-        dto.setPublicOrganizationDto(modelMapper.map(entity.getOrganization(), PublicOrganizationDto.class));
-        return dto;
+        entity.setImageUrl(fileUrl);
+        slideRepository.save(entity);
+        SlideResponseDto dtoResponse = modelMapper.map(entity, SlideResponseDto.class);
+        dtoResponse.setPublicOrganizationDto(modelMapper.map(entity.getOrganization(), PublicOrganizationDto.class));
+        return dtoResponse;
+    }
+
+    public Integer lastPosition(){
+        return slideRepository.findTopByOrderByPositionDesc().getPosition();
     }
 
     

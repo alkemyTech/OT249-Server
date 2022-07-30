@@ -8,11 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alkemy.ong.dto.SlideResponseDto;
 import com.alkemy.ong.dto.SlideDto;
+import com.alkemy.ong.dto.SlideRequestDto;
 import com.alkemy.ong.service.SlideService;
 
 @RestController
@@ -32,5 +35,11 @@ public class SlideController {
     @PreAuthorize( "hasRole('ADMIN')")
     public ResponseEntity<SlideResponseDto> getById(@PathVariable String id){
         return new ResponseEntity<>(slideService.getById(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    @PreAuthorize( "hasRole('ADMIN')")
+    public ResponseEntity<SlideResponseDto> save(@RequestBody SlideRequestDto slideRequestDto){
+        return new ResponseEntity<>(slideService.save(slideRequestDto), HttpStatus.OK);
     }
 }
