@@ -39,10 +39,11 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    @Transactional
     public void deleteCategory(String id) {
- 	String queryDeleted = "UPDATE categories SET deleted=1 WHERE Id = '" + id + "'";
-    	
-    	entityManager.createNativeQuery(queryDeleted).executeUpdate();
+
+    	Category category = categoryRepository.findById(id).get();
+    	categoryRepository.delete(category);
     }
 
     @Override
