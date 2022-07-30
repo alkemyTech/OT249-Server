@@ -56,7 +56,7 @@ public class NewController {
     	News newsAux = new News();
     	
     	newsAux.setName(createNewsDto.getName());
-    	newsAux.setContent(createNewsDto.getName());
+    	newsAux.setContent(createNewsDto.getContent());
     	newsAux.setImage(createNewsDto.getImage());
     	newsAux.setCategory(createNewsDto.getCategory());
     	newsAux.setTimestamp(LocalDateTime.now());
