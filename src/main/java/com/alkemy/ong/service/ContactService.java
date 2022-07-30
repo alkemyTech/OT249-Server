@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ContactService {
     Contact getContact();
-    Contact saveContact();
+    ContactDto saveContact(ContactDto contact);
     List<ContactDto> getAllContacts();
     void deleteContact();
 }
