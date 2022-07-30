@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alkemy.ong.dto.PublicOrganizationDto;
 import com.alkemy.ong.dto.SlideDetailsDto;
 import com.alkemy.ong.dto.SlideDto;
 import com.alkemy.ong.model.Slide;
@@ -31,7 +32,10 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public SlideDetailsDto getById(String id) {
-        return modelMapper.map(slideRepository.getById(id), SlideDetailsDto.class);
+        Slide entity = slideRepository.getById(id);
+        SlideDetailsDto dto = modelMapper.map(entity, SlideDetailsDto.class);
+        dto.setPublicOrganizationDto(modelMapper.map(entity.getOrganization(), PublicOrganizationDto.class));
+        return dto;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.alkemy.ong.dto;
 
-import com.alkemy.ong.model.Organization;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +15,5 @@ public class SlideDetailsDto {
     private String imageUrl;
     private String text;
     private Integer position;
-    private Organization organization;
+    private PublicOrganizationDto publicOrganizationDto;
 }
