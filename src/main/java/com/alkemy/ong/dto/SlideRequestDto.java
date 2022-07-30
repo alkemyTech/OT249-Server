@@ -9,11 +9,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SlideDetailsDto {
-
+public class SlideRequestDto {
     private String  id;
     private String imageUrl;
     private String text;
     private Integer position;
-    private PublicOrganizationDto publicOrganizationDto;
+    private String orgId;
 }

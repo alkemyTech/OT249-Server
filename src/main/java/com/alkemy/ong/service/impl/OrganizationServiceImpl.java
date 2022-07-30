@@ -40,7 +40,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 
     @Override
     public Organization get(String id) {
-        return null;
+        return organizationRepository.getById(id);
     }
 
     @Override

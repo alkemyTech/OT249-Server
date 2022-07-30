@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alkemy.ong.dto.SlideDetailsDto;
+import com.alkemy.ong.dto.SlideResponseDto;
 import com.alkemy.ong.dto.SlideDto;
 import com.alkemy.ong.service.SlideService;
 
@@ -30,7 +30,7 @@ public class SlideController {
 
     @GetMapping("/{id}")
     @PreAuthorize( "hasRole('ADMIN')")
-    public ResponseEntity<SlideDetailsDto> getById(@PathVariable String id){
+    public ResponseEntity<SlideResponseDto> getById(@PathVariable String id){
         return new ResponseEntity<>(slideService.getById(id), HttpStatus.OK);
     }
 }
