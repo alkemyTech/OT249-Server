@@ -1,7 +1,9 @@
 package com.alkemy.ong.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -17,6 +19,8 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE contacts SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
+@Getter
+@Setter
 public class Contact {
     @Id
     @GeneratedValue(generator = "uuid")
