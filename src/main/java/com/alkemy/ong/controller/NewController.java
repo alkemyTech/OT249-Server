@@ -1,5 +1,6 @@
 package com.alkemy.ong.controller;
 
+import com.alkemy.ong.dto.CreateNewsDto;
 import com.alkemy.ong.dto.NewDTO;
 import com.alkemy.ong.model.News;
 import com.alkemy.ong.service.NewsService;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 import javax.validation.Valid;
 
@@ -45,4 +48,26 @@ public class NewController {
 		NewDTO newsDTOresponse = newsService.updateNews(id, newsDTO, bindingResult );
 		return ResponseEntity.ok( newsDTOresponse );
 	}
+	
+    @PostMapping("/news")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<String> createNews(@RequestBody CreateNewsDto createNewsDto){
+
+    	News newsAux = new News();
+    	
+    	newsAux.setName(createNewsDto.getName());
+    	newsAux.setContent(createNewsDto.getName());
+    	newsAux.setImage(createNewsDto.getImage());
+    	newsAux.setCategory(createNewsDto.getCategory());
+    	newsAux.setTimestamp(LocalDateTime.now());
+    	newsAux.setSoftDelete(false);
+    	
+    	newsService.createNews(newsAux);
+    	
+    	return new ResponseEntity<>("Novedad creada correctamente",HttpStatus.CREATED);
+    	
+    	
+    	
+
+    }
 }
