@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import com.alkemy.ong.model.Organization;
+import com.alkemy.ong.repository.OrganizationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,9 @@ public class SlideServiceImpl implements SlideService {
     @Autowired
     AmazonClient amazonClient;
 
+    @Autowired
+    OrganizationRepository organizationRepository;
+
     @Override
     public List<SlideDto> getAll() {
         List<SlideDto> dtos = new ArrayList<>();
@@ -55,8 +60,21 @@ public class SlideServiceImpl implements SlideService {
     }
 
     @Override
-    public Slide update(String id, Slide slide) {
-        return null;
+    public SlideResponseDto update(String id, SlideRequestDto slideRequestDto) throws Exception {
+
+        Slide slide= slideRepository.findById(id).orElseThrow(() -> new Exception ("Slide not Found"));
+
+        slide.setImageUrl(slideRequestDto.getBase64Img());
+        slide.setText(slideRequestDto.getText());
+        slide.setPosition(slideRequestDto.getPosition());
+        if (slideRequestDto.getOrgId()!=null){
+            Organization organization = organizationRepository.findById(slideRequestDto.getOrgId()).orElseThrow(() -> new Exception ("Organization not Found"));
+            slide.setOrganization(organization);
+        }
+        slideRepository.save(slide);
+        SlideResponseDto dtoResponse =  modelMapper.map(slide,SlideResponseDto.class);
+        dtoResponse.setPublicOrganizationDto(modelMapper.map(slide.getOrganization(),PublicOrganizationDto.class));
+        return dtoResponse;
     }
 
     @Override

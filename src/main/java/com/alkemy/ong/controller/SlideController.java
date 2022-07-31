@@ -6,12 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alkemy.ong.dto.SlideResponseDto;
 import com.alkemy.ong.dto.SlideDto;
@@ -41,5 +36,12 @@ public class SlideController {
     @PreAuthorize( "hasRole('ADMIN')")
     public ResponseEntity<SlideResponseDto> save(@RequestBody SlideRequestDto slideRequestDto){
         return new ResponseEntity<>(slideService.save(slideRequestDto), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize( "hasRole('ADMIN')")
+    public  ResponseEntity<SlideResponseDto>update(@PathVariable String id, @RequestBody SlideRequestDto slideRequestDto) throws Exception {
+
+        return new ResponseEntity<>(slideService.update(id, slideRequestDto), HttpStatus.OK);
     }
 }
