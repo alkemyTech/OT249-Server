@@ -9,4 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface SlideRepository extends JpaRepository<Slide, String> {
+    Slide findTopByOrderByPositionDesc();
 }
