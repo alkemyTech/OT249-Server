@@ -19,11 +19,10 @@ public class TestimonialServiceImpl implements TestimonialService {
     private final ModelMapper modelMapper;
 
     @Override
-    public boolean deleteTestimony(String id) {
+    public void deleteTestimony(String id) {
 
         Testimonial testimonial = testimonialRepository.findById( id ).orElseThrow( () -> new RecordException.RecordNotFoundException( "Testimony Not found" ) );
         testimonialRepository.delete( testimonial );
-        return this.findById( id ).getSoftDelete();
     }
 
     @Override
