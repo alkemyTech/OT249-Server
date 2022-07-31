@@ -1,5 +1,6 @@
 package com.alkemy.ong.service;
 
+import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.model.Category;
 import org.springframework.data.domain.Page;
 
@@ -13,7 +14,7 @@ public interface CategoryService {
     //Metodo necesitado
     Category createCategory(Category category);
     void deleteCategory(String id);
-    Category updateCategory(Category category, String id);
+    void updateCategory(CategoryDto category, String id);
 
     Page<Map<String, String>> getAllCategories(int page, String order);
 }
