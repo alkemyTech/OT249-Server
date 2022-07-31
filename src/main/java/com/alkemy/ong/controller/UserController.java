@@ -77,7 +77,6 @@ public class UserController {
 	public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody Map<Object, Object> fields) throws IOException {
 		try {
 			User user = userService.findById(id).get();
-			System.out.println(user.getEmail());
 			fields.forEach((key, value) -> {
 				Field field = ReflectionUtils.findField(user.getClass(), (String) key);
 				field.setAccessible(true);
