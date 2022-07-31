@@ -17,7 +17,7 @@ import java.time.Instant;
 @Getter @Setter @NoArgsConstructor
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE testimonials SET soft_deLete = true WHERE id=?")
-@Where(clause = "deleted=false")
+@Where(clause = "soft_deLete=false")
 public class Testimonial {
 	@Id
     @GeneratedValue(generator = "uuid")
