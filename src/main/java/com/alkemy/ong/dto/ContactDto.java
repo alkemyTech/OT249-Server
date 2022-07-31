@@ -15,7 +15,7 @@ public class ContactDto {
 
     @NotBlank(message = "El nombre no puede estar vacio")
     private String name;
-    private Integer phone;
+    private String phone;
     @NotBlank(message = "El email no puede estar vacio")
     @Email(message = "Email incorrecto")
     private String email;
