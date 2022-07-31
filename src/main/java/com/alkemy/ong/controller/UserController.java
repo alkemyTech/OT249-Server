@@ -56,11 +56,11 @@ public class UserController {
 	JwtUtil jwtUtil;
 
 	@PostMapping("/auth/register")
-	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
+	public ResponseEntity<String> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
 		boolean deleted = false;
 		User user =  new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), passwordEncode.encode(userDto.getPassword()), userDto.getPhoto(), rol, new Timestamp(System.currentTimeMillis()), deleted);
-		return new ResponseEntity<>(userService.guardarUsuario(user), HttpStatus.OK);
+		return new ResponseEntity<>("usuario guardado", HttpStatus.OK);
 	}
 	@GetMapping(value = "/users")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

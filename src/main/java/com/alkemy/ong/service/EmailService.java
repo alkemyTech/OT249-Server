@@ -43,6 +43,16 @@ public class EmailService {
             throw ex;
         }
     }
+    
+    public void sendEmailToContact(String emailTo, String firstName) {
+    	String emailSubject = "¡Somos Más!, Información de contacto";
+        Content body = new Content("Hola "+ firstName, ", Su contacto se ha completado exitosamente");
+        try {
+            sendEmail(emailTo, emailSubject, body);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void WelcomeMail(String emailTo, String firstName) {
         String emailSubject = "¡Bienvenidos a Somos Más!";
