@@ -19,7 +19,7 @@ import com.alkemy.ong.model.Member;
 import com.alkemy.ong.repository.MemberRepository;
 import com.alkemy.ong.service.IMemberService;
 
-@RestController("members")
+@RestController
 public class MemberController {
 
 	@Autowired
@@ -28,7 +28,7 @@ public class MemberController {
 	@Autowired
 	private MemberRepository memberRepository;
 
-	@PostMapping
+	@PostMapping("members")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> createMember(@Valid @RequestBody MemberDto memberDto) {
 
