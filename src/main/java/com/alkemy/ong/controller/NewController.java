@@ -2,6 +2,7 @@ package com.alkemy.ong.controller;
 
 import com.alkemy.ong.dto.CreateNewsDto;
 import com.alkemy.ong.dto.NewDTO;
+import com.alkemy.ong.model.Category;
 import com.alkemy.ong.model.News;
 import com.alkemy.ong.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import javax.validation.Valid;
@@ -54,11 +56,17 @@ public class NewController {
     public ResponseEntity<String> createNews(@Valid @RequestBody CreateNewsDto createNewsDto){
 
     	News newsAux = new News();
+    	Category categoryAux = new Category();
     	
+    	categoryAux.setName(createNewsDto.getCategory().getName());
+    	categoryAux.setDescription(createNewsDto.getCategory().getDescription());
+    	categoryAux.setImage(createNewsDto.getCategory().getImage());
+    	categoryAux.setTimestamp(new Timestamp(System.currentTimeMillis()));
+
     	newsAux.setName(createNewsDto.getName());
     	newsAux.setContent(createNewsDto.getContent());
     	newsAux.setImage(createNewsDto.getImage());
-    	newsAux.setCategory(createNewsDto.getCategory());
+    	newsAux.setCategory(categoryAux);
     	newsAux.setTimestamp(LocalDateTime.now());
     	newsAux.setSoftDelete(false);
     	
