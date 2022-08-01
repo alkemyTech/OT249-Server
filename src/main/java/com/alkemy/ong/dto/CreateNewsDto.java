@@ -13,13 +13,10 @@ import lombok.Setter;
 public class CreateNewsDto {
 
 	@NotBlank
-	@NotNull
 	private String name;
 	@NotBlank
-	@NotNull
 	private String content;
 	@NotBlank
-	@NotNull
 	private String image;
 	
 	@NotNull

@@ -50,8 +50,8 @@ public class NewController {
 	}
 	
     @PostMapping("/news")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<String> createNews(@RequestBody CreateNewsDto createNewsDto){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> createNews(@Valid @RequestBody CreateNewsDto createNewsDto){
 
     	News newsAux = new News();
     	
