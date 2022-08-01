@@ -1,5 +1,7 @@
 package com.alkemy.ong.service.impl;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,16 @@ public class ActivityServiceImpl implements ActivityService {
 	@Override
 	public Activity crearActivity(Activity activity) {
 		return activityRepository.save(activity);
+	}
+
+	@Override
+	public Activity findById(String id) {
+		Optional<Activity> activityOptional = activityRepository.findById(id);
+		if (activityOptional.isPresent()) {
+			return activityOptional.get();
+		} else {
+			return null;
+		}
 	}
 	
 }
