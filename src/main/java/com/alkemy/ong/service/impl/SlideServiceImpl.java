@@ -64,6 +64,10 @@ public class SlideServiceImpl implements SlideService {
 
         Slide slide= slideRepository.findById(id).orElseThrow(() -> new Exception ("Slide not Found"));
 
+        CustomMultipartFile customMultipartFile = new CustomMultipartFile();
+        String fileUrl = amazonClient.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
+        slide.setImageUrl(fileUrl);
+
         slide.setImageUrl(slideRequestDto.getBase64Img());
         slide.setText(slideRequestDto.getText());
         slide.setPosition(slideRequestDto.getPosition());
