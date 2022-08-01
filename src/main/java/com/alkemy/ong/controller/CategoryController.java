@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,6 +75,22 @@ public class CategoryController {
 				return new ResponseEntity<>("Categoría no encontrada", HttpStatus.NOT_FOUND);
 			}
 
+		}
+		
+		@PutMapping("/categories/{id}")
+		@PreAuthorize("hasRole('ADMIN')")
+		public ResponseEntity<String> updateCategory(@PathVariable("id") String id,@RequestBody CategoryDto category){
+			
+			if (categoryRepository.existsById(id)) {
+				categoryService.updateCategory(category, id);
+
+				return new ResponseEntity<>("Categoria actualizada con éxito", HttpStatus.OK);
+			} else {
+
+				return new ResponseEntity<>("Categoría no encontrada", HttpStatus.NOT_FOUND);
+			}
+			
+			
 		}
 	  
 }
