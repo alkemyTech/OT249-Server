@@ -62,7 +62,6 @@ public class UserController {
 		userService.guardarUsuario(user);
 		
 		LoginRequestDTO loginReqDto = new LoginRequestDTO(userDto.getEmail(), userDto.getPassword());
-		System.out.println("email " + loginReqDto.getEmail() + " Password: " + loginReqDto.getPassword());
 		return new ResponseEntity<>(userService.login(loginReqDto), HttpStatus.OK);
 	}
 	@GetMapping(value = "/users")
