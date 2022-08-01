@@ -44,4 +44,11 @@ public class SlideController {
     public ResponseEntity<SlideResponseDto> save(@RequestBody SlideRequestDto slideRequestDto){
         return new ResponseEntity<>(slideService.save(slideRequestDto), HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize( "hasRole('ADMIN')")
+    public  ResponseEntity<SlideResponseDto>update(@PathVariable String id, @RequestBody SlideRequestDto slideRequestDto) throws Exception {
+
+        return new ResponseEntity<>(slideService.update(id, slideRequestDto), HttpStatus.OK);
+    }
 }
