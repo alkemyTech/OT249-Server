@@ -34,9 +34,8 @@ public class TestimonialController {
     @DeleteMapping("/{id}")
     @PreAuthorize( "hasRole('ADMIN')" )
     public ResponseEntity<?> deleteTestimonial(@PathVariable String id){
-
-        boolean updateTestimony = testimonialService.deleteTestimony(id );
-        return ResponseEntity.ok( updateTestimony );
+        testimonialService.deleteTestimony(id );
+        return ResponseEntity.noContent().build();
     }
 
 }

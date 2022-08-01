@@ -6,7 +6,7 @@ import org.springframework.validation.BindingResult;
 import javax.validation.Valid;
 
 public interface TestimonialService {
-    boolean deleteTestimony(String id);
+    void deleteTestimony(String id);
     TestimonialDto updateTestimony(String id, TestimonialDto testimonialDto, BindingResult bindingResult);
 
     TestimonialDto createTestimony(@Valid TestimonialDto testimonialDto, BindingResult bindingResult);

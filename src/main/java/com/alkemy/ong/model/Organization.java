@@ -51,6 +51,10 @@ public class Organization {
     private Timestamp timestamp = Timestamp.from(Instant.now());
 
     private Boolean deleted = Boolean.FALSE;
+    
+    private String urlFacebook;
+    private String urlInstagram;
+    private String urlLinkedin;
 
     public Organization(String name, String image, String address, Integer phone, String email, String welcomeText,
             String aboutUsText, Timestamp timestamp, Boolean deleted) {

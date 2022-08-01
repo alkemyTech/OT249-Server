@@ -27,7 +27,7 @@ public class Contact {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String id;
     private String name;
-    private Integer phone;
+    private String phone;
     private String email;
     private String message;
     private Boolean deleted;

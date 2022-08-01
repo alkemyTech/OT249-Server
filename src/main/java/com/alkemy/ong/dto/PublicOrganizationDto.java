@@ -18,5 +18,11 @@ public class PublicOrganizationDto {
         private Integer phone;
         @NotBlank
         private String address;
+        @NotBlank
+        private String facebookUrl;
+        @NotBlank
+        private String linkedinUrl;
+        @NotBlank
+        private String instagramUrl;
 
 }

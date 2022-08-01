@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +22,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE members SET is_delete = true WHERE id=?")
+@Where(clause = "is_delete=false")
 public class Member {
 	
 	@Id
@@ -46,7 +50,8 @@ public class Member {
 	
 	private Timestamp timestamp;
 	
-	private Boolean isDelete;
+	@Column(name = "is_delete")
+	private Boolean isDelete= false;
 
 	public Member(String name, String facebookUrl, String instagramUrl, String linkedinUrl, String image,
 			String description, Timestamp timestamp, Boolean isDelete) {

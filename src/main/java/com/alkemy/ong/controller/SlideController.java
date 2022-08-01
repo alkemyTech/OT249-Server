@@ -31,6 +31,13 @@ public class SlideController {
     public ResponseEntity<SlideResponseDto> getById(@PathVariable String id){
         return new ResponseEntity<>(slideService.getById(id), HttpStatus.OK);
     }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String>delete(@PathVariable String id){
+
+        slideService.delete(id);
+        return new ResponseEntity<>("Slide deleted", HttpStatus.OK);
+    }
 
     @PostMapping
     @PreAuthorize( "hasRole('ADMIN')")
