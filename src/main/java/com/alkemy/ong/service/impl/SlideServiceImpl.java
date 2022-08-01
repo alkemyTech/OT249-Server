@@ -1,9 +1,9 @@
 package com.alkemy.ong.service.impl;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
+import com.alkemy.ong.exceptions.RecordException;
 import com.alkemy.ong.model.Organization;
 import com.alkemy.ong.repository.OrganizationRepository;
 import org.modelmapper.ModelMapper;
