@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE members SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE members SET is_delete = true WHERE id=?")
 @Where(clause = "is_delete=false")
 public class Member {
 	
