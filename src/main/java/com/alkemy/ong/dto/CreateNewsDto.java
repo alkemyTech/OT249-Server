@@ -20,5 +20,5 @@ public class CreateNewsDto {
 	private String image;
 	
 	@NotNull
-	private CategoryDto category;
+	private String idCategory;
 }

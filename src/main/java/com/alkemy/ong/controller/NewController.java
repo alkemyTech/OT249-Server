@@ -4,6 +4,7 @@ import com.alkemy.ong.dto.CreateNewsDto;
 import com.alkemy.ong.dto.NewDTO;
 import com.alkemy.ong.model.Category;
 import com.alkemy.ong.model.News;
+import com.alkemy.ong.repository.CategoryRepository;
 import com.alkemy.ong.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class NewController {
 
 	@Autowired
 	private NewsService newsService;
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@GetMapping("/{id}")
 	public ResponseEntity<NewDTO> NewDetail(@PathVariable String id) {
@@ -56,13 +60,8 @@ public class NewController {
     public ResponseEntity<String> createNews(@Valid @RequestBody CreateNewsDto createNewsDto){
 
     	News newsAux = new News();
-    	Category categoryAux = new Category();
-    	
-    	categoryAux.setName(createNewsDto.getCategory().getName());
-    	categoryAux.setDescription(createNewsDto.getCategory().getDescription());
-    	categoryAux.setImage(createNewsDto.getCategory().getImage());
-    	categoryAux.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
+    	Category categoryAux = categoryRepository.findById(createNewsDto.getIdCategory()).get();
+  
     	newsAux.setName(createNewsDto.getName());
     	newsAux.setContent(createNewsDto.getContent());
     	newsAux.setImage(createNewsDto.getImage());
