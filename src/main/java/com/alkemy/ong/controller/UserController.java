@@ -60,11 +60,14 @@ public class UserController {
 	ModelMapper modelMapper;
 	
 	@PostMapping("/auth/register")
-	public ResponseEntity<User> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
+	public ResponseEntity<?> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
 		boolean deleted = false;
 		User user =  new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), passwordEncode.encode(userDto.getPassword()), userDto.getPhoto(), rol, new Timestamp(System.currentTimeMillis()), deleted);
-		return new ResponseEntity<>(userService.guardarUsuario(user), HttpStatus.OK);
+		userService.guardarUsuario(user);
+		
+		LoginRequestDTO loginReqDto = new LoginRequestDTO(userDto.getEmail(), userDto.getPassword());
+		return new ResponseEntity<>(userService.login(loginReqDto), HttpStatus.OK);
 	}
 	@GetMapping(value = "/users")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

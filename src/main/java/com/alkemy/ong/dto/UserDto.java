@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,7 +39,7 @@ public class UserDto implements Serializable, UserDetails {
 	@NotBlank
 	private String photo;
 	
-	@NotBlank
+	@NotNull
 	private RoleDto role;
 
 	private boolean deleted;
