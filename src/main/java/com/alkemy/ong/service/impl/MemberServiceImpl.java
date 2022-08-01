@@ -3,6 +3,8 @@ package com.alkemy.ong.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +31,11 @@ public class MemberServiceImpl implements IMemberService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteMemberById(String id) {
 
+		Member member = memberRepository.findById(id).get();
+		memberRepository.delete(member);
 	}
 
 	@Override
