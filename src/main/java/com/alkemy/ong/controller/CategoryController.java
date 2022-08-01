@@ -78,13 +78,13 @@ public class CategoryController {
 		}
 		
 		@PutMapping("/categories/{id}")
-		@PreAuthorize("hasRole('ROLE_ADMIN')")
+		@PreAuthorize("hasRole('ADMIN')")
 		public ResponseEntity<String> updateCategory(@PathVariable("id") String id,@RequestBody CategoryDto category){
 			
 			if (categoryRepository.existsById(id)) {
 				categoryService.updateCategory(category, id);
 
-				return new ResponseEntity<>("Categoria actualizada con éxito", HttpStatus.NO_CONTENT);
+				return new ResponseEntity<>("Categoria actualizada con éxito", HttpStatus.OK);
 			} else {
 
 				return new ResponseEntity<>("Categoría no encontrada", HttpStatus.NOT_FOUND);
