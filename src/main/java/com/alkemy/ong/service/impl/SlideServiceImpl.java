@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import com.alkemy.ong.exceptions.RecordException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,8 @@ public class SlideServiceImpl implements SlideService {
 
     @Override
     public void delete(String id) {
-      // TODO document why this method is empty
+        Slide slide = slideRepository.findById(id).orElseThrow(() -> new RecordException.RecordNotFoundException( "Slide not found" ));
+        slideRepository.delete(slide);
     }
 
     @Override
