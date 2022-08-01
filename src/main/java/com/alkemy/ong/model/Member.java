@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE categories SET deleted = true WHERE id=?")
-@Where(clause = "deleted=false")
+@SQLDelete(sql = "UPDATE members SET deleted = true WHERE id=?")
+@Where(clause = "is_delete=false")
 public class Member {
 	
 	@Id
@@ -50,6 +50,7 @@ public class Member {
 	
 	private Timestamp timestamp;
 	
+	@Column(name = "is_delete")
 	private Boolean isDelete= false;
 
 	public Member(String name, String facebookUrl, String instagramUrl, String linkedinUrl, String image,

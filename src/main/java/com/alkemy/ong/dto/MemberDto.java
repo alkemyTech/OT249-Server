@@ -18,7 +18,6 @@ public class MemberDto {
 
 	private String id;
 	@NotBlank
-	@NotNull
 	private String name;
 	private String facebookUrl;
 	private String instagramUrl;

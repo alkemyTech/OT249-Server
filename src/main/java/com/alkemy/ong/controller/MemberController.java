@@ -23,7 +23,7 @@ public class MemberController {
 	private IMemberService memberService;
 
 	@PostMapping
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> createMember(@Valid @RequestBody MemberDto memberDto) {
 
 		Member memberAux = new Member();
