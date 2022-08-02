@@ -11,7 +11,6 @@ Las siguientes variables de entorno son necesarias para la correcta ejecución:
 - `DB_USER`
 - `DB_PASSWORD`
 - `SENDGRID.KEY`
-- `SENDGRID.FROM`
 - `ENDPOINT_URL`
 - `ACCESS_KEY`
 - `SECRET_KEY`
