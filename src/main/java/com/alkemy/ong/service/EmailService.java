@@ -44,11 +44,11 @@ public class EmailService {
         }
     }
     
-    public void sendEmailToContact(String emailTo, String firstName) {
+    public void sendEmailToContact(String email, String name) {
     	String emailSubject = "¡Somos Más!, Información de contacto";
-        Content body = new Content("Hola "+ firstName, ", Su contacto se ha completado exitosamente");
+        Content body = new Content("Hola "+ name, ", Su contacto se ha completado exitosamente");
         try {
-            sendEmail(emailTo, emailSubject, body);
+            sendEmail(email,emailSubject, body);
         } catch (IOException e) {
             e.printStackTrace();
         }
