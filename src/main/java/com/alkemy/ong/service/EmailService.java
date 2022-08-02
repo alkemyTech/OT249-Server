@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.sendgrid.Method;
@@ -18,8 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class EmailService {
+public class EmailService implements EnvironmentAware {
+    @Autowired
+    private Environment env;
 
+    public void setEnvironment(@Lazy Environment env) {
+        this.env = env;
+    }
     @Value("${sendgrid.from}")
     private String from;
 
@@ -27,12 +35,14 @@ public class EmailService {
     private SendGrid sendGrid;
 
     public Response sendEmail(String subject, String emailTo, Content body) throws IOException{
-        
+
+        String apiKey = env.getProperty("SENDGRID.KEY");
         Email from = new Email(this.from);
         Email to = new Email(emailTo);
         Mail mail = new Mail(from, subject, to, body);
 
         try {
+            SendGrid sendGrid = new SendGrid(apiKey);
             Request request = new Request();
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
@@ -58,7 +68,7 @@ public class EmailService {
         String emailSubject = "¡Bienvenidos a Somos Más!";
         Content body = new Content("text/html", welcomeEmailTemplate(firstName));
         try {
-            sendEmail(emailTo, emailSubject, body);
+            sendEmail(emailSubject,emailTo, body);
         } catch (IOException e) {
             e.printStackTrace();
         }

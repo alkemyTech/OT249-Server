@@ -11,5 +11,6 @@ public interface IMemberService {
 	public List<Member> getAllMembers();
 	public void deleteMemberById(String id);
 	public void updateMember(Member member,String id);
+	public void createMember(Member member);
 	
 }

@@ -1,7 +1,9 @@
 package com.alkemy.ong.exceptions;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -16,6 +18,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class CustomExceptionController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BindingResultException.class)
+    @ResponseStatus(BAD_REQUEST)
     public ResponseEntity<?> handleValidateExceptions(BindingResultException ex) {
         Map<String, Object> tokens = new HashMap<>();
         List<Map<String, Object>> token2 = ex.getFieldErrors().stream().map( vale -> {
@@ -40,7 +43,8 @@ public class CustomExceptionController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(RecordException.RecordNotFoundException.class)
-    public Map<String, String> handleValidateExceptionsEmail(RecordException.RecordNotFoundException ex) {
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Map<String, String> handleRecordNotFound(RecordException.RecordNotFoundException ex) {
         return Map.of("errors", ex.getMessage());
     }
 

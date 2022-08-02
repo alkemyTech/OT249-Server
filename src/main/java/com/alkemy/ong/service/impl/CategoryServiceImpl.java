@@ -47,8 +47,18 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
-    public Category updateCategory(Category category, String id) {
-        return null;
+    @Transactional
+    public void updateCategory(CategoryDto category, String id) {
+       
+    	Category categoryAux = entityManager.find(Category.class, id);
+    	
+    	categoryAux.setName(category.getName());
+    	categoryAux.setDescription(category.getDescription());
+    	categoryAux.setImage(category.getImage());
+    	
+    	entityManager.merge(categoryAux);
+    	
+    	
     }
 
 	@Override

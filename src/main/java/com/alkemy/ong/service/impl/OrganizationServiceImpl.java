@@ -25,12 +25,12 @@ public class OrganizationServiceImpl implements OrganizationService{
     @Override
     public PublicOrganizationDto getPublicData() {
         Organization organization = organizationRepository.findAll().get(0);
-        PublicOrganizationDto publicOrganizationDto = new PublicOrganizationDto();
-        publicOrganizationDto.setName(organization.getName());
-        publicOrganizationDto.setAddress(organization.getAddress());
-        publicOrganizationDto.setPhone(organization.getPhone());
-        publicOrganizationDto.setImage(organization.getImage());
-        return publicOrganizationDto;
+        //PublicOrganizationDto publicOrganizationDto = new PublicOrganizationDto();
+        //publicOrganizationDto.setName(organization.getName());
+        //publicOrganizationDto.setAddress(organization.getAddress());
+        //publicOrganizationDto.setPhone(organization.getPhone());
+        //publicOrganizationDto.setImage(organization.getImage());
+        return modelMapper.map(organization, PublicOrganizationDto.class);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class OrganizationServiceImpl implements OrganizationService{
 
     @Override
     public Organization get(String id) {
-        return null;
+        return organizationRepository.getById(id);
     }
 
     @Override

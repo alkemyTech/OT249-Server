@@ -6,13 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.alkemy.ong.dto.SlideDetailsDto;
+import com.alkemy.ong.dto.SlideResponseDto;
 import com.alkemy.ong.dto.SlideDto;
+import com.alkemy.ong.dto.SlideRequestDto;
 import com.alkemy.ong.service.SlideService;
 
 @RestController
@@ -30,7 +28,27 @@ public class SlideController {
 
     @GetMapping("/{id}")
     @PreAuthorize( "hasRole('ADMIN')")
-    public ResponseEntity<SlideDetailsDto> getById(@PathVariable String id){
+    public ResponseEntity<SlideResponseDto> getById(@PathVariable String id){
         return new ResponseEntity<>(slideService.getById(id), HttpStatus.OK);
+    }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String>delete(@PathVariable String id){
+
+        slideService.delete(id);
+        return new ResponseEntity<>("Slide deleted", HttpStatus.OK);
+    }
+
+    @PostMapping
+    @PreAuthorize( "hasRole('ADMIN')")
+    public ResponseEntity<SlideResponseDto> save(@RequestBody SlideRequestDto slideRequestDto){
+        return new ResponseEntity<>(slideService.save(slideRequestDto), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize( "hasRole('ADMIN')")
+    public  ResponseEntity<SlideResponseDto>update(@PathVariable String id, @RequestBody SlideRequestDto slideRequestDto) throws Exception {
+
+        return new ResponseEntity<>(slideService.update(id, slideRequestDto), HttpStatus.OK);
     }
 }
