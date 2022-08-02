@@ -13,4 +13,5 @@ public interface NewsService {
     boolean deleteNews(String id);
     NewDTO updateNews(String id, NewDTO newsDTO, BindingResult bindingResult);
     public News findNewsById(String id); 
+    public void createNews(News news);
 }

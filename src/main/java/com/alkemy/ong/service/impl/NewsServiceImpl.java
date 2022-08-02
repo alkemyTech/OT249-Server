@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 @Service
 @AllArgsConstructor
 public class NewsServiceImpl implements NewsService {
@@ -90,5 +92,12 @@ public class NewsServiceImpl implements NewsService {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	@Transactional
+	public void createNews(News news) {
+		
+		newsRepository.save(news);
 	}
 }
