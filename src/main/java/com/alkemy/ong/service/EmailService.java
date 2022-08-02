@@ -45,10 +45,10 @@ public class EmailService {
     }
     
     public void sendEmailToContact(String email, String name) {
-    	String emailSubject = "¡Somos Más!, Información de contacto";
-        Content body = new Content("Hola "+ name, ", Su contacto se ha completado exitosamente");
+    	String emailSubject = "¡Somos Más! - Información de contacto";
+    	Content body = new Content("text/html", "<h2>Hola "+ name +" ¡Gracias por completar tu contacto en somos mas!</h2>");
         try {
-            sendEmail(email,emailSubject, body);
+            sendEmail(emailSubject, email, body);
         } catch (IOException e) {
             e.printStackTrace();
         }
