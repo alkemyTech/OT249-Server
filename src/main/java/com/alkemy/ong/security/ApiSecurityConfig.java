@@ -44,7 +44,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore( customAuthorizationFilter, CustomAuthenticationFilter.class );
         http.authorizeRequests().antMatchers(LOGIN_URL,REGISTER_URL).permitAll();
-        http.authorizeRequests().antMatchers("/organization/public/**").hasRole("ADMIN");
+//        http.authorizeRequests().antMatchers("/organization/public/**").hasRole("ADMIN");
         http.authorizeRequests().anyRequest().hasAnyRole( "USER", "ADMIN" );
     }
     @Bean
