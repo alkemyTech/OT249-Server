@@ -17,6 +17,7 @@ public class MemberServiceImpl implements IMemberService {
 	
 	@Autowired
 	private MemberRepository memberRepository;
+	
 
 	@Override
 	public Member getMemberById(String id) {
@@ -27,7 +28,7 @@ public class MemberServiceImpl implements IMemberService {
 	@Override
 	public List<Member> getAllMembers() {
 
-		return null;
+		return memberRepository.findAll();
 	}
 
 	@Override
