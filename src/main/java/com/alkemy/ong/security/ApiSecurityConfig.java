@@ -22,6 +22,8 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String LOGIN_URL = "/auth/login";
     private static final String REGISTER_URL = "/auth/register";
+    // private static final String SWAGGER_ENDPOINT_URL = "/api/docs/**"; //Descomententar esta linea para usar swagger
+    // private static final String SWAGGER_URL = "/**";                   //Descomententar esta linea para usar swagger
     private final CustomExceptionHandler customExceptionHandler;
     private final CustomAuthorizationFilter customAuthorizationFilter;
     private final JwtUtil jwtUtil;
@@ -44,6 +46,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore( customAuthorizationFilter, CustomAuthenticationFilter.class );
         http.authorizeRequests().antMatchers(LOGIN_URL,REGISTER_URL).permitAll();
+       // http.authorizeRequests().antMatchers(SWAGGER_ENDPOINT_URL,SWAGGER_URL).permitAll(); //Descomententar esta linea para usar swagger
 //        http.authorizeRequests().antMatchers("/organization/public/**").hasRole("ADMIN");
         http.authorizeRequests().anyRequest().hasAnyRole( "USER", "ADMIN" );
     }
