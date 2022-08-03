@@ -13,8 +13,11 @@ import com.alkemy.ong.dto.SlideDto;
 import com.alkemy.ong.dto.SlideRequestDto;
 import com.alkemy.ong.service.SlideService;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 @RestController
 @RequestMapping("/slides")
+@ApiIgnore
 public class SlideController {
 
     @Autowired
