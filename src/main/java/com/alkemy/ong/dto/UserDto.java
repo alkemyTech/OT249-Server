@@ -1,5 +1,6 @@
 package com.alkemy.ong.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class UserDto implements Serializable, UserDetails {
 	private String email;
 	
 	@NotBlank
+	@JsonIgnore
 	private String password;
 	
 	@NotBlank
@@ -45,37 +47,42 @@ public class UserDto implements Serializable, UserDetails {
 	private boolean deleted;
 
 	@Override
+	@JsonIgnore
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
 		return List.of( this.getRole() );
 	}
 
-
 	@Override
+	@JsonIgnore
 	public String getUsername() {
 
 		return this.getEmail();
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonExpired() {
 
 		return !this.deleted;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isAccountNonLocked() {
 
 		return !this.deleted;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isCredentialsNonExpired() {
 
 		return !this.deleted;
 	}
 
 	@Override
+	@JsonIgnore
 	public boolean isEnabled() {
 
 		return !this.deleted;
