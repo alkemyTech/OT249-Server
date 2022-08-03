@@ -15,7 +15,7 @@ public class SwaggerConfiguration {
 
 	
 	   @Bean
-       public Docket productApi() {
+       public Docket api() {
            return new Docket(DocumentationType.SWAGGER_2)
                .select()
                .apis(RequestHandlerSelectors.basePackage("com.alkemy.ong.controller"))
