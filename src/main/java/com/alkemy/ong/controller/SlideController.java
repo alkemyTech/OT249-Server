@@ -47,8 +47,11 @@ public class SlideController {
 
     @PutMapping("/{id}")
     @PreAuthorize( "hasRole('ADMIN')")
-    public  ResponseEntity<SlideResponseDto>update(@PathVariable String id, @RequestBody SlideRequestDto slideRequestDto) throws Exception {
-
-        return new ResponseEntity<>(slideService.update(id, slideRequestDto), HttpStatus.OK);
+    public  ResponseEntity<?>update(@PathVariable String id, @RequestBody SlideRequestDto slideRequestDto) {
+        try {
+            return new ResponseEntity<>(slideService.update(id, slideRequestDto), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
     }
 }
