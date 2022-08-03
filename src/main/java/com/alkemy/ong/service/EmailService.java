@@ -53,6 +53,16 @@ public class EmailService implements EnvironmentAware {
             throw ex;
         }
     }
+    
+    public void sendEmailToContact(String email, String name) {
+    	String emailSubject = "¡Somos Más! - Información de contacto";
+    	Content body = new Content("text/html", "<h2>Hola "+ name +" ¡Gracias por completar tu contacto en somos mas!</h2>");
+        try {
+            sendEmail(emailSubject, email, body);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void WelcomeMail(String emailTo, String firstName) {
         String emailSubject = "¡Bienvenidos a Somos Más!";

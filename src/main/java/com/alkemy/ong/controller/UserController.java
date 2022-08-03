@@ -69,6 +69,7 @@ public class UserController {
 		LoginRequestDTO loginReqDto = new LoginRequestDTO(userDto.getEmail(), userDto.getPassword());
 		return new ResponseEntity<>(userService.login(loginReqDto), HttpStatus.OK);
 	}
+	
 	@GetMapping(value = "/users")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> getPagedUsers(@RequestParam(defaultValue = "0", name = "page") int page,

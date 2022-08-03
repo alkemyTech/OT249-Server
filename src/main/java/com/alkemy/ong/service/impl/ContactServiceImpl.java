@@ -4,8 +4,11 @@ import com.alkemy.ong.dto.ContactDto;
 import com.alkemy.ong.model.Contact;
 import com.alkemy.ong.repository.ContactRepository;
 import com.alkemy.ong.service.ContactService;
+import com.alkemy.ong.service.EmailService;
+
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,7 +20,12 @@ import java.util.List;
 public class ContactServiceImpl implements ContactService {
 
     ModelMapper modelMapper;
+    
     ContactRepository contactRepository;
+    
+    @Autowired
+    private EmailService emailService;
+    
     @Override
     public Contact getContact() {
         return null;
@@ -29,6 +37,7 @@ public class ContactServiceImpl implements ContactService {
         modelMapper.map(contactDto,contact);
         contact.setDeleted(false);
         contactRepository.save(contact);
+        emailService.sendEmailToContact(contactDto.getEmail(), contactDto.getName());
         return contactDto;
     }
 
