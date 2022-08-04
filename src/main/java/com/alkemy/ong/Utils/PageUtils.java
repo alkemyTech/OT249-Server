@@ -42,7 +42,7 @@ public class PageUtils {
         return links;
     }
 
-    public static <T> PageDto<?> getPageDto(Page<T> pageDto, String prefix) {
+    public static <T> PageDto<T> getPageDto(Page<T> pageDto, String prefix) {
         PageDto.Links pageLinks = PageUtils.createLinks(pageDto, prefix);
         return new PageDto<>( pageDto.getContent(), pageDto.getPageable(), pageDto.getTotalElements(), pageLinks );
     }
