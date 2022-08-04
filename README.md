@@ -22,63 +22,83 @@ Los siguientes usuarios son generados automaticamente al ejecutarse la aplicacio
 ### ADMIN
 
 - `Administrador 1` 
-`Email: deila@example.com` - `Password: admin`
+    - `Email: deila@example.com` 
+    - `Password: admin`
 
 - `Administrador 2` 
-`Email: hayat@example.com` - `Password: admin`
+    - `Email: hayat@example.com` 
+    - `Password: admin`
 
 - `Administrador 3` 
-`Email: francisco@example.com` - `Password: admin`
+    - `Email: francisco@example.com` 
+    - `Password: admin`
 
 - `Administrador 4` 
-`Email: facundo@example.com` - `Password: admin`
+    - `Email: facundo@example.com` 
+    - `Password: admin`
 
 - `Administrador 5` 
-`Email: lautaro@example.com` - `Password: admin`
+    - `Email: lautaro@example.com` 
+    - `Password: admin`
 
 - `Administrador 6` 
-`Email: alexis@example.com` - `Password: admin`
+    - `Email: alexis@example.com` 
+    - `Password: admin`
 
 - `Administrador 7` 
-`Email: ignacio@example.com` - `Password: admin`
+    - `Email: ignacio@example.com` 
+    - `Password: admin`
 
 - `Administrador 8` 
-`Email: ezequiel@example.com` - `Password: admin`
+    - `Email: ezequiel@example.com` 
+    - `Password: admin`
 
 - `Administrador 9` 
-`Email: agustin@example.com` - `Password: admin`
+    - `Email: agustin@example.com` 
+    - `Password: admin`
 
 - `Administrador 10` 
-`Email: esteban@example.com` - `Password: admin`
+    - `Email: esteban@example.com` 
+    - `Password: admin`
 
 ### USER
 
 - `Usuario 1` 
-`Email: alejandroIglesias@example.com` - `Password: 1234`
+    - `Email: alejandroIglesias@example.com` 
+    - `Password: 1234`
 
 - `Usuario 2` 
-`Email: yassine@example.com` - `Password: 1234`
+    - `Email: yassine@example.com` 
+    - `Password: 1234`
 
 - `Usuario 3` 
-`Email: delia@example.com` - `Password: 1234`
+    - `Email: delia@example.com` 
+    - `Password: 1234`
 
 - `Usuario 4` 
-`Email: adrian@example.com` - `Password: 1234`
+    - `Email: adrian@example.com` 
+    - `Password: 1234`
 
 - `Usuario 5` 
-`Email: jairo@example.com` - `Password: 1234`
+    - `Email: jairo@example.com` 
+    - `Password: 1234`
 
 - `Usuario 6` 
-`Email: nelson@example.com` - `Password: 1234`
+    - `Email: nelson@example.com` 
+    - `Password: 1234`
 
 - `Usuario 7` 
-`Email: adolfo@example.com` - `Password: 1234`
+    - `Email: adolfo@example.com` 
+    - `Password: 1234`
 
 - `Usuario 8` 
-`Email: sara@example.com` - `Password: 1234`
+    - `Email: sara@example.com` 
+    - `Password: 1234`
 
 - `Usuario 9` 
-`Email: teofilo@example.com` - `Password: 1234`
+    - `Email: teofilo@example.com` 
+    - `Password: 1234`
 
 - `Usuario 10` 
-`Email: marisa@example.com` - `Password: 1234`
+    - `Email: marisa@example.com` 
+    - `Password: 1234`
