@@ -2,6 +2,7 @@ package com.alkemy.ong.controller;
 
 import com.alkemy.ong.dto.CreateNewsDto;
 import com.alkemy.ong.dto.NewDTO;
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.model.Category;
 import com.alkemy.ong.model.News;
 import com.alkemy.ong.repository.CategoryRepository;
@@ -13,7 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import javax.validation.Valid;
@@ -27,6 +27,13 @@ public class NewController {
 	
 	@Autowired
 	private CategoryRepository categoryRepository;
+	@GetMapping("/")
+	public ResponseEntity<PageDto<NewDTO>> getPagedController(
+			@RequestParam(defaultValue = "0", name = "page") int page,
+			@RequestParam(defaultValue = "asc", name = "order") String order) {
+		PageDto<NewDTO> newDTO = newsService.getAllNews(page, order);
+		return ResponseEntity.ok(newDTO);
+	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<NewDTO> NewDetail(@PathVariable String id) {
