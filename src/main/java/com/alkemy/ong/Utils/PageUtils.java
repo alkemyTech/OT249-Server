@@ -1,7 +1,6 @@
 package com.alkemy.ong.Utils;
 
 import com.alkemy.ong.dto.PageDto;
-import com.alkemy.ong.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,21 +24,26 @@ public class PageUtils {
         PageDto.Links links = new PageDto.Links();
         links.setPrefix(prefix);
         if (page.hasNext())
-            links.setNextLink( String.valueOf( page.getPageable().next().getPageNumber() ) );
-        else if (page.getTotalPages() > page.getPageable().getPageNumber())
-            links.setNextLink( String.valueOf( page.getPageable().getPageNumber() ) );
+            links.setNextOrLast( String.valueOf( page.getPageable().next().getPageNumber() ) );
+        else if (page.getTotalPages() > page.getNumber())
+            links.setNextOrLast( String.valueOf( page.getPageable().getPageNumber() ) );
         else if(page.getTotalPages() > 0)
-            links.setNextLink( String.valueOf( page.getTotalPages() - 1 ) );
+            links.setNextOrLast( String.valueOf( page.getTotalPages() - 1 ) );
         else
-            links.setNextLink( String.valueOf( page.getTotalPages() ) );
+            links.setNextOrLast( String.valueOf( page.getTotalPages() ) );
 
 
         if (page.getTotalPages() > page.getPageable().getPageNumber())
-            links.setPrevLink( String.valueOf( page.getPageable().previousOrFirst().getPageNumber() ) );
+            links.setPrevOrFirst( String.valueOf( page.getPageable().previousOrFirst().getPageNumber() ) );
         else
-            links.setPrevLink( String.valueOf( page.getPageable().first().getPageNumber() ) );
+            links.setPrevOrFirst( String.valueOf( page.getPageable().first().getPageNumber() ) );
 
 
         return links;
+    }
+
+    public static <T> PageDto<?> getPageDto(Page<T> pageDto, String prefix) {
+        PageDto.Links pageLinks = PageUtils.createLinks(pageDto, prefix);
+        return new PageDto<>( pageDto.getContent(), pageDto.getPageable(), pageDto.getTotalElements(), pageLinks );
     }
 }
