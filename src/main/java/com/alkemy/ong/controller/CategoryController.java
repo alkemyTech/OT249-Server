@@ -45,6 +45,7 @@ public class CategoryController {
   
     //Metodo funcionando
     @PostMapping("/categories")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Category> crearCategoria(@Valid @RequestBody CategoryDto categoryDto) {
 		boolean deleted = false;
 		Category category = new Category(categoryDto.getName(), categoryDto.getDescription(), categoryDto.getImage(), new Timestamp(System.currentTimeMillis()), deleted);
@@ -52,7 +53,7 @@ public class CategoryController {
 	}
   
 	  @GetMapping("/categories/{id}")
-	  @PreAuthorize("hasRole('ROLE_ADMIN')")
+	  @PreAuthorize("hasRole('ADMIN')")
 	  public ResponseEntity<CategoryDto> getCategoryDetails(@PathVariable("id") String id){
 	  	try {
 	  		Category category = categoryService.getCategory(id);
@@ -63,7 +64,7 @@ public class CategoryController {
 	  }
 	  	
 		@DeleteMapping("/categories/{id}")
-	  	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	  	@PreAuthorize("hasRole('ADMIN')")
 		public ResponseEntity<String> deleteCategory(@PathVariable("id") String id) {
 
 			if (categoryRepository.existsById(id)) {

@@ -25,7 +25,7 @@ public class MemberController {
 	private MemberRepository memberRepository;
 
 	@PostMapping("members")
-	@PreAuthorize("hasRole('USER')")
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	public ResponseEntity<String> createMember(@Valid @RequestBody MemberDto memberDto) {
 
 		Member memberAux = new Member();
