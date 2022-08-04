@@ -28,6 +28,7 @@ public class NewController {
 	@Autowired
 	private CategoryRepository categoryRepository;
 	@GetMapping("/")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<PageDto<NewDTO>> getPagedController(
 			@RequestParam(defaultValue = "0", name = "page") int page,
 			@RequestParam(defaultValue = "asc", name = "order") String order) {
