@@ -35,7 +35,6 @@ public class UserDto implements Serializable, UserDetails {
 	private String email;
 	
 	@NotBlank
-	@JsonIgnore
 	private String password;
 	
 	@NotBlank
@@ -86,5 +85,15 @@ public class UserDto implements Serializable, UserDetails {
 	public boolean isEnabled() {
 
 		return !this.deleted;
+	}
+
+	public static final class UserPagedDto extends UserDto{
+
+		@Override
+		@JsonIgnore
+		public String getPassword() {
+
+			return super.getPassword();
+		}
 	}
 }
