@@ -6,7 +6,7 @@ import com.alkemy.ong.dto.SlideResponseDto;
 import com.alkemy.ong.service.SlideService;
 import com.alkemy.ong.service.impl.OrganizationServiceImpl;
 
-import springfox.documentation.annotations.ApiIgnore;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@ApiIgnore
 public class OrgController {
     @Autowired
     private OrganizationServiceImpl organizationService;
