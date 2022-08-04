@@ -2,6 +2,7 @@ package com.alkemy.ong.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.alkemy.ong.exceptions.RecordException;
 import com.alkemy.ong.model.Organization;
@@ -81,6 +82,26 @@ public class SlideServiceImpl implements SlideService {
         SlideResponseDto dtoResponse =  modelMapper.map(slide,SlideResponseDto.class);
         dtoResponse.setPublicOrganizationDto(modelMapper.map(slide.getOrganization(),PublicOrganizationDto.class));
         return dtoResponse;
+    }
+
+    @Override
+    public List<SlideResponseDto> slideForOng(String ongId) throws Exception {
+
+        Organization organization = organizationRepository.findById(ongId).orElseThrow(()-> new Exception ("Organization not Found"));
+
+        PublicOrganizationDto publicOrganizationDto = modelMapper.map(organization,PublicOrganizationDto.class);
+
+        List<Slide> slides= slideRepository.findByOrganization_idLikeOrderByPositionDesc(ongId);
+        if (slides.isEmpty()){
+            throw new Exception("Slide not found for that organization");
+        }
+        List<SlideResponseDto>slideResponseDtoList = new ArrayList<>();
+        for (Slide slide:slides){
+            slideResponseDtoList.add(modelMapper.map(slide,SlideResponseDto.class));//
+        }
+        slideResponseDtoList.forEach(slide -> slide.setPublicOrganizationDto(publicOrganizationDto));
+        return slideResponseDtoList;
+
     }
 
     @Override

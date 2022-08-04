@@ -48,7 +48,7 @@ public class NewController {
 		}
 	}
 	@PutMapping("/{id}")
-	@PreAuthorize( "hasAuthority('ADMIN')" )
+	@PreAuthorize( "hasRole('ADMIN')" )
 	public ResponseEntity<NewDTO> updateNews(@PathVariable String id, @Valid @RequestBody NewDTO newsDTO, BindingResult bindingResult){
 
 		NewDTO newsDTOresponse = newsService.updateNews(id, newsDTO, bindingResult );

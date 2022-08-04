@@ -14,4 +14,6 @@ public interface SlideService {
     SlideResponseDto save(SlideRequestDto slideRequestDto);
     void delete(String id);
     SlideResponseDto update(String id, SlideRequestDto slideRequestDto) throws Exception;
+
+    List<SlideResponseDto>slideForOng(String ongId) throws Exception;
 }
