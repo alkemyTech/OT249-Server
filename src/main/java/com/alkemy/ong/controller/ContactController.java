@@ -24,7 +24,7 @@ public class ContactController {
     private ContactService contactService;
 
     @PostMapping()
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     ResponseEntity<ContactDto> saveContact(@Valid @RequestBody ContactDto contactDto){
         return new ResponseEntity<>(contactService.saveContact(contactDto),HttpStatus.OK);
     }

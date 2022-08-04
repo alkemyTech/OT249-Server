@@ -42,7 +42,7 @@ public class OrgController {
     ResponseEntity<PublicOrganizationDto> updatePublicOrganization(@PathVariable(name = "id") String id, @Valid @RequestBody PublicOrganizationDto publicOrganizationDto){
         return new ResponseEntity<>(organizationService.update(id, publicOrganizationDto), HttpStatus.ACCEPTED);
     }
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/organization/public/slides/{id}")
     ResponseEntity<List<SlideResponseDto>>slidesList(@PathVariable String id) throws Exception {
         List<SlideResponseDto> slideDtoList = new ArrayList<>();
