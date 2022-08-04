@@ -19,7 +19,10 @@ import com.alkemy.ong.dto.ActivityDto;
 import com.alkemy.ong.model.Activity;
 import com.alkemy.ong.service.ActivityService;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 @RestController
+@ApiIgnore
 public class ActivityController {
 
 	@Autowired
