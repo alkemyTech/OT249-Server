@@ -67,13 +67,17 @@ public class SlideServiceImpl implements SlideService {
 
         Slide slide= slideRepository.findById(id).orElseThrow(() -> new Exception ("Slide not Found"));
 
-        CustomMultipartFile customMultipartFile = new CustomMultipartFile();
-        String fileUrl = amazonClient.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
-        slide.setImageUrl(fileUrl);
-
-        slide.setImageUrl(slideRequestDto.getBase64Img());
-        slide.setText(slideRequestDto.getText());
-        slide.setPosition(slideRequestDto.getPosition());
+        if (slideRequestDto.getBase64Img()!=null){
+            CustomMultipartFile customMultipartFile = new CustomMultipartFile();
+            String fileUrl = amazonClient.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
+            slide.setImageUrl(fileUrl);
+        }
+        if (slideRequestDto.getText()!=null){
+            slide.setText(slideRequestDto.getText());
+        }
+        if (slideRequestDto.getPosition()!=null){
+            slide.setPosition(slideRequestDto.getPosition());
+        }
         if (slideRequestDto.getOrgId()!=null){
             Organization organization = organizationRepository.findById(slideRequestDto.getOrgId()).orElseThrow(() -> new Exception ("Organization not Found"));
             slide.setOrganization(organization);
