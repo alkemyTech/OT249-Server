@@ -1,30 +1,38 @@
 package com.alkemy.ong.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
-import java.util.function.Function;
 
 @Setter
 @Getter
 public class PageDto<T> extends PageImpl<T> {
     private Links _links;
 
-    public PageDto(List<T> content, Pageable pageable, long total) {
+    @Override
+    @JsonIgnore
+    public Sort getSort() {
 
-        super( content, pageable, total );
+        return super.getSort();
     }
 
     @Override
-    public <U> Page<U> map(Function<? super T, ? extends U> converter) {
+    @JsonIgnore
+    public Pageable getPageable() {
 
-        return super.map( converter );
+        return super.getPageable();
+    }
+
+    public PageDto(List<T> content, Pageable pageable, long total) {
+
+        super( content, pageable, total );
     }
 
     public PageDto(List<T> content, Pageable pageable, long total, Links _links) {
@@ -37,18 +45,18 @@ public class PageDto<T> extends PageImpl<T> {
     @NoArgsConstructor
     @AllArgsConstructor
     public static final class Links{
-        private String nextLink;
-        private String prevLink;
+        private String nextOrLast;
+        private String prevOrFirst;
         private String prefix;
 
-        public String getNextLink() {
+        public String getNextOrLast() {
 
-            return "/" + prefix + "?page="+ nextLink;
+            return "/" + prefix + "?page="+ nextOrLast;
         }
 
-        public String getPrevLink() {
+        public String getPrevOrFirst() {
 
-            return "/" + prefix + "?page="+ prevLink;
+            return "/" + prefix + "?page="+ prevOrFirst;
         }
 
     }
