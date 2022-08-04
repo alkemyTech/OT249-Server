@@ -11,5 +11,6 @@ public interface IRoleService {
 	public List<Role> getAllRoles();
 	public void deleteRoleById(String id);
 	public void updateRole(Role role,String id);
+	public Role getRoleByName(String name);
 	
 }

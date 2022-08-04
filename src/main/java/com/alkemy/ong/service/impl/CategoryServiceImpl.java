@@ -2,6 +2,7 @@ package com.alkemy.ong.service.impl;
 
 import com.alkemy.ong.Utils.PageUtils;
 import com.alkemy.ong.dto.CategoryDto;
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.model.Category;
 import com.alkemy.ong.repository.CategoryRepository;
 import com.alkemy.ong.service.CategoryService;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -69,8 +69,10 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
     @Override
-    public Page<Map<String, String>> getAllCategories(int page, String order) {
+    public PageDto<Map<String, String>> getAllCategories(int page, String order) {
         Page<Category> category = categoryRepository.findAll( PageUtils.getPageable( page, order ) );
-        return category.map(cat -> Map.of("name", modelMapper.map( cat, CategoryDto.class).getName()));
+        Page<Map<String, String>> categoryDto = category.map( cat -> Map.of( "name", modelMapper.map( cat, CategoryDto.class ).getName()) );
+        return PageUtils.getPageDto(categoryDto, "categories");
     }
+
 }

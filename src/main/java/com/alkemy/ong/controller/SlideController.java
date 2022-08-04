@@ -13,11 +13,9 @@ import com.alkemy.ong.dto.SlideDto;
 import com.alkemy.ong.dto.SlideRequestDto;
 import com.alkemy.ong.service.SlideService;
 
-import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/slides")
-@ApiIgnore
 public class SlideController {
 
     @Autowired
@@ -50,8 +48,11 @@ public class SlideController {
 
     @PutMapping("/{id}")
     @PreAuthorize( "hasRole('ADMIN')")
-    public  ResponseEntity<SlideResponseDto>update(@PathVariable String id, @RequestBody SlideRequestDto slideRequestDto) throws Exception {
-
-        return new ResponseEntity<>(slideService.update(id, slideRequestDto), HttpStatus.OK);
+    public  ResponseEntity<?>update(@PathVariable String id, @RequestBody SlideRequestDto slideRequestDto) {
+        try {
+            return new ResponseEntity<>(slideService.update(id, slideRequestDto), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
     }
 }
