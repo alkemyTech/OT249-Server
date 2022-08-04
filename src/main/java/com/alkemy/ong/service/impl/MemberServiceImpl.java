@@ -39,9 +39,8 @@ public class MemberServiceImpl implements IMemberService {
 	@Override
 	public Page<MemberDto> getAllMembers(int page, String order) {
 		Page<Member> members = memberRepository.findAll( PageUtils.getPageable( page, order ) );
-		PageDto.Links pageLinks = PageUtils.createLinks(members, "members");
 		Page<MemberDto> membersDto = members.map( cat -> this.modelMapper.map( cat, MemberDto.class ));
-		return new PageDto<>( membersDto.getContent(), membersDto.getPageable(), membersDto.getTotalPages(), pageLinks );
+		return PageUtils.getPageDto( membersDto, "members" );
 	}
 
 	@Override
