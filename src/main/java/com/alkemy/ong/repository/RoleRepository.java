@@ -9,5 +9,5 @@ import com.alkemy.ong.model.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, String> {
-
+    Role findByName(String name);
 }
