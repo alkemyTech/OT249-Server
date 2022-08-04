@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.alkemy.ong.Utils.PageUtils;
 import com.alkemy.ong.dto.MemberDto;
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.model.Member;
 import com.alkemy.ong.repository.MemberRepository;
 import com.alkemy.ong.service.IMemberService;
@@ -37,7 +38,7 @@ public class MemberServiceImpl implements IMemberService {
 	}
 
 	@Override
-	public Page<MemberDto> getAllMembers(int page, String order) {
+	public PageDto<MemberDto> getAllMembers(int page, String order) {
 		Page<Member> members = memberRepository.findAll( PageUtils.getPageable( page, order ) );
 		Page<MemberDto> membersDto = members.map( cat -> this.modelMapper.map( cat, MemberDto.class ));
 		return PageUtils.getPageDto( membersDto, "members" );
