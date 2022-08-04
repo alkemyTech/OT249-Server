@@ -54,31 +54,31 @@ Los siguientes usuarios son generados automaticamente al ejecutarse la aplicacio
 ### USER
 
 - `Usuario 1` 
-`Email: alejandroIglesias@example.com` `Password: 1234`
+`Email: alejandroIglesias@example.com` - `Password: 1234`
 
 - `Usuario 2` 
-`Email: yassine@example.com` `Password: 1234`
+`Email: yassine@example.com` - `Password: 1234`
 
 - `Usuario 3` 
-`Email: delia@example.com` `Password: 1234`
+`Email: delia@example.com` - `Password: 1234`
 
 - `Usuario 4` 
-`Email: adrian@example.com` `Password: 1234`
+`Email: adrian@example.com` - `Password: 1234`
 
 - `Usuario 5` 
-`Email: jairo@example.com` `Password: 1234`
+`Email: jairo@example.com` - `Password: 1234`
 
 - `Usuario 6` 
-`Email: nelson@example.com` `Password: 1234`
+`Email: nelson@example.com` - `Password: 1234`
 
 - `Usuario 7` 
-`Email: adolfo@example.com` `Password: 1234`
+`Email: adolfo@example.com` - `Password: 1234`
 
 - `Usuario 8` 
-`Email: sara@example.com` `Password: 1234`
+`Email: sara@example.com` - `Password: 1234`
 
 - `Usuario 9` 
-`Email: teofilo@example.com` `Password: 1234`
+`Email: teofilo@example.com` - `Password: 1234`
 
 - `Usuario 10` 
-`Email: marisa@example.com` `Password: 1234`
+`Email: marisa@example.com` - `Password: 1234`
