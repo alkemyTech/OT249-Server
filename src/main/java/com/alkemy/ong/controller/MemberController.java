@@ -10,13 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alkemy.ong.dto.MemberDto;
 import com.alkemy.ong.model.Member;
@@ -85,9 +79,9 @@ public class MemberController {
 
 	@GetMapping("/members")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<List<Member>> getAllMembers(){
-		
-		return new ResponseEntity<>(memberService.getAllMembers(),HttpStatus.OK);
+	public ResponseEntity<?> getAllMembers(@RequestParam(defaultValue = "0", name = "page") int page,
+										   @RequestParam(defaultValue = "asc", name = "order") String order){
+		return new ResponseEntity<>(memberService.getAllMembers(page, order),HttpStatus.OK);
 	}
 	
 }
