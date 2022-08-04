@@ -4,7 +4,7 @@ import com.alkemy.ong.dto.ContactDto;
 import com.alkemy.ong.model.Contact;
 import com.alkemy.ong.service.ContactService;
 import lombok.AllArgsConstructor;
-import springfox.documentation.annotations.ApiIgnore;
+
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/contacts")
 @AllArgsConstructor
-@ApiIgnore
 public class ContactController {
 
 
