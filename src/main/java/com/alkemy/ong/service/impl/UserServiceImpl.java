@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
 	public Page<UserDto> getAllUsers(int page, String order) {
 
 		Page<User> users = userRepo.findAll( PageUtils.getPageable( page, order ) );
-		return users.map( user -> modelMapper.map( user, UserDto.class ) );
+		return users.map( user -> modelMapper.map( user, UserDto.UserPagedDto.class ) );
 	}
 
 	@Override
