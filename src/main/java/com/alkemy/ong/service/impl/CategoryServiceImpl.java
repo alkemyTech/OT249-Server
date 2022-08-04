@@ -69,7 +69,7 @@ public class CategoryServiceImpl implements CategoryService{
 	}
 
     @Override
-    public PageDto<?> getAllCategories(int page, String order) {
+    public PageDto<Map<String, String>> getAllCategories(int page, String order) {
         Page<Category> category = categoryRepository.findAll( PageUtils.getPageable( page, order ) );
         Page<Map<String, String>> categoryDto = category.map( cat -> Map.of( "name", modelMapper.map( cat, CategoryDto.class ).getName()) );
         return PageUtils.getPageDto(categoryDto, "categories");
