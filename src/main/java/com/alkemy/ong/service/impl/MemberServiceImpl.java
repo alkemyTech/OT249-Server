@@ -1,25 +1,17 @@
 package com.alkemy.ong.service.impl;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.transaction.Transactional;
-
 import com.alkemy.ong.Utils.PageUtils;
-import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.dto.MemberDto;
-import com.alkemy.ong.dto.PageDto;
-import com.alkemy.ong.model.Category;
+import com.alkemy.ong.model.Member;
+import com.alkemy.ong.repository.MemberRepository;
+import com.alkemy.ong.service.IMemberService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import com.alkemy.ong.model.Member;
-import com.alkemy.ong.repository.MemberRepository;
-import com.alkemy.ong.service.IMemberService;
+import javax.transaction.Transactional;
 
 @Service
 @AllArgsConstructor
