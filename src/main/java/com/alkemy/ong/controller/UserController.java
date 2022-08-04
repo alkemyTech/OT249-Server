@@ -71,13 +71,14 @@ public class UserController {
 	}
 	
 	@GetMapping(value = "/users")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getPagedUsers(@RequestParam(defaultValue = "0", name = "page") int page,
 										   @RequestParam(defaultValue = "asc", name = "order") String order) {
 		return ResponseEntity.ok( userService.getAllUsers(page, order) );
 	}
 
 	@PatchMapping("/users/{id}")
+	@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody Map<Object, Object> fields) throws IOException {
 		try {
 			User user = userService.findById(id).get();
@@ -99,6 +100,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/users/{id}")
+	@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
 		boolean userEliminado = userService.deleteUser(id);
 		if (userEliminado) {
@@ -109,6 +111,7 @@ public class UserController {
 	}
 
 	@GetMapping("/auth/me")
+	@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public ResponseEntity<UserDto>AuthenticatedUser () throws Exception {
 
 		return new ResponseEntity<>(userService.authenticatedUser(),HttpStatus.OK);

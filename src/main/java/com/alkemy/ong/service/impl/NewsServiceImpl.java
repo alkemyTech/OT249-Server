@@ -1,7 +1,9 @@
 package com.alkemy.ong.service.impl;
 
+import com.alkemy.ong.Utils.PageUtils;
 import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.dto.NewDTO;
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.exceptions.BindingResultException;
 import com.alkemy.ong.exceptions.RecordException;
 import com.alkemy.ong.model.Category;
@@ -12,6 +14,7 @@ import com.alkemy.ong.service.NewsService;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -45,9 +48,10 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewDTO> getAllNews() {
-
-        return null;
+    public PageDto<NewDTO> getAllNews(int page, String order) {
+        Page<News> newsPage = newsRepository.findAll( PageUtils.getPageable( page, order ) );
+        Page<NewDTO> newsDTOPage = newsPage.map( news -> modelMapper.map( news, NewDTO.class ) );
+        return PageUtils.getPageDto( newsDTOPage, "news" );
     }
 
     @Override
