@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Setter
@@ -30,6 +31,10 @@ public class News {
     private LocalDateTime timestamp;
     @ManyToOne
     private Category category;
+    
+    @OneToMany(mappedBy = "news", fetch = FetchType.LAZY)
+    private Set<Comment> comments;
+    
     private boolean softDelete;
     
     public News(String name, String content, String image, LocalDateTime timestamp, Category category,
