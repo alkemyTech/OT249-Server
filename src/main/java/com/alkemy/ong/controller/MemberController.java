@@ -1,11 +1,17 @@
 package com.alkemy.ong.controller;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +32,15 @@ public class MemberController {
 	@Autowired
 	private MemberRepository memberRepository;
 
+	@Operation(summary = "Create Member")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Created - Miembro creado con éxito.",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = Member.class)) }),
+			@ApiResponse(responseCode = "400", description = "Bad Request",
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Permission Denied ",
+					content = @Content) })
 	@PostMapping("members")
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	public ResponseEntity<String> createMember(@Valid @RequestBody MemberDto memberDto) {
@@ -51,6 +66,17 @@ public class MemberController {
 		return new ResponseEntity<>("Miembro creado con éxito", HttpStatus.CREATED);
 	}
 
+	@Operation(summary = "Delete Member")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Ok - Borrado con éxito.",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = Member.class)) }),
+			@ApiResponse(responseCode = "404", description = "Not Found - Miembro no encontrado",
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Permission Denied ",
+					content = @Content) })
+	@Parameters(value = {
+			@Parameter(name = "id", description = "Id of the member we want to delete", required = true)})
 	@DeleteMapping("/members/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> deleteCategory(@PathVariable("id") String id) {
@@ -65,7 +91,19 @@ public class MemberController {
 			return new ResponseEntity<String>("Miembro no encontrado", HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
+	@Operation(summary = "UpDate Member")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "OK - Miembro Actualizado Correctamente.",
+					content = @Content),
+			@ApiResponse(responseCode = "400", description = "Bad Request",
+					content = @Content),
+			@ApiResponse(responseCode = "404", description = "Not Found - Unable to find com.alkemy.ong.model.Member with id ...", //CONSULTAR A EMA
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Permission Denied ",
+					content = @Content) })
+	@Parameters(value = {
+			@Parameter(name = "id", description = "Id of the member we want to update", required = true)})
 	@PutMapping("/members/{id}")
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	public ResponseEntity<String> updateMember(@Valid @RequestBody MemberDto memberDto, @PathVariable String id){
@@ -76,7 +114,16 @@ public class MemberController {
 		}
 	}
 
-
+	@Operation(summary = "Get all Members")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "OK - The list of members.",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = Member.class)) }),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Permission Denied ",
+					content = @Content)})
+	@Parameters(value = {
+			@Parameter(name = "page", description = "Value = 0 - dataType = int"),
+			@Parameter(name = "order", description = "Value = asc - dataType = String")})
 	@GetMapping("/members")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getAllMembers(@RequestParam(defaultValue = "0", name = "page") int page,
