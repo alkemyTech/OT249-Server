@@ -1,5 +1,7 @@
 package com.alkemy.ong.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +27,7 @@ public class CommentController {
 	
 	@PostMapping("/comments")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<CreateCommentDto> createComment(@RequestBody CreateCommentDto comment){
+	public ResponseEntity<CreateCommentDto> createComment(@Valid @RequestBody CreateCommentDto comment){
 		return ResponseEntity.ok(commentService.create(comment));
 	}
 }
