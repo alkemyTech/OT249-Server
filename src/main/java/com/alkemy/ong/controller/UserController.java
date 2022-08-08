@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.Map;
-import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -15,19 +13,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import com.alkemy.ong.Utils.JwtUtil;
+import com.alkemy.ong.utils.JwtUtil;
 import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.UserDto;
-import com.alkemy.ong.dto.UserResponseDto;
 import com.alkemy.ong.model.Role;
 import com.alkemy.ong.model.User;
-import com.alkemy.ong.repository.UserRepository;
 import com.alkemy.ong.service.IRoleService;
 import com.alkemy.ong.service.UserService;
 

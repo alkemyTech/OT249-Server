@@ -1,6 +1,6 @@
 package com.alkemy.ong.service.impl;
 
-import com.alkemy.ong.Utils.PageUtils;
+import com.alkemy.ong.utils.PageUtils;
 import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.model.Category;

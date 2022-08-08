@@ -1,4 +1,4 @@
-package com.alkemy.ong.Utils;
+package com.alkemy.ong.utils;
 
 import com.alkemy.ong.dto.PageDto;
 import org.springframework.data.domain.Page;

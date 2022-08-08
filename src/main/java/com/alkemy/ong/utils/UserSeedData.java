@@ -1,4 +1,4 @@
-package com.alkemy.ong.Utils;
+package com.alkemy.ong.utils;
 
 import java.sql.Timestamp;
 

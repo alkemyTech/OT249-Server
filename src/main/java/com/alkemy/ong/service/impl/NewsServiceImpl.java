@@ -1,6 +1,6 @@
 package com.alkemy.ong.service.impl;
 
-import com.alkemy.ong.Utils.PageUtils;
+import com.alkemy.ong.utils.PageUtils;
 import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.dto.NewDTO;
 import com.alkemy.ong.dto.PageDto;
@@ -18,9 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.transaction.Transactional;
 
