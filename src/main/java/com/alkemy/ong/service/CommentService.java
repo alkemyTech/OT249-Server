@@ -9,7 +9,9 @@ import com.alkemy.ong.model.Comment;
 public interface CommentService {
 	
 	public List<CommentDto> getAll();
-	public Comment deleted();
+	public boolean deleted(String id);
 	public Comment update();
 	public CreateCommentDto create(CreateCommentDto comment);
+	public Comment findById(String id);
+	public Comment actualizarComment(Comment comment);
 }
