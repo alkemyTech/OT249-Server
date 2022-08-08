@@ -12,4 +12,6 @@ public interface CommentService {
 	public Comment deleted();
 	public Comment update();
 	public CreateCommentDto create(CreateCommentDto comment);
+	public Comment findById(String id);
+	public Comment actualizarComment(Comment comment);
 }
