@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NewsService {
-    NewDTO getNews(String id);
+    NewDTO getNews(String id) throws Exception;
     PageDto<NewDTO> getAllNews(int page, String order);
     boolean deleteNews(String id);
     NewDTO updateNews(String id, NewDTO newsDTO, BindingResult bindingResult);
