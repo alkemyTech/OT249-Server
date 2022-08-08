@@ -43,9 +43,14 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public Comment deleted() {
-		// TODO Auto-generated method stub
-		return null;
+	@Transactional
+	public boolean deleted(String id) {
+		try {
+			commentRepository.deleteById(id);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	@Override
