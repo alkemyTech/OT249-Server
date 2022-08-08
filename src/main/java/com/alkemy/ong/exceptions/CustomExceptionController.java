@@ -28,7 +28,7 @@ public class CustomExceptionController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(BindingResultException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<Map<String, Object> handleValidateExceptions(BindingResultException ex) {
+    public ResponseEntity<Map<String, Object>> handleValidateExceptions(BindingResultException ex) {
 
         Map<String, Object> tokens = new HashMap<>();
         List<Map<String, Object>> token2 = ex.getFieldErrors().stream().map( vale -> {
