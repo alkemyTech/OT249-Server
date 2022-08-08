@@ -72,7 +72,11 @@ public class MemberController {
 					content = { @Content(mediaType = "application/json",
 							schema = @Schema(implementation = Member.class)) }),
 			@ApiResponse(responseCode = "404", description = "Not Found - Miembro no encontrado",
-					content = @Content)})
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Permission Denied ",
+					content = @Content) })
+	@Parameters(value = {
+			@Parameter(name = "id", description = "Id of the member we want to delete", required = true)})
 	@DeleteMapping("/members/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> deleteCategory(@PathVariable("id") String id) {
@@ -90,13 +94,16 @@ public class MemberController {
 
 	@Operation(summary = "UpDate Member")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Ok - Miembro Actualizado Correctamente.",
-					content = { @Content(mediaType = "application/json",
-							schema = @Schema(implementation = Member.class)) }),
+			@ApiResponse(responseCode = "200", description = "OK - Miembro Actualizado Correctamente.",
+					content = @Content),
 			@ApiResponse(responseCode = "400", description = "Bad Request",
 					content = @Content),
 			@ApiResponse(responseCode = "404", description = "Not Found - Unable to find com.alkemy.ong.model.Member with id ...", //CONSULTAR A EMA
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Permission Denied ",
 					content = @Content) })
+	@Parameters(value = {
+			@Parameter(name = "id", description = "Id of the member we want to update", required = true)})
 	@PutMapping("/members/{id}")
 	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	public ResponseEntity<String> updateMember(@Valid @RequestBody MemberDto memberDto, @PathVariable String id){
@@ -113,11 +120,10 @@ public class MemberController {
 					content = { @Content(mediaType = "application/json",
 							schema = @Schema(implementation = Member.class)) }),
 			@ApiResponse(responseCode = "403", description = "Forbidden - Permission Denied ",
-					content = @Content),
-			@ApiResponse(responseCode = "404", description = "Members not found", //CONSULTAR A ELIAS
-					content = @Content) })
+					content = @Content)})
 	@Parameters(value = {
-			@Parameter(name = "page", description = "Value = Page of the list - dataType = int")})
+			@Parameter(name = "page", description = "Value = 0 - dataType = int"),
+			@Parameter(name = "order", description = "Value = asc - dataType = String")})
 	@GetMapping("/members")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getAllMembers(@RequestParam(defaultValue = "0", name = "page") int page,
