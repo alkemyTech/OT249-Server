@@ -29,8 +29,7 @@ public class CommentController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getAllComments(){
 		return ResponseEntity.ok(commentService.getAll());
-	}
-	
+	}	
 	@PostMapping("/comments")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<CreateCommentDto> createComment(@Valid @RequestBody CreateCommentDto comment){
