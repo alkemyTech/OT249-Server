@@ -2,6 +2,7 @@ package com.alkemy.ong.service.impl;
 
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,12 +56,6 @@ public class CommentServiceImpl implements CommentService{
 	}
 
 	@Override
-	public Comment update() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public CreateCommentDto create(CreateCommentDto comment) {
 		News newFound = newsRepository.findById(comment.getNews()).orElseThrow(() -> new RecordNotFoundException("No se encontró la novedad"));
 		User userFound = userRepository.findById(comment.getUser()).orElseThrow(() -> new RecordNotFoundException("No se encontró el usuario"));
@@ -89,6 +84,18 @@ public class CommentServiceImpl implements CommentService{
 	@Transactional
 	public Comment actualizarComment(Comment comment) {
 		return commentRepository.save(comment);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Comment> commentsByPost(String id) {
+		Optional<News> newsOptional = newsRepository.findById(id);
+		if (newsOptional.isPresent()) {
+			News news = newsOptional.get();
+			return commentRepository.findByNews(news);
+		} else {
+			return Collections.emptyList();
+		}
 	}
 
 }
