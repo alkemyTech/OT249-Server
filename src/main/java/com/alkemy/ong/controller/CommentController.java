@@ -36,8 +36,8 @@ public class CommentController {
 	@GetMapping("/posts/{id}/comments")
 	public ResponseEntity<List<Comment>> commentsInThePost(@PathVariable("id") String id) {
 		return new ResponseEntity<>(commentService.commentsByPost(id), HttpStatus.OK);
-	}
-	
+	}	
+  
 	@PostMapping("/comments")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<CreateCommentDto> createComment(@Valid @RequestBody CreateCommentDto comment){
