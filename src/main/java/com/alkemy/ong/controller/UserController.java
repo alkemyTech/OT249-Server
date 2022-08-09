@@ -11,6 +11,8 @@ import javax.validation.Valid;
 
 import com.alkemy.ong.dto.TestimonialDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -117,6 +119,8 @@ public class UserController {
 					content = @Content),
 			@ApiResponse(responseCode = "403", description = "Forbidden - Acceso no autorizado",
 					content = @Content) })
+	@Parameters(value = {
+			@Parameter(name = "id", description = "User id to update", required = true)})
 	@PatchMapping("/users/{id}")
 	@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody Map<Object, Object> fields) throws IOException {
@@ -150,7 +154,8 @@ public class UserController {
 					content = @Content),
 			@ApiResponse(responseCode = "403", description = "Forbidden - Acceso no autorizado",
 					content = @Content) })
-
+	@Parameters(value = {
+			@Parameter(name = "id", description = "User id to delete", required = true)})
 	@DeleteMapping("/users/{id}")
 	@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
