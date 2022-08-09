@@ -206,6 +206,12 @@
 								<exclude>**/*com/alkemy/ong/config/**</exclude>
 								<!-- Exclude full package from test coverage -->
 								<exclude>**/*com/alkemy/ong/dto/**</exclude>
+								<!-- Exclude class from test coverage -->
+								<exclude>**/*com/alkemy/ong/OngApplication.class</exclude>
+								<!-- Exclude class from test coverage -->
+								<exclude>**/*com/alkemy/ong/exceptions/BindingResultException.class</exclude>
+								<!-- Exclude class from test coverage -->
+								<exclude>**/*com/alkemy/ong/exceptions/RecordException.class</exclude>
 							</excludes>
 						</configuration>
 					</execution>
