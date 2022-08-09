@@ -9,6 +9,12 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import com.alkemy.ong.dto.TestimonialDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,7 +64,18 @@ public class UserController {
 	
 	@Autowired
 	ModelMapper modelMapper;
-	
+
+	@Operation(summary = "Endpoint to Register User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User created",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = TestimonialDto.class)) }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
+					content = @Content),
+			@ApiResponse(responseCode = "404", description = "User not found",
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Acceso no autorizado",
+					content = @Content) })
 	@PostMapping("/auth/register")
 	public ResponseEntity<?> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
@@ -69,7 +86,19 @@ public class UserController {
 		LoginRequestDTO loginReqDto = new LoginRequestDTO(userDto.getEmail(), userDto.getPassword());
 		return new ResponseEntity<>(userService.login(loginReqDto), HttpStatus.OK);
 	}
-	
+
+
+	@Operation(summary = "Endpoint to get registered users")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Users found",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = TestimonialDto.class)) }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
+					content = @Content),
+			@ApiResponse(responseCode = "404", description = "Users not found",
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Acceso no autorizado",
+					content = @Content) })
 	@GetMapping(value = "/users")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getPagedUsers(@RequestParam(defaultValue = "0", name = "page") int page,
@@ -77,6 +106,17 @@ public class UserController {
 		return ResponseEntity.ok( userService.getAllUsers(page, order) );
 	}
 
+	@Operation(summary = "Endpoint to Find specific user")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User found",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = TestimonialDto.class)) }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
+					content = @Content),
+			@ApiResponse(responseCode = "404", description = "User not found",
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Acceso no autorizado",
+					content = @Content) })
 	@PatchMapping("/users/{id}")
 	@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public ResponseEntity<UserDto> updateUser(@PathVariable("id") String id, @RequestBody Map<Object, Object> fields) throws IOException {
@@ -99,6 +139,18 @@ public class UserController {
 		}
 	}
 
+	@Operation(summary = "Endpoint to delete User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User deleted",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = TestimonialDto.class)) }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
+					content = @Content),
+			@ApiResponse(responseCode = "404", description = "User not found",
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Acceso no autorizado",
+					content = @Content) })
+
 	@DeleteMapping("/users/{id}")
 	@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public ResponseEntity<Boolean> deleteUser(@PathVariable("id") String id) {
@@ -110,6 +162,18 @@ public class UserController {
 		}
 	}
 
+
+	@Operation(summary = "Endpoint to get authenticated User")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User found",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = TestimonialDto.class)) }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
+					content = @Content),
+			@ApiResponse(responseCode = "404", description = "User not found",
+					content = @Content),
+			@ApiResponse(responseCode = "403", description = "Forbidden - Acceso no autorizado",
+					content = @Content) })
 	@GetMapping("/auth/me")
 	@PreAuthorize("@userServiceImpl.validarId(#id)")
 	public ResponseEntity<UserDto>AuthenticatedUser () throws Exception {
