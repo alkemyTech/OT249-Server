@@ -69,7 +69,7 @@ public class UserController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "User created",
 					content = { @Content(mediaType = "application/json",
-							schema = @Schema(implementation = TestimonialDto.class)) }),
+							schema = @Schema(implementation = UserDto.class)) }),
 			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
 					content = @Content),
 			@ApiResponse(responseCode = "404", description = "User not found",
@@ -92,7 +92,7 @@ public class UserController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Users found",
 					content = { @Content(mediaType = "application/json",
-							schema = @Schema(implementation = TestimonialDto.class)) }),
+							schema = @Schema(implementation = UserDto.class)) }),
 			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
 					content = @Content),
 			@ApiResponse(responseCode = "404", description = "Users not found",
@@ -110,7 +110,7 @@ public class UserController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "User found",
 					content = { @Content(mediaType = "application/json",
-							schema = @Schema(implementation = TestimonialDto.class)) }),
+							schema = @Schema(implementation = UserDto.class)) }),
 			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
 					content = @Content),
 			@ApiResponse(responseCode = "404", description = "User not found",
@@ -143,7 +143,7 @@ public class UserController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "User deleted",
 					content = { @Content(mediaType = "application/json",
-							schema = @Schema(implementation = TestimonialDto.class)) }),
+							schema = @Schema(implementation = UserDto.class)) }),
 			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
 					content = @Content),
 			@ApiResponse(responseCode = "404", description = "User not found",
@@ -167,7 +167,7 @@ public class UserController {
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "User found",
 					content = { @Content(mediaType = "application/json",
-							schema = @Schema(implementation = TestimonialDto.class)) }),
+							schema = @Schema(implementation = UserDto.class)) }),
 			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
 					content = @Content),
 			@ApiResponse(responseCode = "404", description = "User not found",
