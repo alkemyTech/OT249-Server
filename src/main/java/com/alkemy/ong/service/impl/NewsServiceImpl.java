@@ -34,7 +34,7 @@ public class NewsServiceImpl implements NewsService {
     private final ModelMapper modelMapper;
 
     @Override
-    public NewDTO getNews(String id) {
+    public NewDTO getNews(String id) throws Exception {
 
         Optional<News> answer = newsRepository.findById(id);
 
@@ -43,8 +43,10 @@ public class NewsServiceImpl implements NewsService {
             NewDTO newDTO = modelMapper.map(news,NewDTO.class);
 
             return newDTO;
+        }else {
+            throw new Exception("New not found");
         }
-        return null;
+
     }
 
     @Override
