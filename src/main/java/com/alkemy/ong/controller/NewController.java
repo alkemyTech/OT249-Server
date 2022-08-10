@@ -4,7 +4,6 @@ import com.alkemy.ong.dto.CreateNewsDto;
 import com.alkemy.ong.dto.NewDTO;
 import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.model.Category;
-import com.alkemy.ong.model.Member;
 import com.alkemy.ong.model.News;
 import com.alkemy.ong.repository.CategoryRepository;
 import com.alkemy.ong.service.NewsService;
@@ -15,28 +14,25 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/news")
+@AllArgsConstructor
 public class NewController {
 
-	@Autowired
-	private NewsService newsService;
+	private final NewsService newsService;
 	
-	@Autowired
-	private CategoryRepository categoryRepository;
-	@GetMapping("/")
-	@PreAuthorize("hasRole('USER')")
+	private final CategoryRepository categoryRepository;
+
 	@Operation(summary = "Get all News")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "OK",
@@ -47,6 +43,8 @@ public class NewController {
 	@Parameters(value = {
 			@Parameter(name = "page", description = "Value = 0 - dataType = int"),
 			@Parameter(name = "order", description = "Value = asc - dataType = String")})
+	@GetMapping("/")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<PageDto<NewDTO>> getPagedController(
 			@RequestParam(defaultValue = "0", name = "page") int page,
 			@RequestParam(defaultValue = "asc", name = "order") String order) {
@@ -54,7 +52,6 @@ public class NewController {
 		return ResponseEntity.ok(newDTO);
 	}
 
-	@GetMapping("/{id}")
 	@Operation(summary = "Get New details")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "OK",
@@ -64,6 +61,7 @@ public class NewController {
 					content = @Content) })
 	@Parameters(value = {
 			@Parameter(name = "id", description = "New id we want get", required = true)})
+	@GetMapping("/{id}")
 	public ResponseEntity<NewDTO> NewDetail(@PathVariable String id) {
 		try {
 			NewDTO newDTO = newsService.getNews(id);
@@ -74,8 +72,6 @@ public class NewController {
 
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@DeleteMapping("/news/{id}")
 	@Operation(summary = "Delete New")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "OK",
@@ -86,6 +82,8 @@ public class NewController {
 					content = @Content) })
 	@Parameters(value = {
 			@Parameter(name = "id", description = "New id we want delete", required = true)})
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Boolean> deleteNews(@PathVariable String id) {
 		News news = newsService.findNewsById(id);
 		if (news != null) {
@@ -95,8 +93,6 @@ public class NewController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	@PutMapping("/{id}")
-	@PreAuthorize( "hasRole('ADMIN')" )
 	@Operation(summary = "UpDate New")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "OK",
@@ -110,14 +106,14 @@ public class NewController {
 					content = @Content) })
 	@Parameters(value = {
 			@Parameter(name = "id", description = "New id we want to update", required = true)})
+	@PutMapping("/{id}")
+	@PreAuthorize( "hasRole('ADMIN')" )
 	public ResponseEntity<NewDTO> updateNews(@PathVariable String id, @Valid @RequestBody NewDTO newsDTO, BindingResult bindingResult){
 
 		NewDTO newsDTOresponse = newsService.updateNews(id, newsDTO, bindingResult );
 		return ResponseEntity.ok( newsDTOresponse );
 	}
 	
-    @PostMapping()
-    @PreAuthorize("hasRole('ADMIN')")
 	@Operation(summary = "Create New")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Created - Novedad creada correctamente.",
@@ -126,6 +122,8 @@ public class NewController {
 					content = @Content),
 			@ApiResponse(responseCode = "403", description = "Forbidden - Permission Denied ",
 					content = @Content) })
+	@PostMapping()
+	@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createNews(@Valid @RequestBody CreateNewsDto createNewsDto){
 
     	News newsAux = new News();

@@ -1,0 +1,392 @@
+package com.alkemy.ong.controller;
+
+import com.alkemy.ong.dto.CategoryDto;
+import com.alkemy.ong.dto.CreateNewsDto;
+import com.alkemy.ong.dto.NewDTO;
+import com.alkemy.ong.exceptions.CustomExceptionController;
+import com.alkemy.ong.model.Category;
+import com.alkemy.ong.model.News;
+import com.alkemy.ong.repository.CategoryRepository;
+import com.alkemy.ong.repository.NewsRepository;
+import com.alkemy.ong.security.ApiSecurityConfig;
+import com.alkemy.ong.security.CustomAuthorizationFilter;
+import com.alkemy.ong.security.CustomExceptionHandler;
+import com.alkemy.ong.service.NewsService;
+import com.alkemy.ong.service.UserService;
+import com.alkemy.ong.service.impl.NewsServiceImpl;
+import com.alkemy.ong.utils.JwtUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.handler.codec.http.HttpHeaderValues;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {NewController.class, ApiSecurityConfig.class, CustomExceptionHandler.class, CustomAuthorizationFilter.class})
+@WebMvcTest(controllers = NewController.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+class NewControllerTest {
+
+    private NewController newController;
+    @MockBean
+    private CategoryRepository categoryRepository;
+
+    @SpyBean
+    private ModelMapper modelMapper;
+
+    @MockBean
+    private NewsRepository newsRepository;
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
+    private NewsService newsService;
+
+    @MockBean
+    private UserService userService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
+    @BeforeEach
+    public void setUp() {
+
+        newController = new NewController( newsService, categoryRepository );
+    }
+
+    private static NewDTO getNewDTO(String content, CategoryDto categoryDto) {
+
+        NewDTO newDTO = new NewDTO();
+        newDTO.setCategory( categoryDto );
+        newDTO.setContent( content );
+        newDTO.setId( "42" );
+        newDTO.setImage( "Image" );
+        newDTO.setName( "Name" );
+        newDTO.setSoftDelete( false );
+        newDTO.setTimestamp( null );
+        return newDTO;
+    }
+
+
+    private static CreateNewsDto getDto() {
+
+        CreateNewsDto newsDto = new CreateNewsDto();
+        newsDto.setContent( "--" );
+        newsDto.setName( "6" );
+        newsDto.setIdCategory( "54" );
+        newsDto.setImage( "aaaa" );
+        return newsDto;
+    }
+
+    private static Category getCategory() {
+
+        Category category = new Category();
+        category.setDeleted( true );
+        category.setDescription( "The characteristics of someone or something" );
+        category.setId( "42" );
+        category.setImage( "Image" );
+        category.setName( "Name" );
+        category.setTimestamp( mock( Timestamp.class ) );
+        return category;
+    }
+
+    private static <T> String getAsString(T t) throws JsonProcessingException {
+
+        return (new ObjectMapper()).writeValueAsString( t );
+    }
+
+
+    private static News getNews(Category category) {
+
+        News news = new News();
+        news.setCategory( category );
+        news.setContent( "Not all who wander are lost" );
+        news.setId( "42" );
+        news.setImage( "Image" );
+        news.setName( "Name" );
+        news.setSoftDelete( true );
+        return news;
+    }
+
+    @Test
+    @WithMockUser(username = "admin", authorities = {"AAA", "BBB"})
+    void createNews_cuando_no_tiene_rol_suficiente_devuelve_forbidden() throws Exception {
+
+        doNothing().when( newsService ).createNews( any() );
+        when( categoryRepository.findById( anyString() ) ).thenReturn( Optional.of( new Category() ) );
+        MvcResult mvcResult = mockMvc.perform( MockMvcRequestBuilders.post( "/news" ).contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( status().isForbidden() ).andReturn();
+        assertThat( mvcResult.getResponse().getErrorMessage() ).isEqualTo( "Access Denied" );
+    }
+
+    /**
+     * Method under test: {@link NewController#createNews(CreateNewsDto)}
+     */
+    @Test
+    void createNews_cuando_todo_no_hay_problemas_deberia_devolver_ok() throws Exception {
+
+        CreateNewsDto createNewsDto = new CreateNewsDto();
+        createNewsDto.setContent( "null" );
+        createNewsDto.setIdCategory( "Id Category" );
+        createNewsDto.setImage( "Image" );
+        createNewsDto.setName( "Name" );
+        when( categoryRepository.findById( anyString() ) ).thenReturn( Optional.of( new Category() ) );
+        doNothing().when( newsService ).createNews( any( News.class ) );
+        String content = getAsString( createNewsDto );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/news" )
+                .contentType( MediaType.APPLICATION_JSON )
+                .content( content );
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder );
+        actualPerformResult.andExpect( status().isCreated() ).andExpect( content().string( "Novedad creada correctamente" ) );
+    }
+
+    /**
+     * Method under test: {@link NewController#createNews(CreateNewsDto)}
+     */
+    @Test
+    void createNews_cuando_se_pasa_un_valor_nulo_deberia_devolver_un_error_de_validacion() throws Exception {
+
+        when( categoryRepository.findById( anyString() ) ).thenReturn( Optional.of( new Category()
+        ) );
+        CreateNewsDto createNewsDto = new CreateNewsDto();
+        String content = getAsString( createNewsDto );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/news" )
+                .contentType( MediaType.APPLICATION_JSON )
+                .content( content );
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder );
+        actualPerformResult.andExpect( status().isBadRequest() ).andExpect( MockMvcResultMatchers.content().string( "" ) );
+    }
+
+    /**
+     * Method under test: {@link NewController#deleteNews(String)}
+     */
+    @Test
+    void deleteNews_cuando_todo_no_hay_problemas_deberia_devolver_ok() throws Exception {
+
+        Category category = getCategory();
+
+        News news = getNews( category );
+        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        when( newsService.deleteNews( any() ) ).thenReturn( true );
+        when( newsService.findNewsById( any() ) ).thenReturn( news );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete( "/news/{id}", "42" );
+        MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( status().isOk() );
+    }
+
+    /**
+     * Method under test: {@link NewController#deleteNews(String)}
+     */
+    @Test
+    void deleteNews_cuando_todo_no_hay_problemas_deberia_devolver_un_error_bad_request() throws Exception {
+
+        when( newsService.deleteNews( anyString() ) ).thenReturn( false );
+        when( newsService.findNewsById( anyString() ) ).thenReturn( null );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete( "/news/{id}", "42" );
+        MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( MockMvcResultMatchers.status().isNotFound() );
+    }
+
+
+    /**
+     * Method under test: {@link NewController#deleteNews(String)}
+     */
+    @Test
+    void deleteNews_cuando_no_se_encuentra_deberia_devolver_un_error_not_found() throws Exception {
+        when( newsService.deleteNews( any() ) ).thenReturn( true );
+        when( newsService.findNewsById( any() ) ).thenReturn( null );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete( "/news/{id}", "42" );
+        MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( status().isNotFound() );
+    }
+
+    /**
+     * Method under test: {@link NewController#getPagedController(int, String)}
+     */
+    @Test
+    void GetPagedController_cuando_se_pasa_correctamente_parametros_devuelve_un_ok() throws Exception {
+
+        when( newsService.getAllNews( anyInt(), anyString() ) ).thenReturn( null );
+        MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.get( "/news/" ).param( "order", "foo" );
+        MockHttpServletRequestBuilder requestBuilder = paramResult.param( "page", String.valueOf( 1 ) );
+        MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( MockMvcResultMatchers.status().isOk() );
+    }
+
+    /**
+     * Method under test: {@link NewController#NewDetail(String)}
+     */
+    @Test
+    void NewDetail_cuando_no_se_encuentra_deberia_devolver_not_found() throws Exception {
+
+        when( newsService.getNews( any() ) ).thenThrow( new Exception( "New not found" ) );
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/{id}", "42" );
+        MockMvcBuilders.standaloneSetup( newController ).setControllerAdvice( new CustomExceptionHandler() )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( status().isNotFound() )
+                .andExpect( content().string( "" ) );
+    }
+
+    /**
+     * Method under test: {@link NewController#updateNews(String, NewDTO, BindingResult)}
+     */
+    @Test
+    void UpdateNews_cuando_se_pasan_valores_nulos_deberia_tirar_una_excepcion_de_bind_result_exception() throws Exception {
+        newsService = new NewsServiceImpl( newsRepository, categoryRepository, modelMapper );
+        NewController newController = new NewController( newsService, categoryRepository );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/news/{id}", "42" )
+                .contentType( MediaType.APPLICATION_JSON )
+                .content( (new ObjectMapper()).writeValueAsString( new NewDTO() ) );
+        MockMvcBuilders.standaloneSetup( newController )
+                .setControllerAdvice( new CustomExceptionController() )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( status().isBadRequest() )
+                .andExpect( jsonPath( "$.errorMessage", is("Hay errores en lo enviado" ) ) )
+                .andExpect( jsonPath( "$.errorFields", hasSize( 3 ) ) )
+                .andExpect( jsonPath( "$.errorFields", Matchers.isA(ArrayList.class ) ) )
+                .andExpect( jsonPath( "$.errorCode", is( "CLIENT_ERROR" ) ) );
+    }
+
+    /**
+     * Method under test: {@link NewController#updateNews(String, NewDTO, BindingResult)}
+     */
+    @Test
+    @Disabled("Disabled ")
+    void testUpdateNews() {
+        Category category = new Category();
+        category.setDeleted( true );
+        category.setDescription( "The characteristics of someone or something" );
+        category.setId( "42" );
+        category.setImage( "Image" );
+        category.setName( "Name" );
+        category.setTimestamp( Timestamp.from( LocalDateTime.of( 1,1,1,1,1,1 ).toInstant( ZoneOffset.UTC  ) ) );
+
+        News news = new News();
+        news.setCategory( category );
+        news.setComments( new HashSet<>() );
+        news.setContent( "Not all who wander are lost" );
+        news.setId( "42" );
+        news.setImage( "Image" );
+        news.setName( "Name" );
+        news.setSoftDelete( true );
+        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        NewsRepository newsRepository = mock( NewsRepository.class );
+        when( newsRepository.findById( anyString() ) ).thenReturn( Optional.of( news ) );
+        CategoryRepository categoryRepository = mock( CategoryRepository.class );
+        NewController newController = new NewController(
+                new NewsServiceImpl( newsRepository, categoryRepository, new ModelMapper() ), mock( CategoryRepository.class ) );
+        NewDTO newsDTO = new NewDTO();
+        newController.updateNews( "42", newsDTO, new BindException( "Target", "Object Name" ) );
+    }
+
+
+    /**
+     * Method under test: {@link NewController#updateNews(String, NewDTO, BindingResult)}
+     */
+    @Test
+    void UpdateNews_cuando_todo_es_correct_deberia_devolver_la_entidad_actualizada() throws Exception {
+
+
+        CategoryDto categoryDto = new CategoryDto();
+        NewDTO newDTO = getNewDTO( "", categoryDto );
+        when( newsService.updateNews( any(), any(), any() ) ).thenReturn( newDTO );
+        String content = getAsString( newDTO );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/news/{id}", "42" )
+                .contentType( MediaType.APPLICATION_JSON )
+                .content( content );
+        MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( status().isOk() )
+                .andExpect( MockMvcResultMatchers.content().contentType( HttpHeaderValues.APPLICATION_JSON.toString() ) )
+                .andExpect( jsonPath( "$.id", is( newDTO.getId() ) ) )
+                .andExpect( jsonPath( "$.name", is( newDTO.getName() ) ) )
+                .andExpect( jsonPath( "$.image", is( newDTO.getImage() ) ) )
+                .andExpect( jsonPath( "$.timestamp", is( newDTO.getTimestamp() ) ) )
+                .andExpect( jsonPath( "$.category.name", is( categoryDto.getName() ) ))
+                .andExpect( jsonPath( "$.softDelete", is( newDTO.isSoftDelete() ) ))
+                .andExpect( jsonPath( "$.content", Matchers.is(  newDTO.getContent()) ) )
+
+                .andExpect( MockMvcResultMatchers.content()
+                        .json(getAsString( newDTO ) ) );
+    }
+
+    /**
+     * Method under test: {@link NewController#NewDetail(String)}
+     */
+    @Test
+    void NewDetail_cuando_se_pasa_un_id_y_lo_encuentra_deberia_devolver_la_entidad() throws Exception {
+
+        NewDTO newDTO = new NewDTO();
+        CategoryDto categoryDto = new CategoryDto();
+        newDTO.setCategory( categoryDto );
+        when( newsService.getNews( any() ) ).thenReturn( newDTO );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/{id}", "42" );
+        MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( status().isOk() )
+                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( jsonPath( "$.id", is( newDTO.getId() ) ) )
+                .andExpect( jsonPath( "$.name", is( newDTO.getName() ) ) )
+                .andExpect( jsonPath( "$.image", is( newDTO.getImage() ) ) )
+                .andExpect( jsonPath( "$.timestamp", is( newDTO.getTimestamp() ) ) )
+                .andExpect( jsonPath( "$.category.name", is( categoryDto.getName() ) ))
+                .andExpect( jsonPath( "$.softDelete", is( newDTO.isSoftDelete() ) ))
+                .andExpect( jsonPath( "$.content", Matchers.is(  newDTO.getContent()) ) )
+                .andExpect( MockMvcResultMatchers.content()
+                        .json(
+                                "{\"id\":null,\"name\":null,\"content\":null,\"image\":null,\"timestamp\":null,\"category\":{},\"softDelete"
+                                        + "\":false}" ) );
+    }
+
+}
+
