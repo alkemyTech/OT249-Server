@@ -1,5 +1,7 @@
 package com.alkemy.ong.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,13 @@ public class CommentController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getAllComments(){
 		return ResponseEntity.ok(commentService.getAll());
+	}
+	
+	@GetMapping("/posts/{id}/comments")
+	public ResponseEntity<List<Comment>> commentsInThePost(@PathVariable("id") String id) {
+		return new ResponseEntity<>(commentService.commentsByPost(id), HttpStatus.OK);
 	}	
+  
 	@PostMapping("/comments")
 	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<CreateCommentDto> createComment(@Valid @RequestBody CreateCommentDto comment){
