@@ -23,6 +23,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URL = "/auth/login";
     private static final String REGISTER_URL = "/auth/register";
     private static final String SWAGGER_URL = "/api/**";                  
+
     private final CustomExceptionHandler customExceptionHandler;
     private final CustomAuthorizationFilter customAuthorizationFilter;
     private final JwtUtil jwtUtil;
