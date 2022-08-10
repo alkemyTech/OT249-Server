@@ -20,7 +20,7 @@ public class UserSeedData implements CommandLineRunner {
     @Autowired
     private RoleRepository roleRepository;
 	
-    private static final String PASSWORD_USER = "$2a$12$sfmceDRaaF5MKFQeV1LP7.iJuFd.dteTrCw0qw31fM6R54pkqvz5K"; 
+    private static final String PASSWORD_USER = "$2a$12$Tw/CXcVmA09y0e7A.h3tzu8VDDpwiSfpoGQxXTVX5UirKCsEga/gq"; 
 
     private static final String PASSWORD_ADMIN = "$2a$12$sfmceDRaaF5MKFQeV1LP7.iJuFd.dteTrCw0qw31fM6R54pkqvz5K";
 
