@@ -1,5 +1,7 @@
 package com.alkemy.ong.service.impl;
 
+import com.alkemy.ong.Utils.PageUtils;
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.dto.TestimonialDto;
 import com.alkemy.ong.exceptions.BindingResultException;
 import com.alkemy.ong.exceptions.RecordException;
@@ -8,6 +10,7 @@ import com.alkemy.ong.repository.TestimonialRepository;
 import com.alkemy.ong.service.TestimonialService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
@@ -53,4 +56,12 @@ public class TestimonialServiceImpl implements TestimonialService {
         Testimonial found = testimonialRepository.findById( id ).orElseThrow( () -> new RecordException.RecordNotFoundException( "Testimonial not found" ) );
         return this.modelMapper.map( found, TestimonialDto.class );
     }
+
+	@Override
+	public PageDto<TestimonialDto> getAllTestimonials(int page, String order) {
+
+		  Page<Testimonial> testimonialPage = testimonialRepository.findAll( PageUtils.getPageable( page, order ) );
+	        Page<TestimonialDto> testimonialDTOPage = testimonialPage.map( testimonial -> modelMapper.map( testimonial, TestimonialDto.class ) );
+	        return PageUtils.getPageDto( testimonialDTOPage, "testimonials" );
+	}
 }

@@ -1,5 +1,7 @@
 package com.alkemy.ong.controller;
 
+
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.dto.TestimonialDto;
 import com.alkemy.ong.service.TestimonialService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,5 +79,14 @@ public class TestimonialController {
         testimonialService.deleteTestimony(id );
         return ResponseEntity.noContent().build();
     }
+    
+	@GetMapping("/")
+	@PreAuthorize("hasRole('USER')")
+    public ResponseEntity<PageDto<TestimonialDto>> getPagedController(
+			@RequestParam(defaultValue = "0", name = "page") int page,
+			@RequestParam(defaultValue = "asc", name = "order") String order) {
+		PageDto<TestimonialDto> testimonialDTO = testimonialService.getAllTestimonials(page, order);
+		return ResponseEntity.ok(testimonialDTO);
+	}
 
 }
