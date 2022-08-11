@@ -473,18 +473,6 @@ class NewsServiceImplTest {
     }
 
     /**
-     * Method under test: {@link NewsServiceImpl#getAllNews(int, String)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testGetAllNews3() {
-
-        Page<News> page = new PageImpl<>( new ArrayList<>() );
-        when( newsRepository.findAll( any( Pageable.class ) ) ).thenReturn( page );
-
-    }
-
-    /**
      * Method under test: {@link NewsServiceImpl#deleteNews(String)}
      */
     @Test
