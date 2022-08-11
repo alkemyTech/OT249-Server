@@ -2,7 +2,6 @@ package com.alkemy.ong.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import com.alkemy.ong.exceptions.RecordException;
 import com.alkemy.ong.model.Organization;
@@ -12,7 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alkemy.ong.Utils.CustomMultipartFile;
+import com.alkemy.ong.utils.CustomMultipartFile;
 import com.alkemy.ong.dto.PublicOrganizationDto;
 import com.alkemy.ong.dto.SlideResponseDto;
 import com.alkemy.ong.dto.SlideDto;

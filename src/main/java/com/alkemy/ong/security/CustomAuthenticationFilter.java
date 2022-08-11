@@ -1,6 +1,6 @@
 package com.alkemy.ong.security;
 
-import com.alkemy.ong.Utils.JwtUtil;
+import com.alkemy.ong.utils.JwtUtil;
 import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.dto.UserResponseDto;
