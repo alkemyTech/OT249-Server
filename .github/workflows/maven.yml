@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven
+name: SpringBoot Maven CI
 
 on:
   push:
@@ -10,10 +10,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -22,14 +20,35 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
           cache: maven
-      - name: Build with Maven
+      - name: Testing
         env:
           DB_URL: ${{ secrets.DB_URL }}
-          DB_USER: ${{secrets.DB_USER}} 
+          DB_USER: ${{secrets.DB_USER}}
           SENDGRID_KEY: ${{ secrets.SENDGRID_KEY }}
-          ENDPOINT_URL: ${{secrets.ENDPOINT_URL}} 
-          ACCESS_KEY: ${{secrets.ACCESS_KEY}} 
-          SECRET_KEY: ${{secrets.SECRET_KEY}} 
-          BUCKET_NAME: ${{secrets.BUCKET_NAME}} 
-          JWT_SECRET: ${{secrets.JWT_SECRET}} 
+          ENDPOINT_URL: ${{secrets.ENDPOINT_URL}}
+          ACCESS_KEY: ${{secrets.ACCESS_KEY}}
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
         run: mvn -B test --file pom.xml
+  jacoco:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      - name: Testing
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USER: ${{secrets.DB_USER}}
+          SENDGRID_KEY: ${{ secrets.SENDGRID_KEY }}
+          ENDPOINT_URL: ${{secrets.ENDPOINT_URL}}
+          ACCESS_KEY: ${{secrets.ACCESS_KEY}}
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          BUCKET_NAME: ${{secrets.BUCKET_NAME}}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+        run: mvn -B verify --file pom.xml

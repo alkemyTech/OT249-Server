@@ -1,8 +1,8 @@
 package com.alkemy.ong.service.impl;
 
 
-import com.alkemy.ong.Utils.JwtUtil;
-import com.alkemy.ong.Utils.PageUtils;
+import com.alkemy.ong.utils.JwtUtil;
+import com.alkemy.ong.utils.PageUtils;
 import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.RoleDto;
 import com.alkemy.ong.dto.UserDto;
@@ -14,8 +14,6 @@ import com.alkemy.ong.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,7 +24,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Optional;
 

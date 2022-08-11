@@ -1,6 +1,6 @@
 package com.alkemy.ong.security;
 
-import com.alkemy.ong.Utils.JwtUtil;
+import com.alkemy.ong.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -2,6 +2,7 @@ package com.alkemy.ong.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,13 +14,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 @RestControllerAdvice
 public class CustomExceptionController extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(FORBIDDEN)
+    public Map<String, String> handleAccessDeniedException(AccessDeniedException ex) {
+
+        return Map.of( "errors", ex.getMessage() );
+    }
+
     @ExceptionHandler(BindingResultException.class)
     @ResponseStatus(BAD_REQUEST)
-    public ResponseEntity<?> handleValidateExceptions(BindingResultException ex) {
+    public ResponseEntity<Map<String, Object>> handleValidateExceptions(BindingResultException ex) {
+
         Map<String, Object> tokens = new HashMap<>();
         List<Map<String, Object>> token2 = ex.getFieldErrors().stream().map( vale -> {
             String defaultMessage = "FIELD ERROR";
@@ -45,7 +55,8 @@ public class CustomExceptionController extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RecordException.RecordNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Map<String, String> handleRecordNotFound(RecordException.RecordNotFoundException ex) {
-        return Map.of("errors", ex.getMessage());
+
+        return Map.of( "errors", ex.getMessage() );
     }
 
 }

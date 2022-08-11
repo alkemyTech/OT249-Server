@@ -17,6 +17,18 @@
 	<properties>
 		<java.version>11</java.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-java-sdk-bom</artifactId>
+				<version>1.12.1</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -77,13 +89,11 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>2.1.212</version>
-			<scope>test</scope>
+			<version>2.1.214</version>
 		</dependency>
 		<dependency>
 			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.12.239</version>
+			<artifactId>aws-java-sdk-s3</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -94,28 +104,127 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.8</version>
+			<version>1.6.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-data-rest</artifactId>
-			<version>1.6.8</version>
+			<version>1.6.9</version>
+		</dependency>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-codec-http</artifactId>
+			<version>4.1.79.Final</version>
 		</dependency>
 
 	</dependencies>
 
 	<build>
 		<plugins>
+<!--			<plugin>-->
+<!--				<groupId>org.springframework.boot</groupId>-->
+<!--				<artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--				<configuration>-->
+<!--					<profiles>test</profiles>-->
+<!--					<wait>5000</wait>-->
+<!--					<maxAttempts>180</maxAttempts>-->
+<!--				</configuration>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>pre-integration-test</id>-->
+<!--						<goals>-->
+<!--							<goal>start</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>post-integration-test</id>-->
+<!--						<goals>-->
+<!--							<goal>stop</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M7</version>
+
+<!--				<configuration>-->
+<!--					<groups>ut</groups>-->
+<!--					<excludedGroups>it</excludedGroups>-->
+<!--				</configuration>-->
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>check</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<element>CLASS</element>
+									<limits>
+										<limit>
+											<counter>LINE</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>1.0</minimum>
+										</limit>
+										<limit>
+											<counter>BRANCH</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>1.0</minimum>
+										</limit>
+									</limits>
+								</rule>
+								<rule>
+									<element>METHOD</element>
+									<limits>
+										<limit>
+											<counter>COMPLEXITY</counter>
+											<value>TOTALCOUNT</value>
+											<maximum>25</maximum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+							<excludes>
+								<!-- Exclude full package from test coverage -->
+								<exclude>**/*com/alkemy/ong/model/**</exclude>
+								<!-- Exclude full package from test coverage -->
+								<exclude>**/*com/alkemy/ong/repository/**</exclude>
+								<!-- Exclude full package from test coverage -->
+								<exclude>**/*com/alkemy/ong/config/**</exclude>
+								<!-- Exclude full package from test coverage -->
+								<exclude>**/*com/alkemy/ong/dto/**</exclude>
+								<!-- Exclude class from test coverage -->
+								<exclude>**/*com/alkemy/ong/OngApplication.class</exclude>
+								<!-- Exclude class from test coverage -->
+								<exclude>**/*com/alkemy/ong/exceptions/BindingResultException.class</exclude>
+								<!-- Exclude class from test coverage -->
+								<exclude>**/*com/alkemy/ong/exceptions/RecordException.class</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
 				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<fileSets>
+						<fileSet>
+							<directory>${project.build.directory}</directory>
+							<includes>
+								<include>*.exec</include>
+							</includes>
+						</fileSet>
+					</fileSets>
 				</configuration>
 			</plugin>
 		</plugins>

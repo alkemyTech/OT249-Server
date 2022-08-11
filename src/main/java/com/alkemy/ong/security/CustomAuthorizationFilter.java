@@ -1,6 +1,6 @@
 package com.alkemy.ong.security;
 
-import com.alkemy.ong.Utils.JwtUtil;
+import com.alkemy.ong.utils.JwtUtil;
 import com.alkemy.ong.service.UserService;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;

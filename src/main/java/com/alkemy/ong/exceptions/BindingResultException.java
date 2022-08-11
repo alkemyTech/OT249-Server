@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-@Setter
 @Getter
 public class BindingResultException extends RuntimeException {
 
