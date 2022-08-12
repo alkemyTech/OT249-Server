@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.alkemy.ong.model.Role;
@@ -12,6 +13,7 @@ import com.alkemy.ong.repository.RoleRepository;
 import com.alkemy.ong.repository.UserRepository;
 
 @Component
+@Profile("!test")
 public class UserSeedData implements CommandLineRunner {
     
 	@Autowired
