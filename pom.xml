@@ -213,8 +213,6 @@
 								<!-- Exclude class from test coverage -->
 								<exclude>**/*com/alkemy/ong/exceptions/RecordException*.*</exclude>
 								<!-- Exclude class from test coverage -->
-								<exclude>**/*com/alkemy/ong/exceptions/RecordException*.*</exclude>
-								<!-- Exclude class from test coverage -->
 								<exclude>**/*com/alkemy/ong/utils/ActivitySeedData.*</exclude>
 								<!-- Exclude class from test coverage -->
 								<exclude>**/*com/alkemy/ong/utils/UserSeedData.*</exclude>
