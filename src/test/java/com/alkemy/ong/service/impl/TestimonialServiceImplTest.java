@@ -267,7 +267,7 @@ class TestimonialServiceImplTest {
         BindingResult bindingResult = mock( BindingResult.class );
         when( bindingResult.hasFieldErrors() ).thenReturn( true );
         assertThatThrownBy(
-                () -> testimonialServiceImpl.createTestimony( testimonialDto, bindingResult ) ).isInstanceOf( BindingResultException.class ).hasFieldOrProperty( "errorFields" );
+                () -> testimonialServiceImpl.createTestimony( testimonialDto, bindingResult ) ).isInstanceOf( BindingResultException.class );
         verifyNoInteractions( modelMapper );
         verifyNoInteractions( testimonialRepository );
         verify( bindingResult ).hasFieldErrors();

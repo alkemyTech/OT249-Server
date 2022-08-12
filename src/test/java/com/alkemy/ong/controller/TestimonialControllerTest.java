@@ -112,8 +112,8 @@ class TestimonialControllerTest {
         actualPerformResult.andExpect( MockMvcResultMatchers.status().isBadRequest() )
                 .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content()
-                        .string(
-                                "{\"errorMessage\":\"Hay errores en lo enviado\",\"errorCode\":\"CLIENT_ERROR\",\"errorFields\":[{\"field\":\"name\",\"code\":\"NotBlank\",\"message\":\"must not be blank\"},{\"field\":\"content\",\"code\":\"NotBlank\",\"message\":\"must not be blank\"}]}" ) );
+                        .json(
+                                "{\"errorMessage\":\"Hay errores en lo enviado\",\"errorCode\":\"CLIENT_ERROR\",\"errorFields\":[{\"code\":\"NotBlank\",\"message\":\"must not be blank\",\"field\":\"name\"},{\"code\":\"NotBlank\",\"message\":\"must not be blank\",\"field\":\"content\"}]}\n" ) );
     }
 
     /**
@@ -184,7 +184,7 @@ class TestimonialControllerTest {
                 .andExpect( MockMvcResultMatchers.status().isOk() )
                 .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content()
-                        .string(
+                        .json(
                                 "{\"id\":null,\"name\":null,\"image\":null,\"content\":null,\"timestamp\":null,\"softDelete\":null}" ) );
     }
 
@@ -208,8 +208,8 @@ class TestimonialControllerTest {
                 .andExpect( MockMvcResultMatchers.status().isBadRequest() )
                 .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content()
-                        .string(
-                                "{\"errorMessage\":\"Hay errores en lo enviado\",\"errorCode\":\"CLIENT_ERROR\",\"errorFields\":[{\"code\":\"NotBlank\",\"message\":\"must not be blank\",\"field\":\"content\"},{\"code\":\"NotBlank\",\"message\":\"must not be blank\",\"field\":\"name\"}]}" ) );
+                        .json(
+                                "{\"errorMessage\":\"Hay errores en lo enviado\",\"errorCode\":\"CLIENT_ERROR\",\"errorFields\":[{\"field\":\"name\",\"message\":\"must not be blank\",\"code\":\"NotBlank\"},{\"field\":\"content\",\"message\":\"must not be blank\",\"code\":\"NotBlank\"}]}" ) );
     }
 }
 
