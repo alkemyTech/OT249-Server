@@ -125,23 +125,30 @@ class NewControllerTest {
      * Method under test: {@link NewController#createNews(CreateNewsDto)}
      */
     @Test
-    void createNews_cuando_todo_no_hay_problemas_deberia_devolver_ok() throws Exception {
+    void createNews_cuando_no_hay_problemas_deberia_devolver_created() throws Exception {
 
         CreateNewsDto createNewsDto = new CreateNewsDto();
         createNewsDto.setContent( "null" );
         createNewsDto.setIdCategory( "Id Category" );
         createNewsDto.setImage( "Image" );
         createNewsDto.setName( "Name" );
-        when( categoryRepository.findById( anyString() ) ).thenReturn( Optional.of( new Category() ) );
-        doNothing().when( newsService ).createNews( any( News.class ) );
+        when( categoryRepository.findById( anyString() ) )
+                .thenReturn( Optional.of( new Category() ) );
+        doNothing()
+                .when( newsService )
+                .createNews( any( News.class ) );
         String content = getAsString( createNewsDto );
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/news" )
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post( "/news" )
                 .contentType( MediaType.APPLICATION_JSON )
                 .content( content );
-        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( newController )
+        ResultActions actualPerformResult = MockMvcBuilders
+                .standaloneSetup( newController )
                 .build()
                 .perform( requestBuilder );
-        actualPerformResult.andExpect( status().isCreated() ).andExpect( content().string( "Novedad creada correctamente" ) );
+        actualPerformResult
+                .andExpect( status().isCreated() )
+                .andExpect( content().string( "Novedad creada correctamente" ) );
     }
 
     /**
