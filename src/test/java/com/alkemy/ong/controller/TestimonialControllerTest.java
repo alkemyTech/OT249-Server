@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -30,11 +31,13 @@ import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ContextConfiguration(classes = {TestimonialController.class})
@@ -86,8 +89,8 @@ class TestimonialControllerTest {
                 .build()
                 .perform( requestBuilder );
         actualPerformResult.andExpect( MockMvcResultMatchers.status().isCreated() )
-                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
-                .andExpect( MockMvcResultMatchers.content()
+                .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( content()
                         .json(
                                 "{\"id\":null,\"name\":null,\"image\":null,\"content\":null,\"timestamp\":null,\"softDelete\":null}" ) );
     }
@@ -110,8 +113,8 @@ class TestimonialControllerTest {
                 .build()
                 .perform( requestBuilder );
         actualPerformResult.andExpect( MockMvcResultMatchers.status().isBadRequest() )
-                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
-                .andExpect( MockMvcResultMatchers.content()
+                .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( content()
                         .json(
                                 "{\"errorMessage\":\"Hay errores en lo enviado\",\"errorCode\":\"CLIENT_ERROR\",\"errorFields\":[{\"code\":\"NotBlank\",\"message\":\"must not be blank\",\"field\":\"name\"},{\"code\":\"NotBlank\",\"message\":\"must not be blank\",\"field\":\"content\"}]}\n" ) );
     }
@@ -164,7 +167,33 @@ class TestimonialControllerTest {
                 .andExpect( jsonPath( "$.content", hasSize( 0 ) ))
                 .andExpect( jsonPath( "$.totalElements", is( 0 ) ));
     }
+    /**
+     * Method under test: {@link TestimonialController#getPagedController(int, String)}
+     */
+    @Test
+    void GetPagedController_cuando_no_se_pasa_parametros_devuelve_la_pagina_cero_y_asc() throws Exception {
 
+        //given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass( String.class );
+        ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass( Integer.class );
+        //when
+        when( testimonialService.getAllTestimonials( anyInt(),anyString() ) ).thenReturn( new PageDto<>( new ArrayList<>(), PageUtils.getPageable( 0,"asc" ),0 ) );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/testimonials/" );
+        MockMvcBuilders.standaloneSetup( testimonialController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( jsonPath( "$.content", Matchers.isA( ArrayList.class ) ))
+                .andExpect( jsonPath( "$.content", hasSize( 0 ) ))
+                .andExpect( jsonPath( "$.totalElements", is( 0 ) ))
+                .andExpect( jsonPath( "$.first", is( true ) ) )
+                .andExpect( jsonPath( "$.number", is( 0 ) ) )        ;
+        //then
+        verify( testimonialService ).getAllTestimonials( integerArgumentCaptor.capture(), argumentCaptor.capture() );
+        assertThat( integerArgumentCaptor.getValue() ).isEqualTo( 0 );
+        assertThat( argumentCaptor.getValue() ).isEqualTo( "asc" );
+    }
     /**
      * Method under test: {@link TestimonialController#updateTestimonial(String, TestimonialDto, BindingResult)}
      */
@@ -182,8 +211,8 @@ class TestimonialControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
-                .andExpect( MockMvcResultMatchers.content()
+                .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( content()
                         .json(
                                 "{\"id\":null,\"name\":null,\"image\":null,\"content\":null,\"timestamp\":null,\"softDelete\":null}" ) );
     }
@@ -206,8 +235,8 @@ class TestimonialControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isBadRequest() )
-                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
-                .andExpect( MockMvcResultMatchers.content()
+                .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( content()
                         .json(
                                 "{\"errorMessage\":\"Hay errores en lo enviado\",\"errorCode\":\"CLIENT_ERROR\",\"errorFields\":[{\"field\":\"name\",\"message\":\"must not be blank\",\"code\":\"NotBlank\"},{\"field\":\"content\",\"message\":\"must not be blank\",\"code\":\"NotBlank\"}]}" ) );
     }

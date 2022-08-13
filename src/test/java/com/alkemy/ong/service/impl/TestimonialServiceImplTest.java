@@ -49,6 +49,7 @@ class TestimonialServiceImplTest {
 
     @BeforeEach
     void setUp() {
+
         testimonialServiceImpl = new TestimonialServiceImpl( testimonialRepository, modelMapper );
     }
 
@@ -281,26 +282,26 @@ class TestimonialServiceImplTest {
 
         Testimonial testimonial = getTestimonial( true );
         Testimonial testimonialWithId = getTestimonialWithId();
-        ArgumentCaptor<Testimonial> testimonial2 = ArgumentCaptor.forClass( Testimonial.class );
-        when( testimonialRepository.save( testimonial2.capture() ) ).thenReturn( testimonialWithId );
+        ArgumentCaptor<Testimonial> argumentCaptor = ArgumentCaptor.forClass( Testimonial.class );
+        when( testimonialRepository.save( argumentCaptor.capture() ) ).thenReturn( testimonialWithId );
         TestimonialDto testimonialDto = getTestimonialDto();
         BindingResult bindingResult = mock( BindingResult.class );
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
         TestimonialDto actual = testimonialServiceImpl.createTestimony( testimonialDto, bindingResult );
         assertThat( actual ).isNotNull();
-        Testimonial value = testimonial2.getValue();
+        Testimonial captorValue = argumentCaptor.getValue();
         assertThat( actual.getId() )
                 .isNotEqualTo( testimonial.getId() )
-                .isNotEqualTo( value.getId() );
+                .isNotEqualTo( captorValue.getId() );
         assertThat( actual.getName() )
                 .isEqualTo( testimonial.getName() )
-                .isEqualTo( value.getName() );
+                .isEqualTo( captorValue.getName() );
         assertThat( actual.getContent() )
                 .isEqualTo( testimonial.getContent() )
-                .isEqualTo( value.getContent() );
+                .isEqualTo( captorValue.getContent() );
         assertThat( actual.getSoftDelete() )
                 .isNotEqualTo( testimonial.getSoftDelete() )
-                .isEqualTo( value.getSoftDelete() )
+                .isEqualTo( captorValue.getSoftDelete() )
                 .isFalse();
 
         verify( testimonialRepository ).save( any() );
@@ -372,7 +373,7 @@ class TestimonialServiceImplTest {
     void FindById_cuando_se_pasa_un_nulo_deberia_tirar_excepcion() {
 
         when( testimonialRepository.findById( any() ) ).thenThrow( new IllegalArgumentException( "error" ) );
-        assertThatThrownBy(() -> testimonialServiceImpl.findById( null ) ).isInstanceOf(  IllegalArgumentException.class ).hasMessage( "error" );
+        assertThatThrownBy( () -> testimonialServiceImpl.findById( null ) ).isInstanceOf( IllegalArgumentException.class ).hasMessage( "error" );
         verify( testimonialRepository ).findById( any() );
         verifyNoInteractions( modelMapper );
     }
@@ -384,7 +385,7 @@ class TestimonialServiceImplTest {
     void FindById_cuando_no_se_encuentra_la_entidad_deberia_tirar_excepcion() {
 
         when( testimonialRepository.findById( any() ) ).thenReturn( Optional.empty() );
-        assertThatThrownBy( () -> testimonialServiceImpl.findById( "42" ) ).isInstanceOf(  RecordException.RecordNotFoundException.class ).hasMessage( "Testimonial not found" );
+        assertThatThrownBy( () -> testimonialServiceImpl.findById( "42" ) ).isInstanceOf( RecordException.RecordNotFoundException.class ).hasMessage( "Testimonial not found" );
         verify( testimonialRepository ).findById( anyString() );
         verifyNoInteractions( modelMapper );
     }
@@ -396,7 +397,7 @@ class TestimonialServiceImplTest {
     void GetAllTestimonials_cuando_se_pasan_pagina_valida_deberia_devolver_paginado() {
 
         Testimonial testimonial = getTestimonial( false );
-        List<Testimonial> testimonials = List.of( testimonial,testimonial,testimonial );
+        List<Testimonial> testimonials = List.of( testimonial, testimonial, testimonial );
         PageImpl<Testimonial> testimonialPage = new PageImpl<>( testimonials, PageUtils.getPageable( 0, "asc" ), 3 );
         when( testimonialRepository.findAll( any( Pageable.class ) ) ).thenReturn( testimonialPage );
         PageDto<TestimonialDto> allTestimonials = testimonialServiceImpl.getAllTestimonials( 1, "Order" );
@@ -423,6 +424,7 @@ class TestimonialServiceImplTest {
      */
     @Test
     void GetAllTestimonials_cuando_se_pasan_pagina_valida_pero_no_hay_elementos_deberia_tirar_devolver_vacia() {
+
         List<Testimonial> testimonials = new ArrayList<>();
         PageImpl<Testimonial> testimonialPage = new PageImpl<>( testimonials, PageUtils.getPageable( 1, "asc" ), 0 );
         when( testimonialRepository.findAll( any( Pageable.class ) ) ).thenReturn( testimonialPage );
