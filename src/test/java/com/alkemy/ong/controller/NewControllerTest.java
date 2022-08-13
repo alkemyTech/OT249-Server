@@ -3,6 +3,7 @@ package com.alkemy.ong.controller;
 import com.alkemy.ong.dto.CategoryDto;
 import com.alkemy.ong.dto.CreateNewsDto;
 import com.alkemy.ong.dto.NewDTO;
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.exceptions.CustomExceptionController;
 import com.alkemy.ong.model.Category;
 import com.alkemy.ong.model.News;
@@ -11,15 +12,16 @@ import com.alkemy.ong.repository.NewsRepository;
 import com.alkemy.ong.security.CustomExceptionHandler;
 import com.alkemy.ong.service.NewsService;
 import com.alkemy.ong.service.impl.NewsServiceImpl;
+import com.alkemy.ong.utils.PageUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.netty.handler.codec.http.HttpHeaderValues;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -38,10 +40,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
@@ -128,11 +130,7 @@ class NewControllerTest {
     @Test
     void createNews_cuando_no_hay_problemas_deberia_devolver_created() throws Exception {
 
-        CreateNewsDto createNewsDto = new CreateNewsDto();
-        createNewsDto.setContent( "null" );
-        createNewsDto.setIdCategory( "Id Category" );
-        createNewsDto.setImage( "Image" );
-        createNewsDto.setName( "Name" );
+        CreateNewsDto createNewsDto = getDto();
         when( categoryRepository.findById( anyString() ) )
                 .thenReturn( Optional.of( new Category() ) );
         doNothing()
@@ -168,7 +166,9 @@ class NewControllerTest {
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( newController )
                 .build()
                 .perform( requestBuilder );
-        actualPerformResult.andExpect( status().isBadRequest() ).andExpect( MockMvcResultMatchers.content().string( "" ) );
+        actualPerformResult
+                .andExpect( status().isBadRequest() )
+                .andExpect( MockMvcResultMatchers.content().string( "" ) );
     }
 
     /**
@@ -232,10 +232,36 @@ class NewControllerTest {
         MockMvcBuilders.standaloneSetup( newController )
                 .build()
                 .perform( requestBuilder )
+                .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.status().isOk() );
     }
 
+    /**
+     * Method under test: {@link NewController#getPagedController(int, String)}
+     */
+    @Test
+    void GetPagedController_cuando_no_se_pasa_parametros_devuelve_la_pagina_cero_y_asc() throws Exception {
 
+        //given
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass( String.class );
+        ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass( Integer.class );
+
+        //when
+        when( newsService.getAllNews( anyInt(), anyString() ) ).thenReturn( new PageDto<>( new ArrayList<>(), PageUtils.getPageable( 0 , "asc"), 0 ) );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/" );
+        MockMvcBuilders.standaloneSetup( newController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( jsonPath("$.first", is( true )) )
+                .andExpect( jsonPath("$.number", is( 0 )) )
+        ;
+        //then
+        verify( newsService ).getAllNews( integerArgumentCaptor.capture(), argumentCaptor.capture() );
+        assertThat(integerArgumentCaptor.getValue()).isEqualTo( 0 );
+        assertThat(argumentCaptor.getValue()).isEqualTo( "asc" );
+    }
 
     /**
      * Method under test: {@link NewController#updateNews(String, NewDTO, BindingResult)}
@@ -246,12 +272,13 @@ class NewControllerTest {
         NewController newController = new NewController( newsService, categoryRepository );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/news/{id}", "42" )
                 .contentType( MediaType.APPLICATION_JSON )
-                .content( (new ObjectMapper()).writeValueAsString( new NewDTO() ) );
+                .content( getAsString( new NewDTO() ) );
         MockMvcBuilders.standaloneSetup( newController )
                 .setControllerAdvice( new CustomExceptionController() )
                 .build()
                 .perform( requestBuilder )
                 .andExpect( status().isBadRequest() )
+                .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( jsonPath( "$.errorMessage", is("Hay errores en lo enviado" ) ) )
                 .andExpect( jsonPath( "$.errorFields", hasSize( 3 ) ) )
                 .andExpect( jsonPath( "$.errorFields", Matchers.isA(ArrayList.class ) ) )
@@ -267,7 +294,7 @@ class NewControllerTest {
 
 
         CategoryDto categoryDto = new CategoryDto();
-        NewDTO newDTO = getNewDTO( "", categoryDto );
+        NewDTO newDTO = getNewDTO( "aa", categoryDto );
         when( newsService.updateNews( any(), any(), any() ) ).thenReturn( newDTO );
         String content = getAsString( newDTO );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/news/{id}", "42" )
@@ -277,7 +304,7 @@ class NewControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( HttpHeaderValues.APPLICATION_JSON.toString() ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( jsonPath( "$.id", is( newDTO.getId() ) ) )
                 .andExpect( jsonPath( "$.name", is( newDTO.getName() ) ) )
                 .andExpect( jsonPath( "$.image", is( newDTO.getImage() ) ) )
@@ -312,16 +339,15 @@ class NewControllerTest {
     @Test
     void NewDetail_cuando_se_pasa_un_id_y_lo_encuentra_deberia_devolver_la_entidad() throws Exception {
 
-        NewDTO newDTO = new NewDTO();
         CategoryDto categoryDto = new CategoryDto();
-        newDTO.setCategory( categoryDto );
+        NewDTO newDTO = getNewDTO( "caca",  categoryDto);
         when( newsService.getNews( any() ) ).thenReturn( newDTO );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/{id}", "42" );
         MockMvcBuilders.standaloneSetup( newController )
                 .build()
                 .perform( requestBuilder )
                 .andExpect( status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( jsonPath( "$.id", is( newDTO.getId() ) ) )
                 .andExpect( jsonPath( "$.name", is( newDTO.getName() ) ) )
                 .andExpect( jsonPath( "$.image", is( newDTO.getImage() ) ) )

@@ -136,7 +136,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_cuando_no_encuentra_una_categoria_deberia_tirar_una_excepcion() {
+    void UpdateNEWS_al_no_encontrar_una_categoria_deberia_tirar_una_excepcion() {
 
         //given
         Category category = getCategory();
@@ -161,7 +161,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_no_deberia_encontrar_la_novedad_y_tirar_una_exception() {
+    void UpdateNEWS_al_encontrar_la_novedad_deberia_tirar_una_exception() {
         //given
         NewDTO newsDTO = new NewDTO();
         BindingResult bindingResult = mock( BindingResult.class );
@@ -181,7 +181,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_deberia_tirar_una_excepcion_al_existir_un_error_de_validacion() {
+    void UpdateNEWS_al_existir_un_error_de_validacion_deberia_tirar_una_excepcion() {
 
         //given
         Category category = getCategory();
@@ -333,7 +333,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_deberia_actualizar_los_datos_devolver_un_objecto_no_nulo_y_no_tirar_excepciones() {
+    void UpdateNEWS_al_actualizar_los_datos_devolver_un_objecto_no_nulo_y_actualizado() {
 
         //given
         Category category = getCategory();
@@ -342,20 +342,32 @@ class NewsServiceImplTest {
         NewDTO dto = getNewsDto( news );
         News updatedNews = getUpdatedNews(dto);
         BindingResult bindingResult = mock( BindingResult.class );
-
+        ArgumentCaptor<News> argumentCaptor = ArgumentCaptor.forClass( News.class );
         //when
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         when( categoryRepository.findByName( anyString() ) ).thenReturn( Optional.of( category ) );
         when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
         when( categoryRepository.findByName( anyString() ) ).thenReturn( Optional.of( category ) );
-        when( newsRepository.save( any(News.class) ) ).thenReturn( updatedNews );
+        when( newsRepository.save( any() ) ).thenReturn( updatedNews );
 
         //then
         NewDTO updateNews = newsServiceImpl.updateNews( "42", dto, bindingResult );
-        verify( newsRepository, atMost( 2 ) ).save( any( News.class ) );
+        verify( newsRepository, atMost( 2 ) ).save( argumentCaptor.capture() );
         assertThat( updateNews ).isNotNull();
-    }
+        News toPersist = argumentCaptor.getValue();
+        assertThat( toPersist ).isNotNull();
+        assertThat( toPersist.getId() )
+                .isEqualTo( "42" );
+        assertThat( toPersist.getName() )
+                .isEqualTo( dto.getName() )
+                .isNotEqualTo( news.getName() );
+        assertThat( toPersist.getImage() )
+                .isEqualTo( dto.getImage() )
+                .isNotEqualTo( news.getName() );
+        assertThat( toPersist.getContent() )
+                .isEqualTo( dto.getContent() )
+                .isNotEqualTo( news.getContent() );   }
 
 
     /**
@@ -420,7 +432,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#getAllNews(int, String)}
      */
     @Test
-    void GetAllNEWS_deberia_listar_todos_los_elementos_y_no_tirar_una_excepcion() {
+    void GetAllNEWS_cuando_pasan_valor_valido_deberia_listar_todos_los_elementos_y_no_tirar_una_excepcion() {
         //given
         List<News> newsList = getNewsList();
         Pageable pageable = PageUtils.getPageable( 1, "asc" );
@@ -447,7 +459,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#getAllNews(int, String)}
      */
     @Test
-    void GetAllNEWS_deberia_listar_todos_los_elementos_en_desc_y_no_tirar_una_excepcion() {
+    void GetAllNEWS_cuando_pasan_valor_de_order_desc_deberia_listar_todos_los_elementos_en_desc_y_no_tirar_una_excepcion() {
 
         //given
         List<News> newsList = getNewsList();
@@ -473,8 +485,10 @@ class NewsServiceImplTest {
      */
     @Test
     void DeleteNEWS_cuando_elimina_un_elemento_devolver_verdadero() {
-
+        //given
+        //when
         doNothing().when( newsRepository ).deleteById( any() );
+        //then
         assertThat( newsServiceImpl.deleteNews( "42" ) ).isTrue();
         verify( newsRepository ).deleteById( any() );
     }
@@ -497,7 +511,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#createNews(News)}
      */
     @Test
-    void CreateNEWS_crear_una_novedad_con_categoria_deberia_guardarla() {
+    void CreateNEWS_cuando_se_crea_una_novedad_con_categoria_deberia_guardarla() {
 
         Category category = getCategory();
         News news = getNews( category );
@@ -514,19 +528,56 @@ class NewsServiceImplTest {
         assertThat(  news.getName() ).isEqualTo( "Name" );
         assertThat(  news.getTimestamp().toLocalDate().toString() ).isEqualTo( "0001-01-01" );
     }
+    /**
+     * Method under test: {@link NewsServiceImpl#createNews(News)}
+     */
+    @Test
+    void CreateNEWS_cuando_se_crea_una_novedad_con_categoria_deberia_ser_iguales_los_valores_que_se_guardan() {
+        //given
+
+        Category category = getCategory();
+        News news = getNews( category );
+        ArgumentCaptor<News> argumentCaptor = ArgumentCaptor.forClass( News.class );
+
+        //when
+        when( newsRepository.save( any() ) ).thenReturn( news );
+        newsServiceImpl.createNews( news );
+        //then
+        verify( newsRepository ).save( argumentCaptor.capture() );
+        News value = argumentCaptor.getValue();
+
+        assertThat( value ).isNotNull();
+        assertThat( news.getName() )
+                .isEqualTo( value.getName() );
+        assertThat(  news.getImage() )
+                .isEqualTo( value.getImage() );
+        assertThat(  news.getContent() )
+                .isEqualTo( value.getContent() );
+        assertThat(category).isEqualTo( news.getCategory() );
+        assertThat( news.isSoftDelete() ).isFalse();
+        assertThat( news.getComments().isEmpty() ).isTrue();
+        assertThat( news.getId()).isEqualTo( "42" );
+        assertThat(  news.getImage() ).isEqualTo( "Image" );
+        assertThat(  news.getContent() ).isEqualTo( "Not all who wander are lost" );
+        assertThat(  news.getName() ).isEqualTo( "Name" );
+        assertThat(  news.getTimestamp().toLocalDate().toString() ).isEqualTo( "0001-01-01" );
+    }
 
     /**
      * Method under test: {@link NewsServiceImpl#createNews(News)}
      */
     @Test
-    void CreateNEWS_cuando_se_pasa_un_valor_nulo_tirar_una_excepcion() {
+    void CreateNEWS_cuando_se_pasa_un_valor_nulo_deberia_tirar_una_excepcion() {
+        //given
+        Category category = getCategory();
+        News news = getNews( category );
 
+
+        //when
         when( newsRepository.save( any() ) )
                 .thenThrow( new IllegalArgumentException() );
 
-        Category category = getCategory();
-
-        News news = getNews( category );
+        //then
         assertThatThrownBy( () -> newsServiceImpl.createNews( news ) ).isInstanceOf(  IllegalArgumentException.class );
         verify( newsRepository ).save( any() );
     }
@@ -534,12 +585,17 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#findNewsById(String)}
      */
     @Test
-    void FindNewsById_cuando_busca_la_novedad_por_id_y_encuentra_deberia_devolver_la_entidad() {
+    void FindNewsById_cuando_busca_la_novedad_por_id_y_encontrarla_deberia_devolver_la_entidad() {
+        //given
 
         Category category = getCategory();
         News news = getNews( category );
         Optional<News> ofResult = Optional.of( news );
+
+        //when
         when( newsRepository.findById( any() ) ).thenReturn( ofResult );
+
+        //then
         assertThat( newsServiceImpl.findNewsById( "42" ) ).isSameAs( news );
         verify( newsRepository ).findById( any() );
     }
@@ -549,10 +605,12 @@ class NewsServiceImplTest {
      */
     @Test
     void FindNewsById_cuando_no_encuentra_una_entidad_deberia_devolver_null() {
-
+        //given
+        //when
         when( newsRepository.findById( any() ) )
                 .thenReturn( Optional.empty() );
         News newsById = newsServiceImpl.findNewsById( "42" );
+        //then
         verify( newsRepository ).findById( any() );
         assertThat( newsById ).isNull();
     }
