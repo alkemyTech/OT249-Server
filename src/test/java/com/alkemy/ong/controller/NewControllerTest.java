@@ -340,7 +340,7 @@ class NewControllerTest {
     void NewDetail_cuando_se_pasa_un_id_y_lo_encuentra_deberia_devolver_la_entidad() throws Exception {
 
         CategoryDto categoryDto = new CategoryDto();
-        NewDTO newDTO = getNewDTO( "caca",  categoryDto);
+        NewDTO newDTO = getNewDTO( "AACCC",  categoryDto);
         when( newsService.getNews( any() ) ).thenReturn( newDTO );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/{id}", "42" );
         MockMvcBuilders.standaloneSetup( newController )
@@ -357,7 +357,7 @@ class NewControllerTest {
                 .andExpect( jsonPath( "$.content", Matchers.is(  newDTO.getContent()) ) )
                 .andExpect( MockMvcResultMatchers.content()
                         .json(
-                                "{\"id\":null,\"name\":null,\"content\":null,\"image\":null,\"timestamp\":null,\"category\":{},\"softDelete"
+                                "{\"id\":\"42\",\"name\":\"Name\",\"content\":\"AACCC\",\"image\":\"Image\",\"timestamp\":null,\"category\":{},\"softDelete"
                                         + "\":false}" ) );
     }
 
