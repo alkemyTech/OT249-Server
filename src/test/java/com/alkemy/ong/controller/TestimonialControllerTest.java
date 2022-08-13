@@ -88,7 +88,7 @@ class TestimonialControllerTest {
         actualPerformResult.andExpect( MockMvcResultMatchers.status().isCreated() )
                 .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content()
-                        .string(
+                        .json(
                                 "{\"id\":null,\"name\":null,\"image\":null,\"content\":null,\"timestamp\":null,\"softDelete\":null}" ) );
     }
 

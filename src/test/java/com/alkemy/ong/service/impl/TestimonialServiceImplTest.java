@@ -176,7 +176,7 @@ class TestimonialServiceImplTest {
      * Method under test: {@link TestimonialServiceImpl#updateTestimony(String, TestimonialDto, BindingResult)}
      */
     @Test
-    void UpdateTestimony_cuando_se_pasa_valor_nulo_deberia_actualizar_y_tirar_una_excepcion() {
+    void UpdateTestimony_cuando_se_pasa_valor_nulo_deberia_tirar_una_excepcion() {
 
         when( testimonialRepository.findById( any() ) ).thenThrow( new IllegalArgumentException( "Error" ) );
         assertThatThrownBy( () ->
