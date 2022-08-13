@@ -52,6 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NewControllerTest {
 
     private NewController newController;
+
     @MockBean
     private CategoryRepository categoryRepository;
 
@@ -211,6 +212,7 @@ class NewControllerTest {
      */
     @Test
     void deleteNews_cuando_no_se_encuentra_deberia_devolver_un_error_not_found() throws Exception {
+
         when( newsService.deleteNews( any() ) ).thenReturn( true );
         when( newsService.findNewsById( any() ) ).thenReturn( null );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete( "/news/news/{id}", "42" );
@@ -247,20 +249,20 @@ class NewControllerTest {
         ArgumentCaptor<Integer> integerArgumentCaptor = ArgumentCaptor.forClass( Integer.class );
 
         //when
-        when( newsService.getAllNews( anyInt(), anyString() ) ).thenReturn( new PageDto<>( new ArrayList<>(), PageUtils.getPageable( 0 , "asc"), 0 ) );
+        when( newsService.getAllNews( anyInt(), anyString() ) ).thenReturn( new PageDto<>( new ArrayList<>(), PageUtils.getPageable( 0, "asc" ), 0 ) );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/" );
         MockMvcBuilders.standaloneSetup( newController )
                 .build()
                 .perform( requestBuilder )
                 .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( jsonPath("$.first", is( true )) )
-                .andExpect( jsonPath("$.number", is( 0 )) )
+                .andExpect( jsonPath( "$.first", is( true ) ) )
+                .andExpect( jsonPath( "$.number", is( 0 ) ) )
         ;
         //then
         verify( newsService ).getAllNews( integerArgumentCaptor.capture(), argumentCaptor.capture() );
-        assertThat(integerArgumentCaptor.getValue()).isEqualTo( 0 );
-        assertThat(argumentCaptor.getValue()).isEqualTo( "asc" );
+        assertThat( integerArgumentCaptor.getValue() ).isEqualTo( 0 );
+        assertThat( argumentCaptor.getValue() ).isEqualTo( "asc" );
     }
 
     /**
@@ -268,6 +270,7 @@ class NewControllerTest {
      */
     @Test
     void UpdateNews_cuando_se_pasan_valores_nulos_deberia_tirar_una_excepcion_de_bind_result_exception() throws Exception {
+
         newsService = new NewsServiceImpl( newsRepository, categoryRepository, modelMapper );
         NewController newController = new NewController( newsService, categoryRepository );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/news/{id}", "42" )
@@ -279,9 +282,9 @@ class NewControllerTest {
                 .perform( requestBuilder )
                 .andExpect( status().isBadRequest() )
                 .andExpect( content().contentType( MediaType.APPLICATION_JSON ) )
-                .andExpect( jsonPath( "$.errorMessage", is("Hay errores en lo enviado" ) ) )
+                .andExpect( jsonPath( "$.errorMessage", is( "Hay errores en lo enviado" ) ) )
                 .andExpect( jsonPath( "$.errorFields", hasSize( 3 ) ) )
-                .andExpect( jsonPath( "$.errorFields", Matchers.isA(ArrayList.class ) ) )
+                .andExpect( jsonPath( "$.errorFields", Matchers.isA( ArrayList.class ) ) )
                 .andExpect( jsonPath( "$.errorCode", is( "CLIENT_ERROR" ) ) );
     }
 
@@ -308,13 +311,13 @@ class NewControllerTest {
                 .andExpect( jsonPath( "$.id", is( newDTO.getId() ) ) )
                 .andExpect( jsonPath( "$.name", is( newDTO.getName() ) ) )
                 .andExpect( jsonPath( "$.image", is( newDTO.getImage() ) ) )
-                .andExpect( jsonPath( "$.timestamp", is( newDTO.getTimestamp() ) ))
-                .andExpect( jsonPath( "$.category.name", is( categoryDto.getName() ) ))
-                .andExpect( jsonPath( "$.softDelete", is( newDTO.isSoftDelete() ) ))
-                .andExpect( jsonPath( "$.content", Matchers.is(  newDTO.getContent()) ) )
+                .andExpect( jsonPath( "$.timestamp", is( newDTO.getTimestamp() ) ) )
+                .andExpect( jsonPath( "$.category.name", is( categoryDto.getName() ) ) )
+                .andExpect( jsonPath( "$.softDelete", is( newDTO.isSoftDelete() ) ) )
+                .andExpect( jsonPath( "$.content", Matchers.is( newDTO.getContent() ) ) )
 
                 .andExpect( MockMvcResultMatchers.content()
-                        .json(getAsString( newDTO ) ) );
+                        .json( getAsString( newDTO ) ) );
     }
 
 
@@ -333,6 +336,7 @@ class NewControllerTest {
                 .andExpect( status().isNotFound() )
                 .andExpect( content().string( "" ) );
     }
+
     /**
      * Method under test: {@link NewController#NewDetail(String)}
      */
@@ -340,7 +344,7 @@ class NewControllerTest {
     void NewDetail_cuando_se_pasa_un_id_y_lo_encuentra_deberia_devolver_la_entidad() throws Exception {
 
         CategoryDto categoryDto = new CategoryDto();
-        NewDTO newDTO = getNewDTO( "AACCC",  categoryDto);
+        NewDTO newDTO = getNewDTO( "AACCC", categoryDto );
         when( newsService.getNews( any() ) ).thenReturn( newDTO );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/{id}", "42" );
         MockMvcBuilders.standaloneSetup( newController )
@@ -352,9 +356,9 @@ class NewControllerTest {
                 .andExpect( jsonPath( "$.name", is( newDTO.getName() ) ) )
                 .andExpect( jsonPath( "$.image", is( newDTO.getImage() ) ) )
                 .andExpect( jsonPath( "$.timestamp", is( newDTO.getTimestamp() ) ) )
-                .andExpect( jsonPath( "$.category.name", is( categoryDto.getName() ) ))
-                .andExpect( jsonPath( "$.softDelete", is( newDTO.isSoftDelete() ) ))
-                .andExpect( jsonPath( "$.content", Matchers.is(  newDTO.getContent()) ) )
+                .andExpect( jsonPath( "$.category.name", is( categoryDto.getName() ) ) )
+                .andExpect( jsonPath( "$.softDelete", is( newDTO.isSoftDelete() ) ) )
+                .andExpect( jsonPath( "$.content", Matchers.is( newDTO.getContent() ) ) )
                 .andExpect( MockMvcResultMatchers.content()
                         .json(
                                 "{\"id\":\"42\",\"name\":\"Name\",\"content\":\"AACCC\",\"image\":\"Image\",\"timestamp\":null,\"category\":{},\"softDelete"

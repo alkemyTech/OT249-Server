@@ -64,6 +64,7 @@ class NewsServiceImplTest {
 
 
     }
+
     private News getNews(Category category) {
 
         News news = new News();
@@ -79,6 +80,7 @@ class NewsServiceImplTest {
     }
 
     private News getUpdatedNews(NewDTO dto) {
+
         Category category = getCategory();
         category.setName( dto.getCategory().getName() );
         News news = getNews( category );
@@ -116,7 +118,7 @@ class NewsServiceImplTest {
         NewDTO newsDto = new NewDTO();
         newsDto.setName( "News updated" );
         newsDto.setTimestamp( news.getTimestamp() );
-        newsDto.setContent(  "News updated" );
+        newsDto.setContent( "News updated" );
         newsDto.setImage( "News updated" );
         newsDto.setSoftDelete( news.isSoftDelete() );
         Category newsCategory = new Category();
@@ -150,7 +152,7 @@ class NewsServiceImplTest {
 
         //then
         assertThatThrownBy(
-                () -> newsServiceImpl.updateNews( "42", newsDTO, bindingResult ) ).isInstanceOf(  RecordException.RecordNotFoundException.class );
+                () -> newsServiceImpl.updateNews( "42", newsDTO, bindingResult ) ).isInstanceOf( RecordException.RecordNotFoundException.class );
         verify( newsRepository ).findById( anyString() );
         verify( modelMapper, atMostOnce() ).map( any( News.class ), eq( NewDTO.class ) );
         verify( modelMapper, atMostOnce() ).map( any( Category.class ), eq( CategoryDto.class ) );
@@ -172,7 +174,7 @@ class NewsServiceImplTest {
 
         //then
         assertThatThrownBy(
-                () -> newsServiceImpl.updateNews( "42", newsDTO, bindingResult ) ).isInstanceOf(  RecordException.RecordNotFoundException.class );
+                () -> newsServiceImpl.updateNews( "42", newsDTO, bindingResult ) ).isInstanceOf( RecordException.RecordNotFoundException.class );
         verify( newsRepository ).findById( anyString() );
         verifyNoInteractions( modelMapper );
     }
@@ -197,18 +199,18 @@ class NewsServiceImplTest {
 
         //then
         assertThatThrownBy( () -> newsServiceImpl.updateNews( "42", newsDTO,
-                bindingResult ) ).isInstanceOf(  BindingResultException.class );
+                bindingResult ) ).isInstanceOf( BindingResultException.class );
         verify( bindingResult ).hasFieldErrors();
         verify( bindingResult ).getFieldErrors();
         verifyNoInteractions( categoryRepository );
         verifyNoInteractions( newsRepository );
     }
+
     /**
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
     void UpdateNEWS_al_tener_una_condicion_de_categoria_nula_no_deberia_actualizar_categoria() {
-
 
 
         //given
@@ -218,12 +220,12 @@ class NewsServiceImplTest {
         BindingResult bindingResult = mock( BindingResult.class );
         NewDTO newsDTO = getNewsDto( news );
         ModelMapper localModelMapper = mock( ModelMapper.class );
-        newsServiceImpl = new NewsServiceImpl( newsRepository, categoryRepository, localModelMapper);
+        newsServiceImpl = new NewsServiceImpl( newsRepository, categoryRepository, localModelMapper );
 
         //when
         when( localModelMapper.map( any(), eq( CategoryDto.class ) ) ).thenReturn( new CategoryDto() );
         when( localModelMapper.map( any(), eq( NewDTO.class ) ) ).thenReturn( new NewDTO() );
-        when( localModelMapper.map( any(NewDTO.class), eq( News.class ) ) ).thenReturn( news );
+        when( localModelMapper.map( any( NewDTO.class ), eq( News.class ) ) ).thenReturn( news );
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         when( newsRepository.save( any() ) ).thenReturn( news );
         when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
@@ -239,6 +241,7 @@ class NewsServiceImplTest {
         verify( newsRepository ).findById( anyString() );
         verify( localModelMapper, atMost( 5 ) ).map( any(), any() );
     }
+
     /**
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
@@ -252,7 +255,7 @@ class NewsServiceImplTest {
         BindingResult bindingResult = mock( BindingResult.class );
         NewDTO newsDTO = getNewsDto( news );
         ModelMapper localModelMapper = mock( ModelMapper.class );
-        newsServiceImpl = new NewsServiceImpl( newsRepository, categoryRepository, localModelMapper);
+        newsServiceImpl = new NewsServiceImpl( newsRepository, categoryRepository, localModelMapper );
         Category category1 = new Category();
 
         //when
@@ -261,7 +264,7 @@ class NewsServiceImplTest {
         when( localModelMapper.map( any( CategoryDto.class ), eq( CategoryDto.class ) ) ).thenReturn( categoryDto );
         when( localModelMapper.map( any( Category.class ), eq( CategoryDto.class ) ) ).thenReturn( null );
         when( localModelMapper.map( any(), eq( NewDTO.class ) ) ).thenReturn( new NewDTO() );
-        when( localModelMapper.map( any(NewDTO.class), eq( News.class ) ) ).thenReturn( news );
+        when( localModelMapper.map( any( NewDTO.class ), eq( News.class ) ) ).thenReturn( news );
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         when( newsRepository.save( any() ) ).thenReturn( news );
         when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
@@ -277,6 +280,7 @@ class NewsServiceImplTest {
         verify( newsRepository ).findById( anyString() );
         verify( localModelMapper, atMost( 5 ) ).map( any(), any() );
     }
+
     /**
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
@@ -289,7 +293,7 @@ class NewsServiceImplTest {
         NewDTO dto = getNewsDto( news );
         BindingResult bindingResult = mock( BindingResult.class );
         ArgumentCaptor<News> argumentCaptor = ArgumentCaptor.forClass( News.class );
-        News updatedNews = getUpdatedNews(dto);
+        News updatedNews = getUpdatedNews( dto );
 
         //when
         when( newsRepository.findById( anyString() ) ).thenReturn( Optional.of( news ) );
@@ -329,6 +333,7 @@ class NewsServiceImplTest {
 
 
     }
+
     /**
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
@@ -340,7 +345,7 @@ class NewsServiceImplTest {
         News news = getNews( category );
         Optional<News> ofResult = Optional.of( news );
         NewDTO dto = getNewsDto( news );
-        News updatedNews = getUpdatedNews(dto);
+        News updatedNews = getUpdatedNews( dto );
         BindingResult bindingResult = mock( BindingResult.class );
         ArgumentCaptor<News> argumentCaptor = ArgumentCaptor.forClass( News.class );
         //when
@@ -367,7 +372,8 @@ class NewsServiceImplTest {
                 .isNotEqualTo( news.getName() );
         assertThat( toPersist.getContent() )
                 .isEqualTo( dto.getContent() )
-                .isNotEqualTo( news.getContent() );   }
+                .isNotEqualTo( news.getContent() );
+    }
 
 
     /**
@@ -403,7 +409,7 @@ class NewsServiceImplTest {
 
         //given
         //when
-        when( newsRepository.findById( anyString() ) ).thenThrow(new IllegalArgumentException("Error") );
+        when( newsRepository.findById( anyString() ) ).thenThrow( new IllegalArgumentException( "Error" ) );
 
         //then
         assertThatThrownBy( () -> newsServiceImpl.getNews( "42" ) )
@@ -450,7 +456,7 @@ class NewsServiceImplTest {
         assertThat( orderOptional ).isPresent();
         assertThat( orderOptional.get().getDirection().isAscending() ).isTrue();
         assertThat( pageDto.getContent().size() ).isEqualTo( 3 );
-        assertThat( pageDto.getTotalElements() ).isEqualTo(  13 );
+        assertThat( pageDto.getTotalElements() ).isEqualTo( 13 );
         verify( newsRepository ).findAll( any( Pageable.class ) );
         verify( modelMapper, atMost( 3 ) ).map( any(), any() );
     }
@@ -465,17 +471,17 @@ class NewsServiceImplTest {
         List<News> newsList = getNewsList();
         Pageable pageable = PageUtils.getPageable( 1, "desc" );
         //when
-        when( newsRepository.findAll( any(Pageable.class) ) ).thenReturn( getPage( newsList, pageable, 10 ) );
+        when( newsRepository.findAll( any( Pageable.class ) ) ).thenReturn( getPage( newsList, pageable, 10 ) );
 
         //then
         PageDto<NewDTO> order = newsServiceImpl.getAllNews( 1, "desc" );
 
-        assertThat( order.getSize()).isEqualTo( 10 );
+        assertThat( order.getSize() ).isEqualTo( 10 );
         Optional<Sort.Order> orderOptional = order.getSort().get().findFirst();
         assertThat( orderOptional ).isPresent();
-        assertThat( orderOptional.get().isAscending()).isEqualTo( false );
-        assertThat( orderOptional.get().isDescending()).isEqualTo( true );
-        assertThat( order.getContent().size()).isEqualTo( 3 );
+        assertThat( orderOptional.get().isAscending() ).isEqualTo( false );
+        assertThat( orderOptional.get().isDescending() ).isEqualTo( true );
+        assertThat( order.getContent().size() ).isEqualTo( 3 );
 
 
     }
@@ -506,7 +512,6 @@ class NewsServiceImplTest {
     }
 
 
-
     /**
      * Method under test: {@link NewsServiceImpl#createNews(News)}
      */
@@ -519,15 +524,16 @@ class NewsServiceImplTest {
 
         newsServiceImpl.createNews( news );
         verify( newsRepository ).save( any() );
-        assertThat(category).isEqualTo( news.getCategory() );
+        assertThat( category ).isEqualTo( news.getCategory() );
         assertThat( news.isSoftDelete() ).isFalse();
         assertThat( news.getComments().isEmpty() ).isTrue();
-        assertThat( news.getId()).isEqualTo( "42" );
-        assertThat(  news.getImage() ).isEqualTo( "Image" );
-        assertThat(  news.getContent() ).isEqualTo( "Not all who wander are lost" );
-        assertThat(  news.getName() ).isEqualTo( "Name" );
-        assertThat(  news.getTimestamp().toLocalDate().toString() ).isEqualTo( "0001-01-01" );
+        assertThat( news.getId() ).isEqualTo( "42" );
+        assertThat( news.getImage() ).isEqualTo( "Image" );
+        assertThat( news.getContent() ).isEqualTo( "Not all who wander are lost" );
+        assertThat( news.getName() ).isEqualTo( "Name" );
+        assertThat( news.getTimestamp().toLocalDate().toString() ).isEqualTo( "0001-01-01" );
     }
+
     /**
      * Method under test: {@link NewsServiceImpl#createNews(News)}
      */
@@ -549,18 +555,18 @@ class NewsServiceImplTest {
         assertThat( value ).isNotNull();
         assertThat( news.getName() )
                 .isEqualTo( value.getName() );
-        assertThat(  news.getImage() )
+        assertThat( news.getImage() )
                 .isEqualTo( value.getImage() );
-        assertThat(  news.getContent() )
+        assertThat( news.getContent() )
                 .isEqualTo( value.getContent() );
-        assertThat(category).isEqualTo( news.getCategory() );
+        assertThat( category ).isEqualTo( news.getCategory() );
         assertThat( news.isSoftDelete() ).isFalse();
         assertThat( news.getComments().isEmpty() ).isTrue();
-        assertThat( news.getId()).isEqualTo( "42" );
-        assertThat(  news.getImage() ).isEqualTo( "Image" );
-        assertThat(  news.getContent() ).isEqualTo( "Not all who wander are lost" );
-        assertThat(  news.getName() ).isEqualTo( "Name" );
-        assertThat(  news.getTimestamp().toLocalDate().toString() ).isEqualTo( "0001-01-01" );
+        assertThat( news.getId() ).isEqualTo( "42" );
+        assertThat( news.getImage() ).isEqualTo( "Image" );
+        assertThat( news.getContent() ).isEqualTo( "Not all who wander are lost" );
+        assertThat( news.getName() ).isEqualTo( "Name" );
+        assertThat( news.getTimestamp().toLocalDate().toString() ).isEqualTo( "0001-01-01" );
     }
 
     /**
@@ -578,9 +584,10 @@ class NewsServiceImplTest {
                 .thenThrow( new IllegalArgumentException() );
 
         //then
-        assertThatThrownBy( () -> newsServiceImpl.createNews( news ) ).isInstanceOf(  IllegalArgumentException.class );
+        assertThatThrownBy( () -> newsServiceImpl.createNews( news ) ).isInstanceOf( IllegalArgumentException.class );
         verify( newsRepository ).save( any() );
     }
+
     /**
      * Method under test: {@link NewsServiceImpl#findNewsById(String)}
      */
@@ -623,11 +630,11 @@ class NewsServiceImplTest {
 
         //given
         //when
-        when( newsRepository.findById( anyString() ) ).thenThrow( new IllegalArgumentException("Error") );
+        when( newsRepository.findById( anyString() ) ).thenThrow( new IllegalArgumentException( "Error" ) );
 
         //then
         assertThatThrownBy(
-                ()-> newsServiceImpl.findNewsById( anyString() ) )
+                () -> newsServiceImpl.findNewsById( anyString() ) )
                 .isInstanceOf( IllegalArgumentException.class )
                 .isExactlyInstanceOf( IllegalArgumentException.class )
                 .hasMessage( "Error" )
