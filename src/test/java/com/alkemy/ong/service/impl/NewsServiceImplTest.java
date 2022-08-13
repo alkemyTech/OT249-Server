@@ -16,7 +16,6 @@ import org.mockito.ArgumentCaptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,9 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -152,8 +149,8 @@ class NewsServiceImplTest {
         when( categoryRepository.findByName( anyString() ) ).thenReturn( Optional.empty() );
 
         //then
-        assertThrows( RecordException.RecordNotFoundException.class,
-                () -> newsServiceImpl.updateNews( "42", newsDTO, bindingResult ) );
+        assertThatThrownBy(
+                () -> newsServiceImpl.updateNews( "42", newsDTO, bindingResult ) ).isInstanceOf(  RecordException.RecordNotFoundException.class );
         verify( newsRepository ).findById( anyString() );
         verify( modelMapper, atMostOnce() ).map( any( News.class ), eq( NewDTO.class ) );
         verify( modelMapper, atMostOnce() ).map( any( Category.class ), eq( CategoryDto.class ) );
@@ -174,8 +171,8 @@ class NewsServiceImplTest {
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
 
         //then
-        assertThrows( RecordException.RecordNotFoundException.class,
-                () -> newsServiceImpl.updateNews( "42", newsDTO, bindingResult ) );
+        assertThatThrownBy(
+                () -> newsServiceImpl.updateNews( "42", newsDTO, bindingResult ) ).isInstanceOf(  RecordException.RecordNotFoundException.class );
         verify( newsRepository ).findById( anyString() );
         verifyNoInteractions( modelMapper );
     }
@@ -199,8 +196,8 @@ class NewsServiceImplTest {
         when( bindingResult.hasFieldErrors() ).thenReturn( true );
 
         //then
-        assertThrows( BindingResultException.class, () -> newsServiceImpl.updateNews( "42", newsDTO,
-                bindingResult ) );
+        assertThatThrownBy( () -> newsServiceImpl.updateNews( "42", newsDTO,
+                bindingResult ) ).isInstanceOf(  BindingResultException.class );
         verify( bindingResult ).hasFieldErrors();
         verify( bindingResult ).getFieldErrors();
         verifyNoInteractions( categoryRepository );
@@ -355,10 +352,9 @@ class NewsServiceImplTest {
         when( newsRepository.save( any(News.class) ) ).thenReturn( updatedNews );
 
         //then
-        assertDoesNotThrow( () -> newsServiceImpl.updateNews( "42", dto, bindingResult ) );
-        verify( newsRepository, atMost( 2 ) ).save( any( News.class ) );
         NewDTO updateNews = newsServiceImpl.updateNews( "42", dto, bindingResult );
-        assertNotNull( updateNews );
+        verify( newsRepository, atMost( 2 ) ).save( any( News.class ) );
+        assertThat( updateNews ).isNotNull();
     }
 
 
@@ -395,14 +391,14 @@ class NewsServiceImplTest {
 
         //given
         //when
-        when( newsRepository.findById( any() ) ).thenThrow(new IllegalArgumentException("Error") );
+        when( newsRepository.findById( anyString() ) ).thenThrow(new IllegalArgumentException("Error") );
 
         //then
         assertThatThrownBy( () -> newsServiceImpl.getNews( "42" ) )
                 .isInstanceOf( IllegalArgumentException.class )
                 .hasMessage( "Error" )
                 .isNotNull();
-        verify( newsRepository ).findById( any() );
+        verify( newsRepository ).findById( anyString() );
         verifyNoInteractions( modelMapper );
     }
 
@@ -416,7 +412,7 @@ class NewsServiceImplTest {
         assertThatThrownBy( () -> newsServiceImpl.getNews( "42" ) )
                 .isExactlyInstanceOf( Exception.class )
                 .hasMessage( "New not found" );
-        verify( newsRepository ).findById( any() );
+        verify( newsRepository ).findById( anyString() );
         verifyNoInteractions( modelMapper );
     }
 
@@ -531,7 +527,7 @@ class NewsServiceImplTest {
         Category category = getCategory();
 
         News news = getNews( category );
-        assertThrows( IllegalArgumentException.class, () -> newsServiceImpl.createNews( news ) );
+        assertThatThrownBy( () -> newsServiceImpl.createNews( news ) ).isInstanceOf(  IllegalArgumentException.class );
         verify( newsRepository ).save( any() );
     }
     /**
@@ -544,7 +540,7 @@ class NewsServiceImplTest {
         News news = getNews( category );
         Optional<News> ofResult = Optional.of( news );
         when( newsRepository.findById( any() ) ).thenReturn( ofResult );
-        assertSame( news, newsServiceImpl.findNewsById( "42" ) );
+        assertThat( newsServiceImpl.findNewsById( "42" ) ).isSameAs( news );
         verify( newsRepository ).findById( any() );
     }
 

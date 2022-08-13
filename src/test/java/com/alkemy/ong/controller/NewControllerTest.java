@@ -15,7 +15,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,19 +31,17 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
@@ -122,7 +123,7 @@ class NewControllerTest {
     }
 
     /**
-     * Method under test: {@link NewController#createNews(CreateNewsDto)}
+     * Methfuzzunder test: {@link NewController#createNews(CreateNewsDto)}
      */
     @Test
     void createNews_cuando_no_hay_problemas_deberia_devolver_created() throws Exception {
@@ -234,21 +235,7 @@ class NewControllerTest {
                 .andExpect( MockMvcResultMatchers.status().isOk() );
     }
 
-    /**
-     * Method under test: {@link NewController#NewDetail(String)}
-     */
-    @Test
-    void NewDetail_cuando_no_se_encuentra_deberia_devolver_not_found() throws Exception {
 
-        when( newsService.getNews( any() ) ).thenThrow( new Exception( "New not found" ) );
-
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/{id}", "42" );
-        MockMvcBuilders.standaloneSetup( newController ).setControllerAdvice( new CustomExceptionHandler() )
-                .build()
-                .perform( requestBuilder )
-                .andExpect( status().isNotFound() )
-                .andExpect( content().string( "" ) );
-    }
 
     /**
      * Method under test: {@link NewController#updateNews(String, NewDTO, BindingResult)}
@@ -269,38 +256,6 @@ class NewControllerTest {
                 .andExpect( jsonPath( "$.errorFields", hasSize( 3 ) ) )
                 .andExpect( jsonPath( "$.errorFields", Matchers.isA(ArrayList.class ) ) )
                 .andExpect( jsonPath( "$.errorCode", is( "CLIENT_ERROR" ) ) );
-    }
-
-    /**
-     * Method under test: {@link NewController#updateNews(String, NewDTO, BindingResult)}
-     */
-    @Test
-    @Disabled("Disabled ")
-    void testUpdateNews() {
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( Timestamp.from( LocalDateTime.of( 1,1,1,1,1,1 ).toInstant( ZoneOffset.UTC  ) ) );
-
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
-        NewsRepository newsRepository = mock( NewsRepository.class );
-        when( newsRepository.findById( anyString() ) ).thenReturn( Optional.of( news ) );
-        CategoryRepository categoryRepository = mock( CategoryRepository.class );
-        NewController newController = new NewController(
-                new NewsServiceImpl( newsRepository, categoryRepository, new ModelMapper() ), mock( CategoryRepository.class ) );
-        NewDTO newsDTO = new NewDTO();
-        newController.updateNews( "42", newsDTO, new BindException( "Target", "Object Name" ) );
     }
 
 
@@ -326,7 +281,7 @@ class NewControllerTest {
                 .andExpect( jsonPath( "$.id", is( newDTO.getId() ) ) )
                 .andExpect( jsonPath( "$.name", is( newDTO.getName() ) ) )
                 .andExpect( jsonPath( "$.image", is( newDTO.getImage() ) ) )
-                .andExpect( jsonPath( "$.timestamp", is( newDTO.getTimestamp() ) ) )
+                .andExpect( jsonPath( "$.timestamp", is( newDTO.getTimestamp() ) ))
                 .andExpect( jsonPath( "$.category.name", is( categoryDto.getName() ) ))
                 .andExpect( jsonPath( "$.softDelete", is( newDTO.isSoftDelete() ) ))
                 .andExpect( jsonPath( "$.content", Matchers.is(  newDTO.getContent()) ) )
@@ -335,6 +290,22 @@ class NewControllerTest {
                         .json(getAsString( newDTO ) ) );
     }
 
+
+    /**
+     * Method under test: {@link NewController#NewDetail(String)}
+     */
+    @Test
+    void NewDetail_cuando_no_se_encuentra_deberia_devolver_not_found() throws Exception {
+
+        when( newsService.getNews( any() ) ).thenThrow( new Exception( "New not found" ) );
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/news/{id}", "42" );
+        MockMvcBuilders.standaloneSetup( newController ).setControllerAdvice( new CustomExceptionHandler() )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( status().isNotFound() )
+                .andExpect( content().string( "" ) );
+    }
     /**
      * Method under test: {@link NewController#NewDetail(String)}
      */
