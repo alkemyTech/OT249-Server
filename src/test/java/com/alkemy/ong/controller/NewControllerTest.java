@@ -228,7 +228,7 @@ class NewControllerTest {
     @Test
     void GetPagedController_cuando_se_pasa_correctamente_parametros_devuelve_un_ok() throws Exception {
 
-        when( newsService.getAllNews( anyInt(), anyString() ) ).thenReturn( null );
+        when( newsService.getAllNews( anyInt(), anyString() ) ).thenReturn( new PageDto<>( new ArrayList<>(), PageUtils.getPageable( 0, "asc" ),0 ) );
         MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.get( "/news/" ).param( "order", "foo" );
         MockHttpServletRequestBuilder requestBuilder = paramResult.param( "page", String.valueOf( 1 ) );
         MockMvcBuilders.standaloneSetup( newController )
