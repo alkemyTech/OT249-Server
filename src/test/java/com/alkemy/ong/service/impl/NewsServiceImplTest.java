@@ -138,7 +138,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_al_no_encontrar_una_categoria_deberia_tirar_una_excepcion() {
+    void UpdateNEWS_cuando_la_categoria_no_se_encuentra_deberia_tirar_una_excepcion() {
 
         //given
         Category category = getCategory();
@@ -163,7 +163,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_al_encontrar_la_novedad_deberia_tirar_una_exception() {
+    void UpdateNEWS_cuando_no_encuentra_la_novedad_deberia_tirar_una_exception() {
         //given
         NewDTO newsDTO = new NewDTO();
         BindingResult bindingResult = mock( BindingResult.class );
@@ -183,7 +183,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_al_existir_un_error_de_validacion_deberia_tirar_una_excepcion() {
+    void UpdateNEWS_cuando_existe_un_error_de_validacion_deberia_tirar_una_excepcion() {
 
         //given
         Category category = getCategory();
@@ -210,7 +210,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_al_tener_una_condicion_de_categoria_nula_no_deberia_actualizar_categoria() {
+    void UpdateNEWS_cuando_hay_una_condicion_de_categoria_nula_no_deberia_actualizar_categoria() {
 
 
         //given
@@ -246,7 +246,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_al_tener_una_categoria_nula_no_deberia_actualizar_categoria() {
+    void UpdateNEWS_cuando_se_pasa_una_categoria_nula_no_deberia_actualizar_categoria() {
 
         //given
         Category category = getCategory();
@@ -285,7 +285,7 @@ class NewsServiceImplTest {
      * Method under test: {@link NewsServiceImpl#updateNews(String, NewDTO, BindingResult)}
      */
     @Test
-    void UpdateNEWS_cuando_actualiza_deberia_actualizar_la_categoria() {
+    void UpdateNEWS_cuando_actualiza_la_entidad_deberia_actualizar_la_categoria() {
 
         //given
         Category category = getCategory();
