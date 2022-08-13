@@ -194,26 +194,39 @@ class TestimonialServiceImplTest {
     @Test
     void UpdateTestimony_cuando_no_hay_error_de_validacion_y_se_encuentra_deberia_actualizar_y_devolver_la_entidad_actualizada() {
 
+        //given
         Testimonial testimonial = getTestimonial( false );
-        when( testimonialRepository.findById( anyString() ) ).thenReturn( Optional.of( testimonial ) );
         TestimonialDto testimonialDto = getTestimonialDto();
         testimonialDto.setContent( "updated" );
         testimonialDto.setImage( "updated" );
         testimonialDto.setName( "updated" );
-        Testimonial value = new Testimonial();
-        value.setName( testimonialDto.getName() );
-        value.setContent( testimonialDto.getContent() );
-        value.setImage( testimonialDto.getImage() );
-        when( testimonialRepository.save( any() ) ).thenReturn( value );
+        Testimonial testimonialSaved = new Testimonial();
+        testimonialSaved.setName( testimonialDto.getName() );
+        testimonialSaved.setContent( testimonialDto.getContent() );
+        testimonialSaved.setImage( testimonialDto.getImage() );
         BindingResult bindingResult = mock( BindingResult.class );
+
+        //when
+
+        when( testimonialRepository.findById( anyString() ) ).thenReturn( Optional.of( testimonial ) );
+        when( testimonialRepository.save( any() ) ).thenReturn( testimonialSaved );
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
+
+        //then
+
         TestimonialDto updateTestimony = testimonialServiceImpl.updateTestimony( "42", testimonialDto, bindingResult );
 
-        assertThat( updateTestimony.getName() ).isEqualTo( testimonialDto.getName() ).isNotEqualTo( testimonial.getName() );
+        assertThat( updateTestimony.getName() )
+                .isEqualTo( testimonialDto.getName() )
+                .isNotEqualTo( testimonial.getName() );
 
-        assertThat( updateTestimony.getImage() ).isEqualTo( testimonialDto.getImage() ).isNotEqualTo( testimonial.getImage() );
+        assertThat( updateTestimony.getImage() )
+                .isEqualTo( testimonialDto.getImage() )
+                .isNotEqualTo( testimonial.getImage() );
 
         assertThat( updateTestimony.getContent() ).isEqualTo( testimonialDto.getContent() ).isNotEqualTo( testimonial.getContent() );
+        verify( testimonialRepository ).findById( anyString() );
+        verify( testimonialRepository ).save( any() );
 
     }
 
@@ -223,34 +236,40 @@ class TestimonialServiceImplTest {
     @Test
     void UpdateTestimony_cuando_no_hay_error_de_validacion_unicamente_deberia_actualizar_lo_posible() {
 
+        //given
         Testimonial testimonial = getTestimonial( true );
         Testimonial testimonialWithId = getUpdatedTestimonial();
-        ArgumentCaptor<Testimonial> testimonial2 = ArgumentCaptor.forClass( Testimonial.class );
-        when( testimonialRepository.save( testimonial2.capture() ) ).thenReturn( testimonialWithId );
-        when( testimonialRepository.findById( anyString() ) ).thenReturn( Optional.of( testimonial ) );
+        ArgumentCaptor<Testimonial> argumentCaptor = ArgumentCaptor.forClass( Testimonial.class );
         TestimonialDto testimonialDto = getTestimonialDto();
         testimonialDto.setName( "updated" );
         testimonialDto.setImage( "updated" );
         testimonialDto.setContent( "updated" );
         testimonialDto.setSoftDelete( false );
         BindingResult bindingResult = mock( BindingResult.class );
+
+        //when
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
+        when( testimonialRepository.save( argumentCaptor.capture() ) ).thenReturn( testimonialWithId );
+        when( testimonialRepository.findById( anyString() ) ).thenReturn( Optional.of( testimonial ) );
+
         TestimonialDto actual = testimonialServiceImpl.updateTestimony( "42", testimonialDto, bindingResult );
-        Testimonial value = testimonial2.getValue();
+
+        //then
+        Testimonial captorValue = argumentCaptor.getValue();
         assertThat( actual ).isNotNull();
         assertThat( actual.getId() )
                 .isEqualTo( "42" );
         assertThat( actual.getName() )
                 .isEqualTo( testimonialDto.getName() )
-                .isEqualTo( value.getName() )
+                .isEqualTo( captorValue.getName() )
                 .isNotEqualTo( testimonial.getName() );
         assertThat( actual.getImage() )
                 .isEqualTo( testimonialDto.getImage() )
-                .isEqualTo( value.getImage() )
+                .isEqualTo( captorValue.getImage() )
                 .isNotEqualTo( testimonial.getName() );
         assertThat( actual.getContent() )
                 .isEqualTo( testimonialDto.getContent() )
-                .isEqualTo( value.getContent() )
+                .isEqualTo( captorValue.getContent() )
                 .isNotEqualTo( testimonial.getContent() );
 
         verify( testimonialRepository ).save( any() );
