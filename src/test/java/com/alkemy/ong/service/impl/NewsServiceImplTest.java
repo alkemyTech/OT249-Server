@@ -20,23 +20,21 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.BindingResult;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {NewsServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles(value = {"test"})
 @DisplayNameGeneration(value = DisplayNameGenerator.ReplaceUnderscores.class)
@@ -188,13 +186,10 @@ class NewsServiceImplTest {
         //given
         Category category = getCategory();
         News news = getNews( category );
-        Optional<News> ofResult = Optional.of( news );
         BindingResult bindingResult = mock( BindingResult.class );
         NewDTO newsDTO = getNewsDto( news );
 
         //when
-        when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
-        when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
         when( bindingResult.hasFieldErrors() ).thenReturn( true );
 
         //then
@@ -228,9 +223,7 @@ class NewsServiceImplTest {
         when( localModelMapper.map( any( NewDTO.class ), eq( News.class ) ) ).thenReturn( news );
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         when( newsRepository.save( any() ) ).thenReturn( news );
-        when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
-        when( categoryRepository.findById( anyString() ) ).thenReturn( Optional.of( new Category() ) );
 
         //then
         assertThat( newsServiceImpl.updateNews( "42", newsDTO,
@@ -267,7 +260,6 @@ class NewsServiceImplTest {
         when( localModelMapper.map( any( NewDTO.class ), eq( News.class ) ) ).thenReturn( news );
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         when( newsRepository.save( any() ) ).thenReturn( news );
-        when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
         when( categoryRepository.findByName( anyString() ) ).thenReturn( Optional.of( category1 ) );
 
@@ -351,14 +343,13 @@ class NewsServiceImplTest {
         //when
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         when( categoryRepository.findByName( anyString() ) ).thenReturn( Optional.of( category ) );
-        when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
         when( categoryRepository.findByName( anyString() ) ).thenReturn( Optional.of( category ) );
         when( newsRepository.save( any() ) ).thenReturn( updatedNews );
 
         //then
         NewDTO updateNews = newsServiceImpl.updateNews( "42", dto, bindingResult );
-        verify( newsRepository, atMost( 2 ) ).save( argumentCaptor.capture() );
+        verify( newsRepository ).save( argumentCaptor.capture() );
         assertThat( updateNews ).isNotNull();
         News toPersist = argumentCaptor.getValue();
         assertThat( toPersist ).isNotNull();
