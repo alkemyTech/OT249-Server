@@ -133,7 +133,6 @@ class TestimonialServiceImplTest {
     @Test
     void DeleteTestimony_cuando_no_se_encuentra_la_entidad_deberia_tirar_una_excepcion() {
 
-        doNothing().when( testimonialRepository ).delete( any() );
         when( testimonialRepository.findById( any() ) ).thenReturn( Optional.empty() );
         assertThatThrownBy( () -> testimonialServiceImpl.deleteTestimony( "42" ) ).isInstanceOf( RecordException.RecordNotFoundException.class ).hasMessage( "Testimony Not found" );
         verify( testimonialRepository ).findById( any() );
@@ -146,13 +145,9 @@ class TestimonialServiceImplTest {
     @Test
     void UpdateTestimony_cuando_hay_error_de_validacion_deberia_tirar_una_excepcion() {
 
-        Testimonial testimonial = getTestimonial( true );
-        Optional<Testimonial> ofResult = Optional.of( testimonial );
-        when( testimonialRepository.findById( any() ) ).thenReturn( ofResult );
         TestimonialDto testimonialDto = getTestimonialDto();
         BindingResult bindingResult = mock( BindingResult.class );
         when( bindingResult.hasFieldErrors() ).thenReturn( true );
-        when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
         assertThatThrownBy( () -> testimonialServiceImpl.updateTestimony( "42", testimonialDto,
                 bindingResult ) ).isInstanceOf( BindingResultException.class ).hasFieldOrProperty( "fieldErrors" );
         verifyNoInteractions( testimonialRepository );
@@ -333,8 +328,6 @@ class TestimonialServiceImplTest {
     @Test
     void CreateTestimony_cuando_hay_errores_de_validacion_deberia_tirar_una_excepcion() {
 
-        Testimonial testimonial = getTestimonial( true );
-        when( testimonialRepository.save( any() ) ).thenReturn( testimonial );
         TestimonialDto testimonialDto = getTestimonialDto();
         BindingResult bindingResult = mock( BindingResult.class );
         when( bindingResult.getFieldErrors() ).thenReturn( new ArrayList<>() );
@@ -432,7 +425,6 @@ class TestimonialServiceImplTest {
     @Test
     void GetAllTestimonials_cuando_se_pasan_pagina_no_valida_deberia_tirar_una_excepcion() {
 
-        when( testimonialRepository.findAll( any( Pageable.class ) ) ).thenReturn( null );
         assertThatThrownBy( () -> testimonialServiceImpl.getAllTestimonials( -1, "Order" ) )
                 .isInstanceOf( IllegalArgumentException.class )
                 .hasMessageEndingWith( "Page index must not be less than zero!" );
