@@ -225,9 +225,12 @@ class NewsServiceImplTest {
         when( newsRepository.save( any() ) ).thenReturn( news );
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
 
+        NewDTO actual = newsServiceImpl.updateNews( "42", newsDTO,
+                bindingResult );
+
         //then
-        assertThat( newsServiceImpl.updateNews( "42", newsDTO,
-                bindingResult ) ).isNotNull();
+        assertThat( actual ).isNotNull();
+        assertThat( actual.getCategory().getName() ).isNull();
         verify( bindingResult ).hasFieldErrors();
         verifyNoInteractions( categoryRepository );
         verify( newsRepository ).save( any() );
@@ -249,11 +252,10 @@ class NewsServiceImplTest {
         NewDTO newsDTO = getNewsDto( news );
         ModelMapper localModelMapper = mock( ModelMapper.class );
         newsServiceImpl = new NewsServiceImpl( newsRepository, categoryRepository, localModelMapper );
-        Category category1 = new Category();
 
         //when
         CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setName( "algo" );
+        categoryDto.setName( category.getName() );
         when( localModelMapper.map( any( CategoryDto.class ), eq( CategoryDto.class ) ) ).thenReturn( categoryDto );
         when( localModelMapper.map( any( Category.class ), eq( CategoryDto.class ) ) ).thenReturn( null );
         when( localModelMapper.map( any(), eq( NewDTO.class ) ) ).thenReturn( new NewDTO() );
@@ -261,11 +263,14 @@ class NewsServiceImplTest {
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         when( newsRepository.save( any() ) ).thenReturn( news );
         when( bindingResult.hasFieldErrors() ).thenReturn( false );
-        when( categoryRepository.findByName( anyString() ) ).thenReturn( Optional.of( category1 ) );
+        when( categoryRepository.findByName( anyString() ) ).thenReturn( Optional.of( category ) );
+
+        NewDTO actual = newsServiceImpl.updateNews( "42", newsDTO,
+                bindingResult );
 
         //then
-        assertThat( newsServiceImpl.updateNews( "42", newsDTO,
-                bindingResult ) ).isNotNull();
+        assertThat( actual ).isNotNull();
+        assertThat( actual.getCategory() ).isNull();
         verify( bindingResult ).hasFieldErrors();
         verify( categoryRepository ).findByName( anyString() );
         verify( newsRepository ).save( any() );
