@@ -210,6 +210,8 @@
 						<exclude>**/*com/alkemy/ong/config/**</exclude>
 						<!-- Exclude full package from test coverage -->
 						<exclude>**/*com/alkemy/ong/dto/**</exclude>
+						<!-- Exclude full package from test coverage -->
+						<exclude>**/*com/alkemy/ong/utils/**</exclude>
 						<!-- Exclude class from test coverage -->
 						<exclude>**/*com/alkemy/ong/OngApplication.class</exclude>
 						<!-- Exclude class from test coverage -->
