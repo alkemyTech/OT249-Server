@@ -4,12 +4,14 @@ import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.alkemy.ong.model.Activity;
 import com.alkemy.ong.repository.ActivityRepository;
 
 @Component
+@Profile("!test")
 public class ActivitySeedData implements CommandLineRunner {
 
 	@Autowired
