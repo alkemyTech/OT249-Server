@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,24 +41,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@AllArgsConstructor
 public class UserController {
 
-	@Autowired
+
 	private UserService userService;
 
-	@Autowired
+
 	private IRoleService roleService;
 
-	@Autowired
+
 	private PasswordEncoder passwordEncode;
 
-	@Autowired
+
 	AuthenticationManager authenticationManager;
 
-	@Autowired
+
 	JwtUtil jwtUtil;
 	
-	@Autowired
+
 	ModelMapper modelMapper;
 
 	@Operation(summary = "Endpoint to Register User")

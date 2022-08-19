@@ -1,5 +1,6 @@
 package com.alkemy.ong.dto;
 
+import com.alkemy.ong.model.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +45,8 @@ public class UserDto implements Serializable, UserDetails {
 	private RoleDto role;
 
 	private boolean deleted;
+
+
 
 	@Override
 	@JsonIgnore
