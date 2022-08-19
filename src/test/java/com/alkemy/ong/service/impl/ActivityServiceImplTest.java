@@ -1,10 +1,7 @@
 package com.alkemy.ong.service.impl;
 
 import com.alkemy.ong.dto.ActivityDto;
-import com.alkemy.ong.dto.TestimonialDto;
-import com.alkemy.ong.exceptions.RecordException;
 import com.alkemy.ong.model.Activity;
-import com.alkemy.ong.model.Testimonial;
 import com.alkemy.ong.repository.ActivityRepository;
 import com.alkemy.ong.service.ActivityService;
 import org.junit.jupiter.api.*;
@@ -15,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.validation.BindingResult;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -23,7 +19,6 @@ import java.time.ZoneOffset;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -87,7 +82,7 @@ class ActivityServiceImplTest {
     }
 
     @Test
-    void UpdateActivityAndReturnEntityUpdated() {
+    void Update_activity_and_return_entity_updated() {
 
         Activity activity = new Activity();
         activity.setContent( "Not all who wander are lost" );
@@ -119,7 +114,7 @@ class ActivityServiceImplTest {
     }
 
     @Test
-    void CreateActivityAndReturnEntitySaved() {
+    void Create_activity_and_return_entity_saved() {
 
         Activity activity = getActivity( true );
         Activity activityWithId = getActivityWithId();

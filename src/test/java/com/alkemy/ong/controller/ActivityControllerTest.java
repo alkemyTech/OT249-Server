@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
@@ -23,7 +22,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -75,8 +73,8 @@ public class ActivityControllerTest {
      * Method under test: {@link ActivityController#crearActividad(ActivityDto)}
      */
     @Test
-    @DisplayName("Add activity, save this and return 200 ok if the user has Role 'ADMIN'")
-    void createActivityOk() throws Exception {
+
+    void create_Activity_save_this_and_return_200_ok_if_the_user_has_Role_ADMIN() throws Exception {
 
         when(activityService.crearActivity(any()))
                 .thenReturn(activity);
@@ -96,8 +94,7 @@ public class ActivityControllerTest {
 
 
     @Test
-    @DisplayName("create activity method return 400 Bad Request if request is not valid")
-    void createActivityAndReturnBadRequestIfRequestIsNotValid() throws Exception {
+    void create_activity_method_return_400_Bad_Request_if_request_is_not_valid() throws Exception {
 
        when(activityService.crearActivity(activity))
                 .thenReturn(activity);
@@ -114,8 +111,7 @@ public class ActivityControllerTest {
         }
 
     @Test
-    @DisplayName("Update activity return 200 ok if the user has Role 'ADMIN'")
-    void UpdateActivityOk() throws Exception {
+    void Update_activity_return_200_ok_if_the_user_has_Role_ADMIN() throws Exception {
 
         when(activityRepository.findById(anyString())).thenReturn(Optional.of(new Activity()));
 
@@ -132,8 +128,7 @@ public class ActivityControllerTest {
         actualPerformResult.andExpect(MockMvcResultMatchers.status().isOk());  }
 
     @Test
-    @DisplayName("Update activity return 404 Not Found")
-    void UpdateActivityNotFound() throws Exception {
+    void Update_Activity_return_404_Not_Found() throws Exception {
 
         when(activityRepository.findById(anyString())).thenReturn(Optional.empty());
 
@@ -150,8 +145,7 @@ public class ActivityControllerTest {
     }
 
     @Test
-    @DisplayName("Update activity method return 400 Bad Request if request is not valid")
-    void UpdateActivityBadRequestForInvalidRequestBody() throws Exception {
+    void Update_activity_method_return_400_Bad_Request_if_request_is_not_valid() throws Exception {
 
         when(activityRepository.findById(anyString())).thenReturn(Optional.of(new Activity()));
 
