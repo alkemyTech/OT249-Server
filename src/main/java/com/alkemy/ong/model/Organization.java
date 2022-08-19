@@ -37,7 +37,7 @@ public class Organization {
     private String image;
 
     private String address;
-    private Integer phone;
+    private String phone;
 
     @Column(nullable = false)
     private String email;
@@ -56,7 +56,7 @@ public class Organization {
     private String urlInstagram;
     private String urlLinkedin;
 
-    public Organization(String name, String image, String address, Integer phone, String email, String welcomeText,
+    public Organization(String name, String image, String address, String phone, String email, String welcomeText,
             String aboutUsText, Timestamp timestamp, Boolean deleted) {
         this.name = name;
         this.image = image;

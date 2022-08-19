@@ -10,12 +10,13 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PublicOrganizationDto {
+		private String id;
         @NotBlank
         private String name;
         @NotBlank
         private String image;
         @NotBlank
-        private Integer phone;
+        private String phone;
         @NotBlank
         private String address;
         @NotBlank
