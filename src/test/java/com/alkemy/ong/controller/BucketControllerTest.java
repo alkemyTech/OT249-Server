@@ -64,11 +64,15 @@ class BucketControllerTest {
      * Method under test: {@link BucketController#uploadFile(MultipartFile)}
      */
     @Test
-    void testUploadFile2() {
+    void testUploadFile2() throws Exception {
 
-        when( amazonClient.uploadFile( any() ) ).thenReturn( "Upload File" );
-        assertEquals( "Upload File", bucketController.uploadFile( new CustomMultipartFile() ) );
-        verify( amazonClient ).uploadFile( any() );
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("aaaa", "".getBytes());
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart( "/uploadFile" ).file( mockMultipartFile )
+                .contentType( MediaType.MULTIPART_FORM_DATA_VALUE );
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( bucketController )
+                .build()
+                .perform( requestBuilder );
+        actualPerformResult.andExpect( MockMvcResultMatchers.status().isBadRequest() );
     }
 
 }
