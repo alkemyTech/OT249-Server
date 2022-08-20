@@ -7,6 +7,7 @@ import com.alkemy.ong.exceptions.RecordException;
 import com.alkemy.ong.model.Organization;
 import com.alkemy.ong.repository.OrganizationRepository;
 
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import com.alkemy.ong.service.OrganizationService;
 import com.alkemy.ong.service.SlideService;
 
 @Service
+@AllArgsConstructor
 public class SlideServiceImpl implements SlideService {
 
     @Autowired
