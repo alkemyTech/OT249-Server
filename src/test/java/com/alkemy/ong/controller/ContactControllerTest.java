@@ -4,6 +4,8 @@ import com.alkemy.ong.dto.ContactDto;
 import com.alkemy.ong.service.ContactService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +24,7 @@ import static org.mockito.Mockito.when;
 
 @ContextConfiguration(classes = {ContactController.class})
 @ExtendWith(SpringExtension.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
 class ContactControllerTest {
 
     private ContactController contactController;
@@ -48,7 +51,7 @@ class ContactControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content().string( "[]" ) );
     }
 
@@ -65,7 +68,7 @@ class ContactControllerTest {
                 .build()
                 .perform( getResult )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content().json( "[]" ) );
     }
 
@@ -91,7 +94,7 @@ class ContactControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content().json( "{\"name\":\"Name\",\"phone\":\"4105551212\",\"email\":\"jane.doe@example.org\",\"message\":\"Not all who wander are lost\"}" ) );
     }
 }

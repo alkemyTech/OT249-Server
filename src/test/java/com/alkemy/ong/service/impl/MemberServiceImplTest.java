@@ -22,9 +22,11 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -55,7 +57,7 @@ class MemberServiceImplTest {
     @Test
     void test_GetMemberById() {
 
-        assertNull( memberServiceImpl.getMemberById( "42" ) );
+        assertThat( memberServiceImpl.getMemberById( "42" ) ).isNull();
     }
 
     /**
@@ -65,7 +67,7 @@ class MemberServiceImplTest {
     @Disabled("TODO: Complete this test")
     void test_GetAllMembers() {
 
-        when( memberRepository.findAll( (Pageable) any() ) ).thenReturn( new PageImpl<>( new ArrayList<>() ) );
+        when( memberRepository.findAll( any( Pageable.class ) ) ).thenReturn( new PageImpl<>( new ArrayList<>() ) );
         memberServiceImpl.getAllMembers( 1, "Order" );
     }
 
@@ -94,8 +96,8 @@ class MemberServiceImplTest {
     void test_GetAllMembers3() {
 
         PageDto<Member> memberPageDto = new PageDto<>( new ArrayList<>(), PageUtils.getPageable( 0, "asc" ), 0 );
-        when( memberRepository.findAll( (Pageable) any() ) ).thenReturn( memberPageDto );
-        memberServiceImpl.getAllMembers( -1, "Order" );
+        when( memberRepository.findAll( any( Pageable.class ) ) ).thenReturn( memberPageDto );
+        PageDto<MemberDto> allMembers = memberServiceImpl.getAllMembers( -1, "Order" );
     }
 
     /**
@@ -132,13 +134,15 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#deleteMemberById(String)}
      */
     @Test
-    @Disabled("TODO: Complete this test")
     void test_DeleteMemberById3() {
         // TODO: Complete this test.
 
         doNothing().when( memberRepository ).delete( any() );
         when( memberRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
-        memberServiceImpl.deleteMemberById( "42" );
+        assertThatThrownBy( () -> memberServiceImpl.deleteMemberById( "42" ) )
+                .isInstanceOf( NoSuchElementException.class );
+        verify( memberRepository ).findById( anyString() );
+        verify( memberRepository, atMost( 0 ) ).delete( any() );
     }
 
     /**
@@ -187,9 +191,7 @@ class MemberServiceImplTest {
         MemberDto memberDto = new MemberDto( "42", "Miembro Actualizado Correctamente", "https://example.org/example",
                 "https://example.org/example", "https://example.org/example", "Miembro Actualizado Correctamente",
                 "The characteristics of someone or something", member1.getTimestamp(), true );
-        assertEquals( "Miembro Actualizado Correctamente",
-                memberServiceImpl
-                        .updateMember( memberDto, "42" ) );
+        assertThat( memberServiceImpl.updateMember( memberDto, "42" ) ).isEqualTo( "Miembro Actualizado Correctamente" );
         verify( memberRepository ).getById( anyString() );
         verify( memberRepository ).save( any() );
     }
@@ -233,9 +235,9 @@ class MemberServiceImplTest {
     private static Member getMember() {
 
         Member member = new Member();
+        member.setId( "42" );
         member.setDescription( "The characteristics of someone or something" );
         member.setFacebookUrl( "https://example.org/example" );
-        member.setId( "42" );
         member.setImage( "Image" );
         member.setInstagramUrl( "https://example.org/example" );
         member.setIsDelete( true );
@@ -303,13 +305,17 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#fillEntity(Member, MemberDto)}
      */
     @Test
+    @Disabled("TODO: Complete this test")
     void testFillEntity4() {
 
         Member member = getMember();
-        memberServiceImpl.fillEntity( member,
-                new MemberDto( "42", "Name", "https://example.org/example", "https://example.org/example",
-                        "https://example.org/example", "Image", "The characteristics of someone or something", member.getTimestamp()
-                        , true ) );
+        MemberDto memberDto = new MemberDto( "42", "Name", "https://example.org/example", "https://example.org/example",
+                "https://example.org/example", "Image", "The characteristics of someone or something", member.getTimestamp()
+                , true );
+        Member fillEntity = memberServiceImpl.fillEntity( member,
+                memberDto );
+
+
     }
 }
 

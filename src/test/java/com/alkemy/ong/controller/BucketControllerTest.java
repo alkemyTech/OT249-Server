@@ -2,10 +2,9 @@ package com.alkemy.ong.controller;
 
 import com.alkemy.ong.service.AmazonClient;
 import com.alkemy.ong.utils.CustomMultipartFile;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,6 +24,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BucketController.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
 class BucketControllerTest {
 
     @MockBean
@@ -43,26 +43,22 @@ class BucketControllerTest {
      * Method under test: {@link BucketController#uploadFile(MultipartFile)}
      */
     @Test
-    @Disabled
+
     void testUploadFile() throws Exception {
 
-        String content = getString( new MockMultipartFile( "Name", "Content".getBytes() ) );
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/uploadFile" )
-                .contentType( MediaType.MULTIPART_FORM_DATA_VALUE )
-                .content( content );
+        when( amazonClient.uploadFile( any() ) ).thenReturn( "Result" );
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile( "file","file.text",
+                MediaType.MULTIPART_FORM_DATA_VALUE, "test data".getBytes() );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.multipart( "/uploadFile" ).file( mockMultipartFile )
+                .contentType( MediaType.MULTIPART_FORM_DATA_VALUE );
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( bucketController )
                 .build()
                 .perform( requestBuilder );
-        actualPerformResult.andExpect( MockMvcResultMatchers.status().isCreated() )
+        actualPerformResult.andExpect( MockMvcResultMatchers.status().isOk() )
                 .andExpect( MockMvcResultMatchers.content().contentType( "text/plain;charset=ISO-8859-1" ) )
-                .andExpect( MockMvcResultMatchers.content().string( "Miembro creado con éxito" ) );
+                .andExpect( MockMvcResultMatchers.content().string( "Result" ) );
     }
-
-    private <T> String getString(T multipartFile) throws JsonProcessingException {
-
-        return (new ObjectMapper()).writeValueAsString( multipartFile );
-    }
-
 
     /**
      * Method under test: {@link BucketController#uploadFile(MultipartFile)}
@@ -74,5 +70,6 @@ class BucketControllerTest {
         assertEquals( "Upload File", bucketController.uploadFile( new CustomMultipartFile() ) );
         verify( amazonClient ).uploadFile( any() );
     }
+
 }
 

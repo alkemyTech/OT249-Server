@@ -6,6 +6,8 @@ import com.alkemy.ong.service.IMemberService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,6 +30,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {MemberController.class})
 @ExtendWith(SpringExtension.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
 class MemberControllerTest {
 
     @MockBean
