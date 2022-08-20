@@ -42,16 +42,6 @@ class UserControllerExTest {
     @Disabled("TODO: Complete this test")
     void testHandleValidateExceptions2() {
         // TODO: Complete this test.
-        //   Reason: R013 No inputs found that don't throw a trivial exception.
-        //   Diffblue Cover tried to run the arrange/act section, but the method under
-        //   test threw
-        //   java.lang.NullPointerException
-        //       at com.alkemy.ong.exceptions.UserControllerEx.handleValidateExceptions(UserControllerEx.java:21)
-        //   In order to prevent handleValidateExceptions(MethodArgumentNotValidException)
-        //   from throwing NullPointerException, add constructors or factory
-        //   methods that make it easier to construct fully initialized objects used in
-        //   handleValidateExceptions(MethodArgumentNotValidException).
-        //   See https://diff.blue/R013 to resolve this issue.
 
         (new UserControllerEx()).handleValidateExceptions( null );
     }

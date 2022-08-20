@@ -19,8 +19,6 @@ import javax.persistence.EntityNotFoundException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -222,7 +220,7 @@ class MemberServiceImplTest {
         verify( memberRepository ).save( any() );
         assertEquals( "The characteristics of someone or something", member1.getDescription() );
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
-        assertEquals( "0001-01-02", simpleDateFormat.format( member1.getTimestamp() ) );
+        assertEquals( "2017-02-03", simpleDateFormat.format( member1.getTimestamp() ) );
         assertEquals( "Name", member1.getName() );
         assertEquals( "https://example.org/example", member1.getLinkedinUrl() );
         assertTrue( member1.getIsDelete() );
@@ -243,7 +241,7 @@ class MemberServiceImplTest {
         member.setIsDelete( true );
         member.setLinkedinUrl( "https://example.org/example" );
         member.setName( "Name" );
-        member.setTimestamp( Timestamp.from( Instant.from( LocalDateTime.of( 1, 1, 1, 1, 1, 1 ).toInstant( ZoneOffset.UTC ) ) ) );
+        member.setTimestamp( Timestamp.from( Instant.parse( "2017-02-03T10:37:30.00Z" ) ));
         return member;
     }
 
