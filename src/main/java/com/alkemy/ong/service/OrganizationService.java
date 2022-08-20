@@ -10,6 +10,6 @@ public interface OrganizationService{
     PublicOrganizationDto getPublicData();
     List<Organization> getAll();
     Organization get(String id);
-    void delete(String id);
+    Organization delete(String id);
     PublicOrganizationDto update(String id, PublicOrganizationDto publicOrganizationDto);
 }
