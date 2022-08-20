@@ -37,6 +37,7 @@ class RoleServiceImplTest {
         roleServiceImpl = new RoleServiceImpl( roleRepository );
     }
 
+
     /**
      * Method under test: {@link RoleServiceImpl#getRoleById(String)}
      */

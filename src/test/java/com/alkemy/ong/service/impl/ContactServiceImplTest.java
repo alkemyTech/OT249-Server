@@ -170,5 +170,6 @@ class ContactServiceImplTest {
         contactServiceImpl.deleteContact();
         verifyNoInteractions( contactRepository );
     }
+
 }
 

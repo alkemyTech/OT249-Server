@@ -33,6 +33,7 @@ import static org.mockito.Mockito.*;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class MemberServiceImplTest {
 
+
     @MockBean
     private MemberRepository memberRepository;
 

@@ -256,5 +256,6 @@ class CategoryServiceImplTest {
         assertSame( category, categoryServiceImpl.createCategory( category1 ) );
         verify( categoryRepository ).save( any() );
     }
+
 }
 
