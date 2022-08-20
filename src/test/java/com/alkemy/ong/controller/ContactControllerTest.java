@@ -31,7 +31,8 @@ class ContactControllerTest {
 
     @BeforeEach
     void setUp() {
-        contactController= new ContactController( contactService );
+
+        contactController = new ContactController( contactService );
 
     }
 
@@ -80,7 +81,7 @@ class ContactControllerTest {
         contactDto.setMessage( "Not all who wander are lost" );
         contactDto.setName( "Name" );
         contactDto.setPhone( "4105551212" );
-        when( contactService.saveContact(any()) ).thenReturn( contactDto);
+        when( contactService.saveContact( any() ) ).thenReturn( contactDto );
 
         String content = (new ObjectMapper()).writeValueAsString( contactDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/contacts" )

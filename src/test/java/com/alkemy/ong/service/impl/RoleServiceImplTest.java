@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {RoleServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class RoleServiceImplTest {
 
     @MockBean
@@ -33,7 +33,8 @@ class RoleServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        roleServiceImpl = new RoleServiceImpl(roleRepository);
+
+        roleServiceImpl = new RoleServiceImpl( roleRepository );
     }
 
     /**
@@ -85,24 +86,27 @@ class RoleServiceImplTest {
         roleServiceImpl.deleteRoleById( "" );
         verifyNoInteractions( roleRepository );
     }
+
     /**
      * Method under test: {@link RoleServiceImpl#updateRole(Role, String)}
      */
     @Test
     void test_update_role_no_deberia_interactuar_con_la_base_de_datos() {
 
-        roleServiceImpl.updateRole( new Role(),"" );
+        roleServiceImpl.updateRole( new Role(), "" );
         verifyNoInteractions( roleRepository );
     }
+
     /**
      * Method under test: {@link RoleServiceImpl#updateRole(Role, String)}
      */
     @Test
     void test_GetRoleByName_deberia_devolver_nulo() {
-        when( roleRepository.findByName( anyString() ) ).thenReturn(  new Role() );
+
+        when( roleRepository.findByName( anyString() ) ).thenReturn( new Role() );
         Role roleByName = roleServiceImpl.getRoleByName( "" );
         verify( roleRepository ).findByName( anyString() );
-        assertThat(roleByName).isNotNull();
+        assertThat( roleByName ).isNotNull();
     }
 }
 

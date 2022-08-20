@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {ContactServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class ContactServiceImplTest {
 
     @MockBean
@@ -30,6 +30,7 @@ class ContactServiceImplTest {
 
     @BeforeEach
     void setUp() {
+
         contactServiceImpl = new ContactServiceImpl( modelMapper, contactRepository, emailService );
 
     }
@@ -61,7 +62,7 @@ class ContactServiceImplTest {
 
         assertSame( contactDto, contactServiceImpl.saveContact( contactDto ) );
         verify( emailService ).sendEmailToContact( any(), any() );
-        verify( modelMapper , atMostOnce()).map( any(), any() );
+        verify( modelMapper, atMostOnce() ).map( any(), any() );
         verify( contactRepository ).save( any() );
     }
 
@@ -155,14 +156,17 @@ class ContactServiceImplTest {
      */
     @Test
     void test_GetContact() {
-        assertThat(contactServiceImpl.getContact()).isNull();
+
+        assertThat( contactServiceImpl.getContact() ).isNull();
         verifyNoInteractions( contactRepository );
     }
+
     /**
      * Method under test: {@link ContactServiceImpl#deleteContact()}
      */
     @Test
     void test_Delete() {
+
         contactServiceImpl.deleteContact();
         verifyNoInteractions( contactRepository );
     }

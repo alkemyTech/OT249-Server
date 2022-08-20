@@ -53,7 +53,8 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        userController = new UserController(userService, iRoleService,passwordEncoder, authenticationManager, jwtUtil, modelMapper );
+
+        userController = new UserController( userService, iRoleService, passwordEncoder, authenticationManager, jwtUtil, modelMapper );
     }
 
     @MockBean

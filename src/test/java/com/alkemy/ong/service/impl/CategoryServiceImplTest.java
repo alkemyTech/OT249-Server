@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {CategoryServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class CategoryServiceImplTest {
 
     @MockBean
@@ -48,6 +48,7 @@ class CategoryServiceImplTest {
 
     @BeforeEach
     void setUp() {
+
         categoryServiceImpl = new CategoryServiceImpl( modelMapper, categoryRepository, entityManager );
     }
 
@@ -94,7 +95,7 @@ class CategoryServiceImplTest {
         // Assert
         // TODO: Add assertions on result
 
-        assertThat(actualAllCategories).isNull();
+        assertThat( actualAllCategories ).isNull();
     }
 
     /**
@@ -111,10 +112,10 @@ class CategoryServiceImplTest {
         category.setName( "Name" );
         categories.add( category );
         categories.add( category );
-        when( categoryRepository.findAll(any(Pageable.class)) ).thenReturn(new PageImpl<>( categories, PageUtils.getPageable( 1, "asc" ), 1) );
+        when( categoryRepository.findAll( any( Pageable.class ) ) ).thenReturn( new PageImpl<>( categories, PageUtils.getPageable( 1, "asc" ), 1 ) );
         PageDto<Map<String, String>> allCategories = categoryServiceImpl.getAllCategories( 1, "asc" );
 
-        assertThat( allCategories).isNotNull();
+        assertThat( allCategories ).isNotNull();
     }
 
     /**
@@ -125,7 +126,7 @@ class CategoryServiceImplTest {
     void test_GetAllCategories3() {
         // TODO: Complete this test.
 
-        when( categoryRepository.findAll( any(Pageable.class) ) ).thenReturn( null );
+        when( categoryRepository.findAll( any( Pageable.class ) ) ).thenReturn( null );
         categoryServiceImpl.getAllCategories( 1, "Order" );
     }
 
@@ -138,7 +139,7 @@ class CategoryServiceImplTest {
         // TODO: Complete this test.
 
         PageImpl<Category> categoryPage = new PageImpl<>( new ArrayList<>(), PageUtils.getPageable( 0, "asc" ), 0 );
-        when( categoryRepository.findAll( any(Pageable.class) ) ).thenReturn( categoryPage );
+        when( categoryRepository.findAll( any( Pageable.class ) ) ).thenReturn( categoryPage );
         categoryServiceImpl.getAllCategories( -1, "Order" );
     }
 
@@ -202,9 +203,9 @@ class CategoryServiceImplTest {
         category.setName( "Name" );
         category.setTimestamp( mock( Timestamp.class ) );
         when( entityManager.merge( any() ) ).thenReturn( "Merge" );
-        when( entityManager.find(  any(), any() ) ).thenReturn( category );
+        when( entityManager.find( any(), any() ) ).thenReturn( category );
         categoryServiceImpl.updateCategory( new CategoryDto(), "42" );
-        verify( entityManager ).find(  any(), any() );
+        verify( entityManager ).find( any(), any() );
         verify( entityManager ).merge( any() );
     }
 

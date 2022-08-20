@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {CategoryController.class})
 @ExtendWith(SpringExtension.class)
-@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class CategoryControllerTest {
 
     private CategoryController categoryController;
@@ -45,6 +45,7 @@ class CategoryControllerTest {
 
     @BeforeEach
     void setUp() {
+
         categoryController = new CategoryController( categoryService, categoryRepository, modelMapper );
     }
 
@@ -226,6 +227,7 @@ class CategoryControllerTest {
                         .json(
                                 "{\"id\":\"42\",\"name\":\"Name\",\"description\":\"The characteristics of someone or something\",\"image\":\"Image\",\"timestamp\":0,\"deleted\":true}" ) );
     }
+
     /**
      * Method under test: {@link CategoryController#getCategoryDetails(String)}
      */
@@ -239,13 +241,15 @@ class CategoryControllerTest {
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isNotFound() )
                 .andExpect( MockMvcResultMatchers.content()
-                        .string("" ) );
+                        .string( "" ) );
     }
+
     /**
      * Method under test: {@link CategoryController#getPagedUsers(int, String)}
      */
     @Test
     void test_GetPagedUsers() throws Exception {
+
         when( categoryService.getAllCategories( anyInt(), any() ) ).thenReturn( null );
         MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.get( "/categories" ).param( "order", "foo" );
         MockHttpServletRequestBuilder requestBuilder = paramResult.param( "page", String.valueOf( 1 ) );

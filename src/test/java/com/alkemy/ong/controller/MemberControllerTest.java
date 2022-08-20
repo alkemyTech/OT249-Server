@@ -40,7 +40,8 @@ class MemberControllerTest {
 
     @BeforeEach
     void setUp() {
-        memberController =  new MemberController( iMemberService, memberRepository );
+
+        memberController = new MemberController( iMemberService, memberRepository );
     }
 
     /**
@@ -70,7 +71,7 @@ class MemberControllerTest {
 
     private static MemberDto getMemberDto() {
 
-        Timestamp timestamp = Timestamp.from( Instant.from( LocalDateTime.of( 1,1,1,1,1,1 ).toInstant( ZoneOffset.UTC ) ) );
+        Timestamp timestamp = Timestamp.from( Instant.from( LocalDateTime.of( 1, 1, 1, 1, 1, 1 ).toInstant( ZoneOffset.UTC ) ) );
 
         MemberDto memberDto = new MemberDto();
         memberDto.setDescription( "The characteristics of someone or something" );
@@ -111,7 +112,7 @@ class MemberControllerTest {
     @Test
     void testUpdateMember2() throws Exception {
 
-        when( iMemberService.updateMember( any(), any() ) ).thenThrow( new EntityNotFoundException("ERROR") );
+        when( iMemberService.updateMember( any(), any() ) ).thenThrow( new EntityNotFoundException( "ERROR" ) );
         MemberDto memberDto = getMemberDto();
         String content = getString( memberDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/members/{id}", "42" )
@@ -124,6 +125,7 @@ class MemberControllerTest {
                 .andExpect( MockMvcResultMatchers.content().contentType( "text/plain;charset=ISO-8859-1" ) )
                 .andExpect( MockMvcResultMatchers.content().string( "ERROR" ) );
     }
+
     /**
      * Method under test: {@link MemberController#getAllMembers(int, String)}
      */

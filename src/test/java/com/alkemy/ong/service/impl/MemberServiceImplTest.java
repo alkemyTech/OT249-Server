@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {MemberServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class MemberServiceImplTest {
 
     @MockBean
@@ -43,7 +43,7 @@ class MemberServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        
+
         memberServiceImpl = new MemberServiceImpl( modelMapper, memberRepository );
 
     }
@@ -80,9 +80,9 @@ class MemberServiceImplTest {
         members.add( new Member() );
         PageDto<Member> memberPageDto = new PageDto<>( members, PageUtils.getPageable( 0, "asc" ), 0 );
 
-        when( memberRepository.findAll( any(Pageable.class) ) ).thenReturn( memberPageDto );
+        when( memberRepository.findAll( any( Pageable.class ) ) ).thenReturn( memberPageDto );
         PageDto<MemberDto> allMembers = memberServiceImpl.getAllMembers( 1, "Order" );
-        assertThat(allMembers).isNotNull();
+        assertThat( allMembers ).isNotNull();
     }
 
     /**
@@ -103,7 +103,7 @@ class MemberServiceImplTest {
     @Test
     void test_DeleteMemberById() {
 
-        Member member = getMember(  );
+        Member member = getMember();
         Optional<Member> ofResult = Optional.of( member );
         doNothing().when( memberRepository ).delete( any() );
         when( memberRepository.findById( any() ) ).thenReturn( ofResult );
@@ -118,7 +118,7 @@ class MemberServiceImplTest {
     @Test
     void test_DeleteMemberById2() {
 
-        Member member = getMember(  );
+        Member member = getMember();
         Optional<Member> ofResult = Optional.of( member );
         doThrow( new EntityNotFoundException( "An error occurred" ) ).when( memberRepository ).delete( any() );
         when( memberRepository.findById( anyString() ) ).thenReturn( ofResult );
@@ -146,9 +146,9 @@ class MemberServiceImplTest {
     @Test
     void test_UpdateMember() throws EntityNotFoundException {
 
-        Member member = getMember(  );
+        Member member = getMember();
 
-        Member member1 = getMember(  );
+        Member member1 = getMember();
         when( memberRepository.getById( anyString() ) ).thenReturn( member );
         when( memberRepository.save( any() ) ).thenReturn( member1 );
         assertEquals( "Miembro Actualizado Correctamente", memberServiceImpl.updateMember( new MemberDto(), "42" ) );
@@ -164,9 +164,9 @@ class MemberServiceImplTest {
     void test_UpdateMember2() throws EntityNotFoundException {
         // TODO: Complete this test.
 
-        Member member = getMember(  );
+        Member member = getMember();
 
-        Member member1 = getMember(  );
+        Member member1 = getMember();
         when( memberRepository.getById( anyString() ) ).thenReturn( member );
         when( memberRepository.save( any() ) ).thenReturn( member1 );
         String updateMember = memberServiceImpl.updateMember( null, "42" );
@@ -178,9 +178,9 @@ class MemberServiceImplTest {
     @Test
     void test_UpdateMember3() throws EntityNotFoundException {
 
-        Member member = getMember(  );
+        Member member = getMember();
 
-        Member member1 = getMember(  );
+        Member member1 = getMember();
         when( memberRepository.getById( anyString() ) ).thenReturn( member );
         when( memberRepository.save( any() ) ).thenReturn( member1 );
         MemberDto memberDto = new MemberDto( "42", "Miembro Actualizado Correctamente", "https://example.org/example",
@@ -211,10 +211,10 @@ class MemberServiceImplTest {
     @Test
     void test_CreateMember() {
 
-        Member member = getMember(  );
+        Member member = getMember();
         when( memberRepository.save( any() ) ).thenReturn( member );
 
-        Member member1 = getMember( );
+        Member member1 = getMember();
         memberServiceImpl.createMember( member1 );
         verify( memberRepository ).save( any() );
         assertEquals( "The characteristics of someone or something", member1.getDescription() );
@@ -252,7 +252,7 @@ class MemberServiceImplTest {
 
         when( memberRepository.save( any() ) ).thenThrow( new EntityNotFoundException( "An error occurred" ) );
 
-        Member member = getMember( );
+        Member member = getMember();
         assertThrows( EntityNotFoundException.class, () -> memberServiceImpl.createMember( member ) );
         verify( memberRepository ).save( any() );
     }
@@ -263,7 +263,7 @@ class MemberServiceImplTest {
     @Test
     void test_FillEntity() {
 
-        Member member = getMember(  );
+        Member member = getMember();
         Member fillEntity = memberServiceImpl.fillEntity( member, new MemberDto() );
         assertThat( fillEntity ).isSameAs( member );
     }
@@ -274,7 +274,7 @@ class MemberServiceImplTest {
     @Test
     void test_FillEntity2() {
 
-        Member member = getMember(  );
+        Member member = getMember();
         MemberDto memberDto = modelMapper.map( member, MemberDto.class );
         Member fillEntity = memberServiceImpl.fillEntity( member, memberDto );
         assertThat( fillEntity.getName() ).isNotNull().isNotBlank().isEqualTo( member.getName() );
@@ -294,7 +294,7 @@ class MemberServiceImplTest {
     @Disabled("TODO: Complete this test")
     void testFillEntity3() {
 
-        Member member = getMember( );
+        Member member = getMember();
         memberServiceImpl.fillEntity( member, null );
     }
 
@@ -304,7 +304,7 @@ class MemberServiceImplTest {
     @Test
     void testFillEntity4() {
 
-        Member member = getMember(  );
+        Member member = getMember();
         memberServiceImpl.fillEntity( member,
                 new MemberDto( "42", "Name", "https://example.org/example", "https://example.org/example",
                         "https://example.org/example", "Image", "The characteristics of someone or something", member.getTimestamp()

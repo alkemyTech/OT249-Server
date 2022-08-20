@@ -22,16 +22,19 @@ import org.springframework.web.multipart.MultipartFile;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-@ExtendWith( SpringExtension.class )
+
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BucketController.class)
 class BucketControllerTest {
 
     @MockBean
     AmazonClient amazonClient;
+
     BucketController bucketController;
 
     @BeforeEach
     void setUp() {
+
         bucketController = new BucketController( amazonClient );
 
     }
@@ -43,23 +46,22 @@ class BucketControllerTest {
     @Disabled
     void testUploadFile() throws Exception {
 
-            String content = getString( new MockMultipartFile("Name", "Content".getBytes()) );
-            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/uploadFile")
-                    .contentType( MediaType.MULTIPART_FORM_DATA_VALUE )
-                    .content( content );
-            ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( bucketController )
-                    .build()
-                    .perform( requestBuilder );
-            actualPerformResult.andExpect( MockMvcResultMatchers.status().isCreated() )
-                    .andExpect( MockMvcResultMatchers.content().contentType( "text/plain;charset=ISO-8859-1" ) )
-                    .andExpect( MockMvcResultMatchers.content().string( "Miembro creado con éxito" ) );
-        }
+        String content = getString( new MockMultipartFile( "Name", "Content".getBytes() ) );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/uploadFile" )
+                .contentType( MediaType.MULTIPART_FORM_DATA_VALUE )
+                .content( content );
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( bucketController )
+                .build()
+                .perform( requestBuilder );
+        actualPerformResult.andExpect( MockMvcResultMatchers.status().isCreated() )
+                .andExpect( MockMvcResultMatchers.content().contentType( "text/plain;charset=ISO-8859-1" ) )
+                .andExpect( MockMvcResultMatchers.content().string( "Miembro creado con éxito" ) );
+    }
 
     private <T> String getString(T multipartFile) throws JsonProcessingException {
 
         return (new ObjectMapper()).writeValueAsString( multipartFile );
     }
-
 
 
     /**
