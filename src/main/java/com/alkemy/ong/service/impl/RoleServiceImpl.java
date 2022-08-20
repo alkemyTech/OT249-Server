@@ -1,17 +1,17 @@
 package com.alkemy.ong.service.impl;
 
-import com.alkemy.ong.model.Role;
-import com.alkemy.ong.repository.RoleRepository;
-import com.alkemy.ong.service.IRoleService;
-import lombok.AllArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.alkemy.ong.model.Role;
+import com.alkemy.ong.repository.RoleRepository;
+import com.alkemy.ong.service.IRoleService;
 
 @Service
-@AllArgsConstructor
 public class RoleServiceImpl implements IRoleService{
 
 	@Autowired

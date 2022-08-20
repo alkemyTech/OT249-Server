@@ -15,7 +15,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,7 +40,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@AllArgsConstructor
 public class UserController {
 
 	@Autowired
@@ -77,13 +75,7 @@ public class UserController {
 	public ResponseEntity<?> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
 		boolean deleted = false;
-
-		User user =  new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(),
-
-				passwordEncode.encode(userDto.getPassword()),
-
-				userDto.getPhoto(), rol, new Timestamp(System.currentTimeMillis()), deleted);
-
+		User user =  new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), passwordEncode.encode(userDto.getPassword()), userDto.getPhoto(), rol, new Timestamp(System.currentTimeMillis()), deleted);
 		userService.guardarUsuario(user);
 		
 		LoginRequestDTO loginReqDto = new LoginRequestDTO(userDto.getEmail(), userDto.getPassword());
