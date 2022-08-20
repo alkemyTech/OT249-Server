@@ -47,8 +47,8 @@ public class OrganizationServiceImpl implements OrganizationService{
     }
 
     @Override
-    public void delete(String id) {
-
+    public Organization delete(String id) {
+    	return null;
     }
 
     @Override
