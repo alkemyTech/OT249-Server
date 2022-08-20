@@ -3,10 +3,10 @@ package com.alkemy.ong.controller;
 
 import com.alkemy.ong.dto.PublicOrganizationDto;
 import com.alkemy.ong.dto.SlideResponseDto;
+import com.alkemy.ong.service.OrganizationService;
 import com.alkemy.ong.service.SlideService;
-import com.alkemy.ong.service.impl.OrganizationServiceImpl;
 
-
+import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class OrgController {
     @Autowired
-    private OrganizationServiceImpl organizationService;
+    private OrganizationService organizationService;
 
     @Autowired
     private SlideService slideService;
@@ -34,7 +35,11 @@ public class OrgController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/organization/public")
     ResponseEntity<PublicOrganizationDto> getPublicDataConfig(){
-        return new ResponseEntity<>(organizationService.getPublicData(), HttpStatus.OK);
+        try {
+        	return new ResponseEntity<>(organizationService.getPublicData(), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/organization/public/{id}")
