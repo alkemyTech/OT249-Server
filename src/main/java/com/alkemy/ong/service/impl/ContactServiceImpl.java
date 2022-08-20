@@ -16,13 +16,15 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+
 public class ContactServiceImpl implements ContactService {
 
     ModelMapper modelMapper;
     
     ContactRepository contactRepository;
     
-    private final EmailService emailService;
+    @Autowired
+    private EmailService emailService;
     
     @Override
     public Contact getContact() {
