@@ -7,6 +7,7 @@ import com.alkemy.ong.exceptions.RecordException;
 import com.alkemy.ong.model.Organization;
 import com.alkemy.ong.repository.OrganizationRepository;
 
+import com.alkemy.ong.service.AmazonClient;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class SlideServiceImpl implements SlideService {
     private OrganizationService organizationService;
 
     @Autowired
-    AmazonClientImpl amazonClientImpl;
+    AmazonClient amazonClient;
 
     @Autowired
     OrganizationRepository organizationRepository;
@@ -69,7 +70,7 @@ public class SlideServiceImpl implements SlideService {
 
         if (slideRequestDto.getBase64Img()!=null){
             CustomMultipartFile customMultipartFile = new CustomMultipartFile();
-            String fileUrl = amazonClientImpl.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
+            String fileUrl = amazonClient.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
             slide.setImageUrl(fileUrl);
         }
         if (slideRequestDto.getText()!=null){
@@ -111,7 +112,7 @@ public class SlideServiceImpl implements SlideService {
     @Override
     public SlideResponseDto save(SlideRequestDto slideRequestDto) {
         CustomMultipartFile customMultipartFile = new CustomMultipartFile();
-        String fileUrl = amazonClientImpl.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
+        String fileUrl = amazonClient.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
         if(slideRequestDto.getPosition() == null) {
             slideRequestDto.setPosition(this.lastPosition() + 1);
         }

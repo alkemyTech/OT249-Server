@@ -1,6 +1,7 @@
 
 package com.alkemy.ong.controller;
 
+import com.alkemy.ong.service.AmazonClient;
 import com.alkemy.ong.service.impl.AmazonClientImpl;
 import lombok.AllArgsConstructor;
 
@@ -13,10 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class BucketController {
 
-    private final AmazonClientImpl amazonClientImpl;
+    private final AmazonClient amazonClient;
 
     @PostMapping("/uploadFile")
     public String uploadFile(@RequestPart(value = "file") MultipartFile file) {
-        return amazonClientImpl.uploadFile(file);
+        return amazonClient.uploadFile(file);
     }
 }

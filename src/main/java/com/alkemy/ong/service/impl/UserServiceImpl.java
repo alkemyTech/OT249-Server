@@ -4,6 +4,7 @@ package com.alkemy.ong.service.impl;
 import com.alkemy.ong.dto.*;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
+import com.alkemy.ong.service.EmailService;
 import com.alkemy.ong.service.UserService;
 import com.alkemy.ong.utils.JwtUtil;
 import com.alkemy.ong.utils.PageUtils;
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepo;
 
 	@Autowired
-	private EmailServiceImpl emailServiceImpl;
+	private EmailService emailService;
 
 	@Autowired
     private AuthenticationManager authenticationManager;
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
 		User userSaved = userRepo.save(user);
 
-		emailServiceImpl.WelcomeMail(userSaved.getEmail(), user.getFirstName());
+		emailService.WelcomeMail(userSaved.getEmail(), user.getFirstName());
 
 		return userSaved;
 	}
