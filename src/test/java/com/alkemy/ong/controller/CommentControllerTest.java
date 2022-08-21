@@ -5,6 +5,8 @@ import com.alkemy.ong.model.*;
 import com.alkemy.ong.service.CommentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,11 +25,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {CommentController.class})
 @ExtendWith(SpringExtension.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+
 class CommentControllerTest {
 
     private CommentController commentController;
@@ -74,13 +77,7 @@ class CommentControllerTest {
                 .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
                 .andExpect( MockMvcResultMatchers.content()
                         .json(
-                                "{\"id\":\"42\",\"body\":\"Not all who wander are lost\",\"timestamp\":-62135755140000,\"deleted\":true,\"user\":{\"id\":\"42\","
-                                        + "\"firstName\":\"Jane\",\"lastName\":\"Doe\",\"email\":\"jane.doe@example.org\",\"password\":\"iloveyou\",\"photo\":\"alice"
-                                        + ".liddell@example.org\",\"role\":{\"id\":\"42\",\"name\":\"Name\",\"users\":[],\"description\":\"The characteristics"
-                                        + " of someone or something\",\"timestamp\":-62135755140000},\"timestamp\":-62135755140000,\"deleted\":true},\"news\":{\"id\":\"42\",\"name\":"
-                                        + "\"Name\",\"content\":\"Not all who wander are lost\",\"image\":\"Image\",\"timestamp\":[1,1,1,1,1],\"category\":{"
-                                        + "\"id\":\"42\",\"name\":\"Name\",\"description\":\"The characteristics of someone or something\",\"image\":\"Image\","
-                                        + "\"timestamp\":-62135755140000,\"deleted\":true},\"comments\":[],\"softDelete\":true}}" ) );
+                                "{\"id\":\"42\",\"body\":\"Not all who wander are lost\",\"timestamp\":10,\"deleted\":true,\"user\":{\"id\":\"42\",\"firstName\":\"Jane\",\"lastName\":\"Doe\",\"email\":\"jane.doe@example.org\",\"password\":\"iloveyou\",\"photo\":\"alice.liddell@example.org\",\"role\":{\"id\":\"42\",\"name\":\"Name\",\"users\":[],\"description\":\"The characteristics of someone or something\",\"timestamp\":10},\"timestamp\":10,\"deleted\":true},\"news\":{\"id\":\"42\",\"name\":\"Name\",\"content\":\"Not all who wander are lost\",\"image\":\"Image\",\"timestamp\":[1,1,1,1,1],\"category\":{\"id\":\"42\",\"name\":\"Name\",\"description\":\"The characteristics of someone or something\",\"image\":\"Image\",\"timestamp\":10,\"deleted\":true},\"comments\":[],\"softDelete\":true}}\n" ) );
     }
 
 
@@ -208,15 +205,15 @@ class CommentControllerTest {
 
     private static Comment getComment(News news, User user) {
 
-        LocalDateTime localDateTime = LocalDateTime.of( 1, 1, 1, 1, 1 );
-        Timestamp valueOf = Timestamp.valueOf( localDateTime );
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
 
         Comment comment = new Comment();
         comment.setBody( "Not all who wander are lost" );
         comment.setDeleted( true );
         comment.setId( "42" );
         comment.setNews( news );
-        comment.setTimestamp( valueOf );
+        comment.setTimestamp( timestamp );
         comment.setUser( user );
         return comment;
     }
@@ -246,8 +243,8 @@ class CommentControllerTest {
 
     private static User getUser(Role role) {
 
-        LocalDateTime localDateTime = LocalDateTime.of( 1, 1, 1, 1, 1 );
-        Timestamp valueOf = Timestamp.valueOf( localDateTime );
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
 
         User user = new User();
         user.setDeleted( true );
@@ -258,20 +255,20 @@ class CommentControllerTest {
         user.setPassword( "iloveyou" );
         user.setPhoto( "alice.liddell@example.org" );
         user.setRole( role );
-        user.setTimestamp( valueOf );
+        user.setTimestamp( timestamp );
         return user;
     }
 
     private static Role getRole() {
 
-        LocalDateTime localDateTime = LocalDateTime.of( 1, 1, 1, 1, 1 );
-        Timestamp valueOf = Timestamp.valueOf( localDateTime );
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
 
         Role role = new Role();
         role.setDescription( "The characteristics of someone or something" );
         role.setId( "42" );
         role.setName( "Name" );
-        role.setTimestamp( valueOf );
+        role.setTimestamp( timestamp );
         role.setUsers( new HashSet<>() );
         return role;
     }
@@ -293,8 +290,8 @@ class CommentControllerTest {
 
     private static Category getCategory() {
 
-        LocalDateTime localDateTime = LocalDateTime.of( 1, 1, 1, 1, 1 );
-        Timestamp valueOf = Timestamp.valueOf( localDateTime );
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
 
         Category category = new Category();
         category.setDeleted( true );
@@ -302,7 +299,7 @@ class CommentControllerTest {
         category.setId( "42" );
         category.setImage( "Image" );
         category.setName( "Name" );
-        category.setTimestamp( valueOf );
+        category.setTimestamp( timestamp );
         return category;
     }
 

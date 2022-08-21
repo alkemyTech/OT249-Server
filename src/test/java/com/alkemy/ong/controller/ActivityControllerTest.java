@@ -5,6 +5,8 @@ import com.alkemy.ong.model.Activity;
 import com.alkemy.ong.service.ActivityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,6 +25,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {ActivityController.class})
 @ExtendWith(SpringExtension.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
 class ActivityControllerTest {
 
 

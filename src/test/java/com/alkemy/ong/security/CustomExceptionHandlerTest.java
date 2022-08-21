@@ -2,6 +2,8 @@
 package com.alkemy.ong.security;
 
 import org.apache.catalina.connector.Response;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,8 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {CustomExceptionHandler.class})
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+
 class CustomExceptionHandlerTest {
 
     @Autowired

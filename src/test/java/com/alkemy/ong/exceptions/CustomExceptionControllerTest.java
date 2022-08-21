@@ -1,5 +1,7 @@
 package com.alkemy.ong.exceptions;
 
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ContextConfiguration(classes = {CustomExceptionController.class})
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+
 class CustomExceptionControllerTest {
 
     /**

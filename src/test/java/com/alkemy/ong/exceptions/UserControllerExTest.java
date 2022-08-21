@@ -1,5 +1,7 @@
 package com.alkemy.ong.exceptions;
 
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.validation.BindingResult;
@@ -16,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
 class UserControllerExTest {
 
     /**

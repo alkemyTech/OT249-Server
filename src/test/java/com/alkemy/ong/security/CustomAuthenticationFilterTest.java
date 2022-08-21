@@ -7,9 +7,7 @@ import com.alkemy.ong.service.UserService;
 import com.alkemy.ong.utils.JwtUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -37,6 +35,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith( SpringExtension.class )
 @Tag( value = "ut")
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+
 class CustomAuthenticationFilterTest {
 
     @MockBean

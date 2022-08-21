@@ -4,6 +4,8 @@ import com.alkemy.ong.utils.CustomMultipartFile;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,6 +23,8 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {AmazonClientImpl.class})
 @ExtendWith(SpringExtension.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+
 class AmazonClientImplTest {
 
     @MockBean

@@ -28,6 +28,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
@@ -38,6 +40,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ContextConfiguration(classes = {CommentServiceImpl.class})
 @ExtendWith(SpringExtension.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+
 class CommentServiceImplTest {
 
     @MockBean
@@ -292,6 +296,8 @@ class CommentServiceImplTest {
     }
 
     private static Category getCategory() {
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
 
         Category category = new Category();
         category.setDeleted( true );
@@ -299,7 +305,7 @@ class CommentServiceImplTest {
         category.setId( "42" );
         category.setImage( "Image" );
         category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        category.setTimestamp( timestamp );
         return category;
     }
 
@@ -342,18 +348,22 @@ class CommentServiceImplTest {
     }
 
     private static Comment getComment(News news, User user) {
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
 
         Comment comment = new Comment();
         comment.setBody( "Not all who wander are lost" );
         comment.setDeleted( true );
         comment.setId( "42" );
         comment.setNews( news );
-        comment.setTimestamp( mock( Timestamp.class ) );
+        comment.setTimestamp( timestamp );
         comment.setUser( user );
         return comment;
     }
 
     private static User getUser(Role role) {
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
 
         User user = new User();
         user.setDeleted( true );
@@ -364,7 +374,7 @@ class CommentServiceImplTest {
         user.setPassword( "iloveyou" );
         user.setPhoto( "alice.liddell@example.org" );
         user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
+        user.setTimestamp( timestamp );
         return user;
     }
 

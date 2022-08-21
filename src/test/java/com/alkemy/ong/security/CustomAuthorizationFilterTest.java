@@ -5,6 +5,8 @@ import com.alkemy.ong.service.UserService;
 import com.alkemy.ong.utils.JwtUtil;
 import io.jsonwebtoken.SignatureException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,6 +35,8 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {CustomAuthorizationFilter.class})
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
+@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
+
 class CustomAuthorizationFilterTest {
 
     @Autowired
