@@ -44,16 +44,22 @@ class RoleServiceImplTest {
     @Test
     void test_GetRoleById_deberia_devolver_entidad_completa_al_encontrar_el_resultado() {
 
+        Role role = getRole();
+        Optional<Role> ofResult = Optional.of( role );
+        when( roleRepository.findById( any() ) ).thenReturn( ofResult );
+        assertSame( role, roleServiceImpl.getRoleById( "42" ) );
+        verify( roleRepository ).findById( any() );
+    }
+
+    private static Role getRole() {
+
         Role role = new Role();
         role.setDescription( "The characteristics of someone or something" );
         role.setId( "42" );
         role.setName( "Name" );
         role.setTimestamp( mock( Timestamp.class ) );
         role.setUsers( new HashSet<>() );
-        Optional<Role> ofResult = Optional.of( role );
-        when( roleRepository.findById( any() ) ).thenReturn( ofResult );
-        assertSame( role, roleServiceImpl.getRoleById( "42" ) );
-        verify( roleRepository ).findById( any() );
+        return role;
     }
 
     /**

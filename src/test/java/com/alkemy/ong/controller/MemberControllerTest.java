@@ -1,8 +1,10 @@
 package com.alkemy.ong.controller;
 
 import com.alkemy.ong.dto.MemberDto;
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.repository.MemberRepository;
 import com.alkemy.ong.service.IMemberService;
+import com.alkemy.ong.utils.PageUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +27,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
@@ -135,13 +138,15 @@ class MemberControllerTest {
     @Test
     void test_GetAllMembers() throws Exception {
 
-        when( iMemberService.getAllMembers( anyInt(), any() ) ).thenReturn( null );
+        when( iMemberService.getAllMembers( anyInt(), any() ) ).thenReturn( new PageDto<>( new ArrayList<>(), PageUtils.getPageable( 0, "asc" ), 0 ) );
         MockHttpServletRequestBuilder paramResult = MockMvcRequestBuilders.get( "/members" ).param( "order", "foo" );
-        MockHttpServletRequestBuilder requestBuilder = paramResult.param( "page", String.valueOf( 1 ) );
+        MockHttpServletRequestBuilder requestBuilder = paramResult.param( "page", String.valueOf( 0 ) );
         MockMvcBuilders.standaloneSetup( memberController )
                 .build()
                 .perform( requestBuilder )
-                .andExpect( MockMvcResultMatchers.status().isOk() );
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
+                .andExpect( MockMvcResultMatchers.content().json( "{\"content\":[],\"_links\":null,\"last\":true,\"totalElements\":0,\"totalPages\":0,\"size\":10,\"number\":0,\"first\":true,\"numberOfElements\":0,\"empty\":true}" ) );
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.alkemy.ong.service.impl;
 
 import com.alkemy.ong.utils.CustomMultipartFile;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,13 +12,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {AmazonClientImpl.class})
@@ -32,7 +31,7 @@ class AmazonClientImplTest {
     @BeforeEach
     void setUp() {
 
-        amazonClientImpl = new AmazonClientImpl( "", "", "", "" );
+        amazonClientImpl = new AmazonClientImpl( "amazon", "bucket", "secretKeyAccess", "SecretKeyReal" );
         amazonClientImpl.setAmazonS3( amazonS3 );
     }
 
@@ -40,11 +39,38 @@ class AmazonClientImplTest {
      * Method under test: {@link AmazonClientImpl#uploadFile(MultipartFile)}
      */
     @Test
-    void testUploadFile() throws IOException {
+    void testUploadFile() {
 
-        assertEquals( "", amazonClientImpl.uploadFile( new CustomMultipartFile() ) );
-        assertEquals( "", amazonClientImpl
-                .uploadFile( new MockMultipartFile( "/", new ByteArrayInputStream( "AAAAAAAA".getBytes( StandardCharsets.UTF_8 ) ) ) ) );
+        CustomMultipartFile actual = new CustomMultipartFile( "AABB".getBytes(), "aa/bbb" );
+        String actualFile = amazonClientImpl.uploadFile( actual );
+        assertThat( actualFile ).isNotNull().isNotBlank().endsWith( ".bbb" );
+
+
+        CustomMultipartFile actual1 = new CustomMultipartFile( "CC".getBytes(), "ccc/ddd" );
+
+        String actualFile2 = amazonClientImpl
+                .uploadFile( actual1 );
+        assertThat( actualFile2 ).isNotNull().isNotBlank().endsWith( ".ddd" );
+
+    }
+
+    /**
+     * Method under test: {@link AmazonClientImpl#uploadFile(MultipartFile)}
+     */
+    @Test
+    void testUploadFile3() {
+
+        String message = "Error1";
+        MockMultipartFile mockMultipartFile =  new MockMultipartFile( "aaa/aaaa", "aaa", null, "aaa".getBytes() );
+        when( amazonS3.putObject( any() ) ).thenThrow( new SdkClientException( message ) );
+        String actualFile = amazonClientImpl
+                .uploadFile( mockMultipartFile );
+        assertThat( actualFile ).isNotNull();
+        File file = Path.of( "aaa" ).toFile();
+        if(file.exists())
+            if(!file.delete())
+                file.deleteOnExit();
+
     }
 
     /**
@@ -59,7 +85,7 @@ class AmazonClientImplTest {
         when( customMultipartFile.getBytes() ).thenReturn( "".getBytes() );
         String actual = amazonClientImpl.uploadFile( customMultipartFile );
         assertThat( actual ).isNotNull().isNotBlank().endsWith( "-foo.txt" );
-        verify( customMultipartFile, atLeast(2)).getOriginalFilename();
+        verify( customMultipartFile, atLeast( 2 ) ).getOriginalFilename();
     }
 
 

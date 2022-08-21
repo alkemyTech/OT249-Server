@@ -72,49 +72,15 @@ class CommentServiceImplTest {
     @Test
     void testGetAll2() {
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
+        User user = getUser( role );
 
-        Comment comment = new Comment();
-        comment.setBody( "Not all who wander are lost" );
-        comment.setDeleted( true );
-        comment.setId( "42" );
-        comment.setNews( news );
-        comment.setTimestamp( mock( Timestamp.class ) );
-        comment.setUser( user );
+        Comment comment = getComment( news, user );
 
         ArrayList<Comment> commentList = new ArrayList<>();
         commentList.add( comment );
@@ -130,93 +96,25 @@ class CommentServiceImplTest {
     @Test
     void testGetAll3() {
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
+        User user = getUser( role );
 
-        Comment comment = new Comment();
-        comment.setBody( "Not all who wander are lost" );
-        comment.setDeleted( true );
-        comment.setId( "42" );
-        comment.setNews( news );
-        comment.setTimestamp( mock( Timestamp.class ) );
-        comment.setUser( user );
+        Comment comment = getComment( news, user );
 
-        Category category1 = new Category();
-        category1.setDeleted( true );
-        category1.setDescription( "The characteristics of someone or something" );
-        category1.setId( "42" );
-        category1.setImage( "Image" );
-        category1.setName( "Name" );
-        category1.setTimestamp( mock( Timestamp.class ) );
+        Category category1 = getCategory();
 
-        News news1 = new News();
-        news1.setCategory( category1 );
-        news1.setComments( new HashSet<>() );
-        news1.setContent( "Not all who wander are lost" );
-        news1.setId( "42" );
-        news1.setImage( "Image" );
-        news1.setName( "Name" );
-        news1.setSoftDelete( true );
-        news1.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news1 = getNews( category1 );
 
-        Role role1 = new Role();
-        role1.setDescription( "The characteristics of someone or something" );
-        role1.setId( "42" );
-        role1.setName( "Name" );
-        role1.setTimestamp( mock( Timestamp.class ) );
-        role1.setUsers( new HashSet<>() );
+        Role role1 = getRole();
 
-        User user1 = new User();
-        user1.setDeleted( true );
-        user1.setEmail( "jane.doe@example.org" );
-        user1.setFirstName( "Jane" );
-        user1.setId( "42" );
-        user1.setLastName( "Doe" );
-        user1.setPassword( "iloveyou" );
-        user1.setPhoto( "alice.liddell@example.org" );
-        user1.setRole( role1 );
-        user1.setTimestamp( mock( Timestamp.class ) );
+        User user1 = getUser( role1 );
 
-        Comment comment1 = new Comment();
-        comment1.setBody( "Not all who wander are lost" );
-        comment1.setDeleted( true );
-        comment1.setId( "42" );
-        comment1.setNews( news1 );
-        comment1.setTimestamp( mock( Timestamp.class ) );
-        comment1.setUser( user1 );
+        Comment comment1 = getComment( news1, user1 );
 
         ArrayList<Comment> commentList = new ArrayList<>();
         commentList.add( comment1 );
@@ -235,49 +133,15 @@ class CommentServiceImplTest {
     @Test
     void testGetAll4() {
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
+        User user = getUser( role );
 
-        Comment comment = new Comment();
-        comment.setBody( "Not all who wander are lost" );
-        comment.setDeleted( true );
-        comment.setId( "42" );
-        comment.setNews( news );
-        comment.setTimestamp( mock( Timestamp.class ) );
-        comment.setUser( user );
+        Comment comment = getComment( news, user );
 
         ArrayList<Comment> commentList = new ArrayList<>();
         commentList.add( comment );
@@ -318,95 +182,30 @@ class CommentServiceImplTest {
     @Test
     void testCreate() {
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
+        User user = getUser( role );
 
-        Comment comment = new Comment();
-        comment.setBody( "Not all who wander are lost" );
-        comment.setDeleted( true );
-        comment.setId( "42" );
-        comment.setNews( news );
-        comment.setTimestamp( mock( Timestamp.class ) );
-        comment.setUser( user );
+        Comment comment = getComment( news, user );
         when( commentRepository.save( any() ) ).thenReturn( comment );
 
-        Category category1 = new Category();
-        category1.setDeleted( true );
-        category1.setDescription( "The characteristics of someone or something" );
-        category1.setId( "42" );
-        category1.setImage( "Image" );
-        category1.setName( "Name" );
-        category1.setTimestamp( mock( Timestamp.class ) );
+        Category category1 = getCategory();
 
-        News news1 = new News();
-        news1.setCategory( category1 );
-        news1.setComments( new HashSet<>() );
-        news1.setContent( "Not all who wander are lost" );
-        news1.setId( "42" );
-        news1.setImage( "Image" );
-        news1.setName( "Name" );
-        news1.setSoftDelete( true );
-        news1.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news1 = getNews( category1 );
         Optional<News> ofResult = Optional.of( news1 );
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
 
-        Role role1 = new Role();
-        role1.setDescription( "The characteristics of someone or something" );
-        role1.setId( "42" );
-        role1.setName( "Name" );
-        role1.setTimestamp( mock( Timestamp.class ) );
-        role1.setUsers( new HashSet<>() );
+        Role role1 = getRole();
 
-        User user1 = new User();
-        user1.setDeleted( true );
-        user1.setEmail( "jane.doe@example.org" );
-        user1.setFirstName( "Jane" );
-        user1.setId( "42" );
-        user1.setLastName( "Doe" );
-        user1.setPassword( "iloveyou" );
-        user1.setPhoto( "alice.liddell@example.org" );
-        user1.setRole( role1 );
-        user1.setTimestamp( mock( Timestamp.class ) );
+        User user1 = getUser( role1 );
         Optional<User> ofResult1 = Optional.of( user1 );
         when( userRepository.findById( anyString() ) ).thenReturn( ofResult1 );
 
-        CreateCommentDto createCommentDto = new CreateCommentDto();
-        createCommentDto.setBody( "Not all who wander are lost" );
-        createCommentDto.setNews( "News" );
-        createCommentDto.setUser( "User" );
+        CreateCommentDto createCommentDto = getCommentDto();
         assertSame( createCommentDto, commentServiceImpl.create( createCommentDto ) );
         verify( commentRepository ).save( any() );
         verify( newsRepository ).findById( anyString() );
@@ -422,50 +221,19 @@ class CommentServiceImplTest {
         when( commentRepository.save( any() ) )
                 .thenThrow( new RecordException.RecordNotFoundException( "An error occurred" ) );
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
         Optional<News> ofResult = Optional.of( news );
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
+        User user = getUser( role );
         Optional<User> ofResult1 = Optional.of( user );
         when( userRepository.findById( anyString() ) ).thenReturn( ofResult1 );
 
-        CreateCommentDto createCommentDto = new CreateCommentDto();
-        createCommentDto.setBody( "Not all who wander are lost" );
-        createCommentDto.setNews( "News" );
-        createCommentDto.setUser( "User" );
+        CreateCommentDto createCommentDto = getCommentDto();
         assertThrows( RecordException.RecordNotFoundException.class, () -> commentServiceImpl.create( createCommentDto ) );
         verify( commentRepository ).save( any() );
         verify( newsRepository ).findById( anyString() );
@@ -480,13 +248,36 @@ class CommentServiceImplTest {
     void testCreate4() {
 
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
+
+        News news = getNews( category );
+        Optional<News> ofResult = Optional.of( news );
+        when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
+
+        Role role = getRole();
+
+        getUser( role );
+        when( userRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
+
+        CreateCommentDto createCommentDto = getCommentDto();
+        assertThrows( RecordException.RecordNotFoundException.class, () -> commentServiceImpl.create( createCommentDto ) );
+        verify( commentRepository , atMost( 0 )).save( any() );
+        verify( newsRepository ).findById( anyString() );
+        verify( userRepository ).findById( anyString() );
+    }
+
+    private static Role getRole() {
+
+        Role role = new Role();
+        role.setDescription( "The characteristics of someone or something" );
+        role.setId( "42" );
+        role.setName( "Name" );
+        role.setTimestamp( mock( Timestamp.class ) );
+        role.setUsers( new HashSet<>() );
+        return role;
+    }
+
+    private static News getNews(Category category) {
 
         News news = new News();
         news.setCategory( category );
@@ -497,36 +288,19 @@ class CommentServiceImplTest {
         news.setName( "Name" );
         news.setSoftDelete( true );
         news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
-        Optional<News> ofResult = Optional.of( news );
-        when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
+        return news;
+    }
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+    private static Category getCategory() {
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
-        when( userRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
-
-        CreateCommentDto createCommentDto = new CreateCommentDto();
-        createCommentDto.setBody( "Not all who wander are lost" );
-        createCommentDto.setNews( "News" );
-        createCommentDto.setUser( "User" );
-        assertThrows( RecordException.RecordNotFoundException.class, () -> commentServiceImpl.create( createCommentDto ) );
-        verify( commentRepository , atMost( 0 )).save( any() );
-        verify( newsRepository ).findById( anyString() );
-        verify( userRepository ).findById( anyString() );
+        Category category = new Category();
+        category.setDeleted( true );
+        category.setDescription( "The characteristics of someone or something" );
+        category.setId( "42" );
+        category.setImage( "Image" );
+        category.setName( "Name" );
+        category.setTimestamp( mock( Timestamp.class ) );
+        return category;
     }
 
     /**
@@ -535,30 +309,51 @@ class CommentServiceImplTest {
     @Test
     void testCreate3() {
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
+
+        User user = getUser( role );
+
+        Comment comment = getComment( news, user );
+        when( commentRepository.save( any() ) ).thenReturn( comment );
+        when( newsRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
+
+        Role role1 = getRole();
+
+        User user1 = getUser( role1 );
+        Optional<User> ofResult = Optional.of( user1 );
+        when( userRepository.findById( anyString() ) ).thenReturn( ofResult );
+
+        CreateCommentDto createCommentDto = getCommentDto();
+        assertThrows( RecordException.RecordNotFoundException.class, () -> commentServiceImpl.create( createCommentDto ) );
+        verify( newsRepository ).findById( anyString() );
+    }
+
+    private static CreateCommentDto getCommentDto() {
+
+        CreateCommentDto createCommentDto = new CreateCommentDto();
+        createCommentDto.setBody( "Not all who wander are lost" );
+        createCommentDto.setNews( "News" );
+        createCommentDto.setUser( "User" );
+        return createCommentDto;
+    }
+
+    private static Comment getComment(News news, User user) {
+
+        Comment comment = new Comment();
+        comment.setBody( "Not all who wander are lost" );
+        comment.setDeleted( true );
+        comment.setId( "42" );
+        comment.setNews( news );
+        comment.setTimestamp( mock( Timestamp.class ) );
+        comment.setUser( user );
+        return comment;
+    }
+
+    private static User getUser(Role role) {
 
         User user = new User();
         user.setDeleted( true );
@@ -570,43 +365,7 @@ class CommentServiceImplTest {
         user.setPhoto( "alice.liddell@example.org" );
         user.setRole( role );
         user.setTimestamp( mock( Timestamp.class ) );
-
-        Comment comment = new Comment();
-        comment.setBody( "Not all who wander are lost" );
-        comment.setDeleted( true );
-        comment.setId( "42" );
-        comment.setNews( news );
-        comment.setTimestamp( mock( Timestamp.class ) );
-        comment.setUser( user );
-        when( commentRepository.save( any() ) ).thenReturn( comment );
-        when( newsRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
-
-        Role role1 = new Role();
-        role1.setDescription( "The characteristics of someone or something" );
-        role1.setId( "42" );
-        role1.setName( "Name" );
-        role1.setTimestamp( mock( Timestamp.class ) );
-        role1.setUsers( new HashSet<>() );
-
-        User user1 = new User();
-        user1.setDeleted( true );
-        user1.setEmail( "jane.doe@example.org" );
-        user1.setFirstName( "Jane" );
-        user1.setId( "42" );
-        user1.setLastName( "Doe" );
-        user1.setPassword( "iloveyou" );
-        user1.setPhoto( "alice.liddell@example.org" );
-        user1.setRole( role1 );
-        user1.setTimestamp( mock( Timestamp.class ) );
-        Optional<User> ofResult = Optional.of( user1 );
-        when( userRepository.findById( anyString() ) ).thenReturn( ofResult );
-
-        CreateCommentDto createCommentDto = new CreateCommentDto();
-        createCommentDto.setBody( "Not all who wander are lost" );
-        createCommentDto.setNews( "News" );
-        createCommentDto.setUser( "User" );
-        assertThrows( RecordException.RecordNotFoundException.class, () -> commentServiceImpl.create( createCommentDto ) );
-        verify( newsRepository ).findById( anyString() );
+        return user;
     }
 
     /**
@@ -615,49 +374,15 @@ class CommentServiceImplTest {
     @Test
     void testFindById() {
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
+        User user = getUser( role );
 
-        Comment comment = new Comment();
-        comment.setBody( "Not all who wander are lost" );
-        comment.setDeleted( true );
-        comment.setId( "42" );
-        comment.setNews( news );
-        comment.setTimestamp( mock( Timestamp.class ) );
-        comment.setUser( user );
+        Comment comment = getComment( news, user );
         Optional<Comment> ofResult = Optional.of( comment );
         when( commentRepository.findById( anyString() ) ).thenReturn( ofResult );
         assertSame( comment, commentServiceImpl.findById( "42" ) );
@@ -693,94 +418,26 @@ class CommentServiceImplTest {
     @Test
     void testActualizarComment() {
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role );
-        user.setTimestamp( mock( Timestamp.class ) );
+        User user = getUser( role );
 
-        Comment comment = new Comment();
-        comment.setBody( "Not all who wander are lost" );
-        comment.setDeleted( true );
-        comment.setId( "42" );
-        comment.setNews( news );
-        comment.setTimestamp( mock( Timestamp.class ) );
-        comment.setUser( user );
+        Comment comment = getComment( news, user );
         when( commentRepository.save( any() ) ).thenReturn( comment );
 
-        Category category1 = new Category();
-        category1.setDeleted( true );
-        category1.setDescription( "The characteristics of someone or something" );
-        category1.setId( "42" );
-        category1.setImage( "Image" );
-        category1.setName( "Name" );
-        category1.setTimestamp( mock( Timestamp.class ) );
+        Category category1 = getCategory();
 
-        News news1 = new News();
-        news1.setCategory( category1 );
-        news1.setComments( new HashSet<>() );
-        news1.setContent( "Not all who wander are lost" );
-        news1.setId( "42" );
-        news1.setImage( "Image" );
-        news1.setName( "Name" );
-        news1.setSoftDelete( true );
-        news1.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news1 = getNews( category1 );
 
-        Role role1 = new Role();
-        role1.setDescription( "The characteristics of someone or something" );
-        role1.setId( "42" );
-        role1.setName( "Name" );
-        role1.setTimestamp( mock( Timestamp.class ) );
-        role1.setUsers( new HashSet<>() );
+        Role role1 = getRole();
 
-        User user1 = new User();
-        user1.setDeleted( true );
-        user1.setEmail( "jane.doe@example.org" );
-        user1.setFirstName( "Jane" );
-        user1.setId( "42" );
-        user1.setLastName( "Doe" );
-        user1.setPassword( "iloveyou" );
-        user1.setPhoto( "alice.liddell@example.org" );
-        user1.setRole( role1 );
-        user1.setTimestamp( mock( Timestamp.class ) );
+        User user1 = getUser( role1 );
 
-        Comment comment1 = new Comment();
-        comment1.setBody( "Not all who wander are lost" );
-        comment1.setDeleted( true );
-        comment1.setId( "42" );
-        comment1.setNews( news1 );
-        comment1.setTimestamp( mock( Timestamp.class ) );
-        comment1.setUser( user1 );
+        Comment comment1 = getComment( news1, user1 );
         assertSame( comment, commentServiceImpl.actualizarComment( comment1 ) );
         verify( commentRepository ).save( any() );
     }
@@ -794,23 +451,9 @@ class CommentServiceImplTest {
         ArrayList<Comment> commentList = new ArrayList<>();
         when( commentRepository.findByNews( any() ) ).thenReturn( commentList );
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
         Optional<News> ofResult = Optional.of( news );
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         List<Comment> actualCommentsByPostResult = commentServiceImpl.commentsByPost( "42" );
@@ -829,23 +472,9 @@ class CommentServiceImplTest {
         when( commentRepository.findByNews( any() ) )
                 .thenThrow( new RecordException.RecordNotFoundException( "An error occurred" ) );
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory();
 
-        News news = new News();
-        news.setCategory( category );
-        news.setComments( new HashSet<>() );
-        news.setContent( "Not all who wander are lost" );
-        news.setId( "42" );
-        news.setImage( "Image" );
-        news.setName( "Name" );
-        news.setSoftDelete( true );
-        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        News news = getNews( category );
         Optional<News> ofResult = Optional.of( news );
         when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
         assertThrows( RecordException.RecordNotFoundException.class, () -> commentServiceImpl.commentsByPost( "42" ) );

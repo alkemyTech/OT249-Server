@@ -48,13 +48,7 @@ class ContactServiceImplTest {
 
         doNothing().when( emailServiceImpl ).sendEmailToContact( any(), any() );
 
-        Contact contact = new Contact();
-        contact.setDeleted( true );
-        contact.setEmail( "jane.doe@example.org" );
-        contact.setId( "42" );
-        contact.setMessage( "Not all who wander are lost" );
-        contact.setName( "Name" );
-        contact.setPhone( "4105551212" );
+        Contact contact = getContact();
         when( contactRepository.save( any() ) ).thenReturn( contact );
         ContactDto contactDto = new ContactDto( "Name", "4105551212", "jane.doe@example.org",
                 "Not all who wander are lost" );
@@ -65,15 +59,8 @@ class ContactServiceImplTest {
         verify( contactRepository ).save( any() );
     }
 
-    /**
-     * Method under test: {@link ContactServiceImpl#saveContact(ContactDto)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testSaveContact2() {
-        // TODO: Complete this test.
 
-        doNothing().when( emailServiceImpl ).sendEmailToContact( any(), any() );
+    private static Contact getContact() {
 
         Contact contact = new Contact();
         contact.setDeleted( true );
@@ -82,8 +69,7 @@ class ContactServiceImplTest {
         contact.setMessage( "Not all who wander are lost" );
         contact.setName( "Name" );
         contact.setPhone( "4105551212" );
-        when( contactRepository.save( any() ) ).thenReturn( contact );
-        contactServiceImpl.saveContact( null );
+        return contact;
     }
 
     /**
@@ -103,13 +89,7 @@ class ContactServiceImplTest {
     @Test
     void testGetAllContacts2() {
 
-        Contact contact = new Contact();
-        contact.setDeleted( true );
-        contact.setEmail( "jane.doe@example.org" );
-        contact.setId( "42" );
-        contact.setMessage( "Not all who wander are lost" );
-        contact.setName( "Name" );
-        contact.setPhone( "4105551212" );
+        Contact contact = getContact();
 
         ArrayList<Contact> contactList = new ArrayList<>();
         contactList.add( contact );
@@ -125,21 +105,9 @@ class ContactServiceImplTest {
     @Test
     void testGetAllContacts3() {
 
-        Contact contact = new Contact();
-        contact.setDeleted( true );
-        contact.setEmail( "jane.doe@example.org" );
-        contact.setId( "42" );
-        contact.setMessage( "Not all who wander are lost" );
-        contact.setName( "Name" );
-        contact.setPhone( "4105551212" );
+        Contact contact = getContact();
 
-        Contact contact1 = new Contact();
-        contact1.setDeleted( true );
-        contact1.setEmail( "jane.doe@example.org" );
-        contact1.setId( "42" );
-        contact1.setMessage( "Not all who wander are lost" );
-        contact1.setName( "Name" );
-        contact1.setPhone( "4105551212" );
+        Contact contact1 = getContact();
 
         ArrayList<Contact> contactList = new ArrayList<>();
         contactList.add( contact1 );

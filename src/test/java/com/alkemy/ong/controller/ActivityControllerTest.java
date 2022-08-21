@@ -4,9 +4,9 @@ import com.alkemy.ong.dto.ActivityDto;
 import com.alkemy.ong.model.Activity;
 import com.alkemy.ong.service.ActivityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.MediaType;
@@ -25,8 +25,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 class ActivityControllerTest {
 
-    @Autowired
+
     private ActivityController activityController;
+
+    @BeforeEach
+    void setUp() {
+        activityController = new ActivityController( activityService );
+    }
 
     @MockBean
     private ActivityService activityService;
@@ -36,30 +41,14 @@ class ActivityControllerTest {
      */
     @Test
     void testActualizarActividad() throws Exception {
-        Activity activity = new Activity();
-        activity.setContent( "Not all who wander are lost" );
-        activity.setDeleted( true );
-        activity.setId( "42" );
-        activity.setImage( "Image" );
-        activity.setName( "Name" );
-        activity.setTimestamp( mock( Timestamp.class ) );
         Timestamp timestamp = mock( Timestamp.class );
-        when( timestamp.getTime() ).thenReturn( 10L );
+        Activity activity = getActivity( timestamp );
 
-        Activity activity1 = new Activity();
-        activity1.setContent( "Not all who wander are lost" );
-        activity1.setDeleted( true );
-        activity1.setId( "42" );
-        activity1.setImage( "Image" );
-        activity1.setName( "Name" );
-        activity1.setTimestamp( timestamp );
+        Activity activity1 = getActivity1( timestamp );
         when( activityService.crearActivity( any() ) ).thenReturn( activity1 );
         when( activityService.findById( any() ) ).thenReturn( activity );
 
-        ActivityDto activityDto = new ActivityDto();
-        activityDto.setContent( "Not all who wander are lost" );
-        activityDto.setImage( "Image" );
-        activityDto.setName( "Name" );
+        ActivityDto activityDto = getActivityDto();
         String content = (new ObjectMapper()).writeValueAsString( activityDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/activities/{id}", "42" )
                 .contentType( MediaType.APPLICATION_JSON )
@@ -75,6 +64,34 @@ class ActivityControllerTest {
                                         + "\":true}" ) );
     }
 
+    private static ActivityDto getActivityDto() {
+
+        ActivityDto activityDto = new ActivityDto();
+        activityDto.setContent( "Not all who wander are lost" );
+        activityDto.setImage( "Image" );
+        activityDto.setName( "Name" );
+        return activityDto;
+    }
+
+    private static Activity getActivity1(Timestamp timestamp) {
+
+        Activity activity1 = new Activity();
+        activity1.setContent( "Not all who wander are lost" );
+        activity1.setDeleted( true );
+        activity1.setId( "42" );
+        activity1.setImage( "Image" );
+        activity1.setName( "Name" );
+        activity1.setTimestamp( timestamp );
+        return activity1;
+    }
+
+    private static Activity getActivity(Timestamp timestamp) {
+
+        Activity activity = getActivity1( timestamp );
+        when( timestamp.getTime() ).thenReturn( 10L );
+        return activity;
+    }
+
     /**
      * Method under test: {@link ActivityController#actualizarActividad(ActivityDto, String)}
      */
@@ -82,10 +99,7 @@ class ActivityControllerTest {
     void testActualizarActividad2() throws Exception {
         when( activityService.findById( any() ) ).thenReturn( null );
 
-        ActivityDto activityDto = new ActivityDto();
-        activityDto.setContent( "Not all who wander are lost" );
-        activityDto.setImage( "Image" );
-        activityDto.setName( "Name" );
+        ActivityDto activityDto = getActivityDto();
         String content = (new ObjectMapper()).writeValueAsString( activityDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/activities/{id}", "42" )
                 .contentType( MediaType.APPLICATION_JSON )
@@ -103,23 +117,11 @@ class ActivityControllerTest {
      */
     @Test
     void testActualizarActividad3() throws Exception {
-        Activity activity = new Activity();
-        activity.setContent( "Not all who wander are lost" );
-        activity.setDeleted( true );
-        activity.setId( "42" );
-        activity.setImage( "Image" );
-        activity.setName( "Name" );
-        activity.setTimestamp( mock( Timestamp.class ) );
         Timestamp timestamp = mock( Timestamp.class );
+        Activity activity = getActivity1( timestamp );
         when( timestamp.getTime() ).thenReturn( 10L );
 
-        Activity activity1 = new Activity();
-        activity1.setContent( "Not all who wander are lost" );
-        activity1.setDeleted( true );
-        activity1.setId( "42" );
-        activity1.setImage( "Image" );
-        activity1.setName( "Name" );
-        activity1.setTimestamp( timestamp );
+        getActivity1( timestamp );
         when( activityService.crearActivity( any() ) ).thenThrow( new DataAccessException("error" ) {
             @Override
             public String getMessage() {
@@ -129,10 +131,7 @@ class ActivityControllerTest {
         } );
         when( activityService.findById( any() ) ).thenReturn( activity );
 
-        ActivityDto activityDto = new ActivityDto();
-        activityDto.setContent( "Not all who wander are lost" );
-        activityDto.setImage( "Image" );
-        activityDto.setName( "Name" );
+        ActivityDto activityDto = getActivityDto();
         String content = (new ObjectMapper()).writeValueAsString( activityDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/activities/{id}", "42" )
                 .contentType( MediaType.APPLICATION_JSON )
@@ -152,19 +151,10 @@ class ActivityControllerTest {
         Timestamp timestamp = mock( Timestamp.class );
         when( timestamp.getTime() ).thenReturn( 10L );
 
-        Activity activity = new Activity();
-        activity.setContent( "Not all who wander are lost" );
-        activity.setDeleted( true );
-        activity.setId( "42" );
-        activity.setImage( "Image" );
-        activity.setName( "Name" );
-        activity.setTimestamp( timestamp );
+        Activity activity = getActivity1( timestamp );
         when( activityService.crearActivity( any() ) ).thenReturn( activity );
 
-        ActivityDto activityDto = new ActivityDto();
-        activityDto.setContent( "Not all who wander are lost" );
-        activityDto.setImage( "Image" );
-        activityDto.setName( "Name" );
+        ActivityDto activityDto = getActivityDto();
         String content = (new ObjectMapper()).writeValueAsString( activityDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/activities" )
                 .contentType( MediaType.APPLICATION_JSON )

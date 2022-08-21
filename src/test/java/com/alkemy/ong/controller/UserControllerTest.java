@@ -40,6 +40,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 
 class UserControllerTest {
+    @MockBean
+    private UserService userService;
 
     @MockBean
     private IRoleService iRoleService;
@@ -124,8 +126,6 @@ class UserControllerTest {
                                 "{\"content\":[],\"pageable\":{\"sort\":{\"sorted\":true,\"unsorted\":false,\"empty\":false},\"pageNumber\":0,\"pageSize\":10,\"offset\":0,\"paged\":true,\"unpaged\":false},\"totalElements\":0,\"totalPages\":0,\"last\":true,\"numberOfElements\":0,\"size\":10,\"number\":0,\"first\":true,\"sort\":{\"sorted\":true,\"unsorted\":false,\"empty\":false},\"empty\":true}\n" ) );
     }
 
-    @MockBean
-    private UserService userService;
 
     /**
      * Method under test: {@link UserController#registrarUsuario(UserDto)}
@@ -133,43 +133,17 @@ class UserControllerTest {
     @Test
     void testRegistrarUsuario() throws Exception {
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
+        Role role = getRole();
         when( iRoleService.getRoleById( anyString() ) ).thenReturn( role );
 
-        Role role1 = new Role();
-        role1.setDescription( "The characteristics of someone or something" );
-        role1.setId( "42" );
-        role1.setName( "Name" );
-        role1.setTimestamp( mock( Timestamp.class ) );
-        role1.setUsers( new HashSet<>() );
+        Role role1 = getRole();
 
-        User user = new User();
-        user.setDeleted( true );
-        user.setEmail( "jane.doe@example.org" );
-        user.setFirstName( "Jane" );
-        user.setId( "42" );
-        user.setLastName( "Doe" );
-        user.setPassword( "iloveyou" );
-        user.setPhoto( "alice.liddell@example.org" );
-        user.setRole( role1 );
-        user.setTimestamp( mock( Timestamp.class ) );
+        User user = getUser( role1 );
         when( userService.login( any() ) ).thenReturn( new UserResponseDto( "Jwt" ) );
         when( userService.guardarUsuario( any() ) ).thenReturn( user );
         when( passwordEncoder.encode( any() ) ).thenReturn( "secret" );
 
-        UserDto userDto = new UserDto();
-        userDto.setDeleted( true );
-        userDto.setEmail( "jane.doe@example.org" );
-        userDto.setFirstName( "Jane" );
-        userDto.setLastName( "Doe" );
-        userDto.setPassword( "iloveyou" );
-        userDto.setPhoto( "alice.liddell@example.org" );
-        userDto.setRole( new RoleDto() );
+        UserDto userDto = getUserDto();
         String content = (new ObjectMapper()).writeValueAsString( userDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/auth/register" )
                 .contentType( MediaType.APPLICATION_JSON )
@@ -184,26 +158,20 @@ class UserControllerTest {
                 .andExpect( MockMvcResultMatchers.content().json( "{\"jwt\":\"Jwt\"}" ) );
     }
 
-    /**
-     * Method under test: {@link UserController#registrarUsuario(UserDto)}
-     */
-    @Test
-    void testRegistrarUsuario2() throws Exception {
+    private static UserDto getUserDto() {
 
-        Role role = new Role();
-        role.setDescription( "The characteristics of someone or something" );
-        role.setId( "42" );
-        role.setName( "Name" );
-        role.setTimestamp( mock( Timestamp.class ) );
-        role.setUsers( new HashSet<>() );
-        when( iRoleService.getRoleById( anyString() ) ).thenReturn( role );
+        UserDto userDto = new UserDto();
+        userDto.setDeleted( true );
+        userDto.setEmail( "jane.doe@example.org" );
+        userDto.setFirstName( "Jane" );
+        userDto.setLastName( "Doe" );
+        userDto.setPassword( "iloveyou" );
+        userDto.setPhoto( "alice.liddell@example.org" );
+        userDto.setRole( new RoleDto() );
+        return userDto;
+    }
 
-        Role role1 = new Role();
-        role1.setDescription( "The characteristics of someone or something" );
-        role1.setId( "42" );
-        role1.setName( "Name" );
-        role1.setTimestamp( mock( Timestamp.class ) );
-        role1.setUsers( new HashSet<>() );
+    private static User getUser(Role role1) {
 
         User user = new User();
         user.setDeleted( true );
@@ -215,18 +183,37 @@ class UserControllerTest {
         user.setPhoto( "alice.liddell@example.org" );
         user.setRole( role1 );
         user.setTimestamp( mock( Timestamp.class ) );
+        return user;
+    }
+
+    private static Role getRole() {
+
+        Role role = new Role();
+        role.setDescription( "The characteristics of someone or something" );
+        role.setId( "42" );
+        role.setName( "Name" );
+        role.setTimestamp( mock( Timestamp.class ) );
+        role.setUsers( new HashSet<>() );
+        return role;
+    }
+
+    /**
+     * Method under test: {@link UserController#registrarUsuario(UserDto)}
+     */
+    @Test
+    void testRegistrarUsuario2() throws Exception {
+
+        Role role = getRole();
+        when( iRoleService.getRoleById( anyString() ) ).thenReturn( role );
+
+        Role role1 = getRole();
+
+        User user = getUser( role1 );
         when( userService.login(  any() ) ).thenReturn( new UserResponseDto( "Jwt" ) );
         when( userService.guardarUsuario(  any() ) ).thenReturn( user );
         when( passwordEncoder.encode( any() ) ).thenReturn( "secret" );
 
-        UserDto userDto = new UserDto();
-        userDto.setDeleted( true );
-        userDto.setEmail( "jane.doe@example.org" );
-        userDto.setFirstName( "Jane" );
-        userDto.setLastName( "Doe" );
-        userDto.setPassword( "iloveyou" );
-        userDto.setPhoto( "alice.liddell@example.org" );
-        userDto.setRole( new RoleDto() );
+        UserDto userDto = getUserDto();
         String content = (new ObjectMapper()).writeValueAsString( userDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/auth/register" )
                 .contentType( MediaType.APPLICATION_JSON )

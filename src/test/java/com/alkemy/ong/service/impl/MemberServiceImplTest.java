@@ -5,12 +5,14 @@ import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.model.Member;
 import com.alkemy.ong.repository.MemberRepository;
 import com.alkemy.ong.utils.PageUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,7 +27,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {MemberServiceImpl.class})
@@ -62,17 +65,6 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#getAllMembers(int, String)}
      */
     @Test
-    @Disabled("TODO: Complete this test")
-    void test_GetAllMembers() {
-
-        when( memberRepository.findAll( any( Pageable.class ) ) ).thenReturn( new PageImpl<>( new ArrayList<>() ) );
-        memberServiceImpl.getAllMembers( 1, "Order" );
-    }
-
-    /**
-     * Method under test: {@link MemberServiceImpl#getAllMembers(int, String)}
-     */
-    @Test
     void test_GetAllMembers2() {
 
         ArrayList<Member> members = new ArrayList<>();
@@ -84,18 +76,6 @@ class MemberServiceImplTest {
         when( memberRepository.findAll( any( Pageable.class ) ) ).thenReturn( memberPageDto );
         PageDto<MemberDto> allMembers = memberServiceImpl.getAllMembers( 1, "Order" );
         assertThat( allMembers ).isNotNull();
-    }
-
-    /**
-     * Method under test: {@link MemberServiceImpl#getAllMembers(int, String)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void test_GetAllMembers3() {
-
-        PageDto<Member> memberPageDto = new PageDto<>( new ArrayList<>(), PageUtils.getPageable( 0, "asc" ), 0 );
-        when( memberRepository.findAll( any( Pageable.class ) ) ).thenReturn( memberPageDto );
-        PageDto<MemberDto> allMembers = memberServiceImpl.getAllMembers( -1, "Order" );
     }
 
     /**
@@ -163,22 +143,6 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#updateMember(MemberDto, String)}
      */
     @Test
-    @Disabled("TODO: Complete this test")
-    void test_UpdateMember2() throws EntityNotFoundException {
-        // TODO: Complete this test.
-
-        Member member = getMember();
-
-        Member member1 = getMember();
-        when( memberRepository.getById( anyString() ) ).thenReturn( member );
-        when( memberRepository.save( any() ) ).thenReturn( member1 );
-        String updateMember = memberServiceImpl.updateMember( null, "42" );
-    }
-
-    /**
-     * Method under test: {@link MemberServiceImpl#updateMember(MemberDto, String)}
-     */
-    @Test
     void test_UpdateMember3() throws EntityNotFoundException {
 
         Member member = getMember();
@@ -220,14 +184,14 @@ class MemberServiceImplTest {
         verify( memberRepository ).save( any() );
         assertEquals( "The characteristics of someone or something", member1.getDescription() );
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
-        assertEquals( "2017-02-03", simpleDateFormat.format( member1.getTimestamp() ) );
-        assertEquals( "Name", member1.getName() );
-        assertEquals( "https://example.org/example", member1.getLinkedinUrl() );
-        assertTrue( member1.getIsDelete() );
-        assertEquals( "https://example.org/example", member1.getInstagramUrl() );
-        assertEquals( "Image", member1.getImage() );
-        assertEquals( "42", member1.getId() );
-        assertEquals( "https://example.org/example", member1.getFacebookUrl() );
+        assertThat(  simpleDateFormat.format( member1.getTimestamp() ) ).isEqualTo( "2017-02-03" );
+        assertThat(  member1.getName() ).isEqualTo("Name");
+        assertThat( member1.getLinkedinUrl() ).isEqualTo( "https://example.org/example" );
+        assertThat( member1.getIsDelete() ).isFalse();
+        assertThat( member1.getInstagramUrl() ).isEqualTo( "https://example.org/example" );
+        assertThat( member1.getImage() ).isEqualTo( "Image" );
+        assertThat(  member1.getId() ).isEqualTo( "42" );
+        assertThat( member1.getFacebookUrl() ).isEqualTo( "https://example.org/example" );
     }
 
     private static Member getMember() {
@@ -238,7 +202,7 @@ class MemberServiceImplTest {
         member.setFacebookUrl( "https://example.org/example" );
         member.setImage( "Image" );
         member.setInstagramUrl( "https://example.org/example" );
-        member.setIsDelete( true );
+        member.setIsDelete( false );
         member.setLinkedinUrl( "https://example.org/example" );
         member.setName( "Name" );
         member.setTimestamp( Timestamp.from( Instant.parse( "2017-02-03T10:37:30.00Z" ) ));
@@ -286,34 +250,6 @@ class MemberServiceImplTest {
         assertThat( fillEntity.getInstagramUrl() ).isNotNull().isNotBlank().isEqualTo( member.getInstagramUrl() );
         assertThat( fillEntity.getLinkedinUrl() ).isNotNull().isNotBlank().isEqualTo( member.getLinkedinUrl() );
         assertThat( fillEntity ).isSameAs( member );
-    }
-
-    /**
-     * Method under test: {@link MemberServiceImpl#fillEntity(Member, MemberDto)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testFillEntity3() {
-
-        Member member = getMember();
-        memberServiceImpl.fillEntity( member, null );
-    }
-
-    /**
-     * Method under test: {@link MemberServiceImpl#fillEntity(Member, MemberDto)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testFillEntity4() {
-
-        Member member = getMember();
-        MemberDto memberDto = new MemberDto( "42", "Name", "https://example.org/example", "https://example.org/example",
-                "https://example.org/example", "Image", "The characteristics of someone or something", member.getTimestamp()
-                , true );
-        Member fillEntity = memberServiceImpl.fillEntity( member,
-                memberDto );
-
-
     }
 }
 

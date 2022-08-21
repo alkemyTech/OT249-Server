@@ -48,7 +48,7 @@ class SlideControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content().string( "[]" ) );
     }
 
@@ -65,7 +65,7 @@ class SlideControllerTest {
                 .build()
                 .perform( getResult )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content().string( "[]" ) );
     }
 
@@ -81,7 +81,7 @@ class SlideControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content()
                         .string(
                                 "{\"id\":null,\"imageUrl\":null,\"text\":null,\"position\":null,\"publicOrganizationDto\":null}" ) );
@@ -100,7 +100,7 @@ class SlideControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content().string( "[]" ) );
     }
 
@@ -158,7 +158,7 @@ class SlideControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content()
                         .string(
                                 "{\"id\":null,\"imageUrl\":null,\"text\":null,\"position\":null,\"publicOrganizationDto\":null}" ) );
@@ -210,7 +210,7 @@ class SlideControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content().json( "{\"id\":null,\"imageUrl\":null,\"text\":null,\"position\":null,\"publicOrganizationDto\":null}" ) );
     }
 }

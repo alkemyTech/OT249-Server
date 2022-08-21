@@ -55,27 +55,10 @@ class CategoryControllerTest {
     @Test
     void test_CrearCategoria() throws Exception {
 
-        Timestamp timestamp = mock( Timestamp.class );
-        when( timestamp.getTime() ).thenReturn( 10L );
-
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( timestamp );
+        Category category = getCategory( );
         when( categoryService.createCategory( any() ) ).thenReturn( category );
-        Timestamp timestamp1 = mock( Timestamp.class );
-        when( timestamp1.getTime() ).thenReturn( 10L );
 
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setDeleted( true );
-        categoryDto.setDescription( "The characteristics of someone or something" );
-        categoryDto.setId( "42" );
-        categoryDto.setImage( "Image" );
-        categoryDto.setName( "Name" );
-        categoryDto.setTimestamp( timestamp1 );
+        CategoryDto categoryDto = getCategoryDto( );
         String content = (new ObjectMapper()).writeValueAsString( categoryDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/categories" )
                 .contentType( MediaType.APPLICATION_JSON )
@@ -89,6 +72,35 @@ class CategoryControllerTest {
                         .json(
                                 "{\"id\":\"42\",\"name\":\"Name\",\"description\":\"The characteristics of someone or something\",\"image\":\"Image\""
                                         + ",\"timestamp\":10,\"deleted\":true}" ) );
+    }
+
+    private static CategoryDto getCategoryDto() {
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
+
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setDeleted( true );
+        categoryDto.setDescription( "The characteristics of someone or something" );
+        categoryDto.setId( "42" );
+        categoryDto.setImage( "Image" );
+        categoryDto.setName( "Name" );
+        categoryDto.setTimestamp( timestamp );
+        return categoryDto;
+    }
+
+    private static Category getCategory() {
+
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
+
+        Category category = new Category();
+        category.setDeleted( true );
+        category.setDescription( "The characteristics of someone or something" );
+        category.setId( "42" );
+        category.setImage( "Image" );
+        category.setName( "Name" );
+        category.setTimestamp( timestamp );
+        return category;
     }
 
     /**
@@ -151,16 +163,8 @@ class CategoryControllerTest {
 
         doNothing().when( categoryService ).updateCategory( any(), anyString() );
         when( categoryRepository.existsById( anyString() ) ).thenReturn( true );
-        Timestamp timestamp = mock( Timestamp.class );
-        when( timestamp.getTime() ).thenReturn( 10L );
 
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setDeleted( true );
-        categoryDto.setDescription( "The characteristics of someone or something" );
-        categoryDto.setId( "42" );
-        categoryDto.setImage( "Image" );
-        categoryDto.setName( "Name" );
-        categoryDto.setTimestamp( timestamp );
+        CategoryDto categoryDto = getCategoryDto(  );
         String content = (new ObjectMapper()).writeValueAsString( categoryDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/categories/{id}", "42" )
                 .contentType( MediaType.APPLICATION_JSON )
@@ -181,16 +185,8 @@ class CategoryControllerTest {
 
         doNothing().when( categoryService ).updateCategory( any(), anyString() );
         when( categoryRepository.existsById( anyString() ) ).thenReturn( false );
-        Timestamp timestamp = mock( Timestamp.class );
-        when( timestamp.getTime() ).thenReturn( 10L );
 
-        CategoryDto categoryDto = new CategoryDto();
-        categoryDto.setDeleted( true );
-        categoryDto.setDescription( "The characteristics of someone or something" );
-        categoryDto.setId( "42" );
-        categoryDto.setImage( "Image" );
-        categoryDto.setName( "Name" );
-        categoryDto.setTimestamp( timestamp );
+        CategoryDto categoryDto = getCategoryDto(  );
         String content = (new ObjectMapper()).writeValueAsString( categoryDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/categories/{id}", "42" )
                 .contentType( MediaType.APPLICATION_JSON )
@@ -209,13 +205,7 @@ class CategoryControllerTest {
     @Test
     void test_GetCategoryDetails() throws Exception {
 
-        Category category = new Category();
-        category.setDeleted( true );
-        category.setDescription( "The characteristics of someone or something" );
-        category.setId( "42" );
-        category.setImage( "Image" );
-        category.setName( "Name" );
-        category.setTimestamp( mock( Timestamp.class ) );
+        Category category = getCategory( );
         when( categoryService.getCategory( any() ) ).thenReturn( category );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get( "/categories/{id}", "42" );
         MockMvcBuilders.standaloneSetup( categoryController )
@@ -225,7 +215,7 @@ class CategoryControllerTest {
                 .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
                 .andExpect( MockMvcResultMatchers.content()
                         .json(
-                                "{\"id\":\"42\",\"name\":\"Name\",\"description\":\"The characteristics of someone or something\",\"image\":\"Image\",\"timestamp\":0,\"deleted\":true}" ) );
+                                "{\"id\":\"42\",\"name\":\"Name\",\"description\":\"The characteristics of someone or something\",\"image\":\"Image\",\"timestamp\":10,\"deleted\":true}" ) );
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.alkemy.ong.exceptions;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
 import org.springframework.validation.BindingResult;
@@ -33,17 +32,6 @@ class UserControllerExTest {
         Map<String, String> handleValidateExceptions = userControllerEx
                 .handleValidateExceptions( new MethodArgumentNotValidException( mock( MethodParameter.class ), bindingResult ) );
         assertThat( handleValidateExceptions ).isNotNull().isNotEmpty().hasSize( 1 );
-    }
-
-    /**
-     * Method under test: {@link UserControllerEx#handleValidateExceptions(MethodArgumentNotValidException)}
-     */
-    @Test
-    @Disabled("TODO: Complete this test")
-    void testHandleValidateExceptions2() {
-        // TODO: Complete this test.
-
-        (new UserControllerEx()).handleValidateExceptions( null );
     }
 
     /**
