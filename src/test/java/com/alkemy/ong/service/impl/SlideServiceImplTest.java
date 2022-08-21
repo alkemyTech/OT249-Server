@@ -320,11 +320,11 @@ class SlideServiceImplTest {
         slide.setText( "Text" );
         Optional<Slide> ofResult = Optional.of( slide );
         when( slideRepository.save( any() ) )
-                .thenThrow( new RecordException.RecordNotFoundException( "An error occurred" ) );
-        when( slideRepository.findById( anyString() ) ).thenReturn( ofResult );
-        assertThrows( RecordException.RecordNotFoundException.class,
+                .thenReturn( Optional.empty());
+        when( slideRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
+        assertThrows( Exception.class,
                 () -> slideServiceImpl.update( "42", new SlideRequestDto() ) );
-        verify( slideRepository ).save( any() );
+        verify( slideRepository, atMost( 0 ) ).save( any() );
         verify( slideRepository ).findById( anyString() );
     }
 
@@ -395,6 +395,67 @@ class SlideServiceImplTest {
     }
 
 
+    /**
+     * Method under test: {@link SlideServiceImpl#update(String, SlideRequestDto)}
+     */
+    @Test
+    void testUpdate4() throws Exception {
+        // TODO: Complete this test.
+
+        Organization organization = new Organization();
+        organization.setAboutUsText( "About Us Text" );
+        organization.setAddress( "42 Main St" );
+        organization.setDeleted( true );
+        organization.setEmail( "jane.doe@example.org" );
+        organization.setId( "42" );
+        organization.setImage( "Image" );
+        organization.setName( "Name" );
+        organization.setPhone( "4105551212" );
+        organization.setTimestamp( mock( Timestamp.class ) );
+        organization.setUrlFacebook( "https://example.org/example" );
+        organization.setUrlInstagram( "https://example.org/example" );
+        organization.setUrlLinkedin( "https://example.org/example" );
+        organization.setWelcomeText( "Welcome Text" );
+
+        Slide slide = new Slide();
+        slide.setId( "42" );
+        slide.setImageUrl( "https://example.org/example" );
+        slide.setOrganization( organization );
+        slide.setPosition( 1 );
+        slide.setText( "Text" );
+        Optional<Slide> ofResult = Optional.of( slide );
+
+        Organization organization1 = new Organization();
+        organization1.setAboutUsText( "About Us Text" );
+        organization1.setAddress( "42 Main St" );
+        organization1.setDeleted( true );
+        organization1.setEmail( "jane.doe@example.org" );
+        organization1.setId( "42" );
+        organization1.setImage( "Image" );
+        organization1.setName( "Name" );
+        organization1.setPhone( "4105551212" );
+        organization1.setTimestamp( mock( Timestamp.class ) );
+        organization1.setUrlFacebook( "https://example.org/example" );
+        organization1.setUrlInstagram( "https://example.org/example" );
+        organization1.setUrlLinkedin( "https://example.org/example" );
+        organization1.setWelcomeText( "Welcome Text" );
+
+        Slide slide1 = new Slide();
+        slide1.setId( "42" );
+        slide1.setImageUrl( "https://example.org/example" );
+        slide1.setOrganization( organization1 );
+        slide1.setPosition( 1 );
+        slide1.setText( "Text" );
+        when( slideRepository.save( any() ) ).thenReturn( slide1 );
+
+        when(organizationRepository.findById( anyString() ) ).thenReturn( Optional.of( new Organization() ) );
+        when( slideRepository.findById( anyString() ) ).thenReturn( ofResult );
+        SlideRequestDto slideRequestDto = new SlideRequestDto();
+        SlideResponseDto slideResponseDto = slideServiceImpl.update( "42", slideRequestDto );
+
+
+        assertThat( slideResponseDto ).isNotNull();
+    }
     /**
      * Method under test: {@link SlideServiceImpl#update(String, SlideRequestDto)}
      */
