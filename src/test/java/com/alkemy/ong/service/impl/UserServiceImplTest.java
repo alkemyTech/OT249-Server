@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -481,6 +482,22 @@ class UserServiceImplTest {
      */
     @Test
     @WithMockUser(roles = {"ADMIN"})
+    void testValidarId4() throws Exception {
+        // TODO: Complete this test.
+        User user = new User();
+        user.setId( "ddd" );
+        Role role = new Role();
+        role.setName( "USER" );
+        user.setRole( role );
+        when( userRepository.findByEmail( anyString() ) ).
+                thenReturn( Optional.empty( ) );
+        assertThatThrownBy(  () ->userServiceImpl.validarId( "42" )).isInstanceOf( Exception.class );
+    }
+    /**
+     * Method under test: {@link UserServiceImpl#validarId(String)}
+     */
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
     void testValidarId2() throws Exception {
         // TODO: Complete this test.
         User user = new User();
@@ -503,6 +520,17 @@ class UserServiceImplTest {
 when( userRepository.findByEmail( any() ) ).thenReturn( Optional.of( new User() ) );
         UserDto userDto = userServiceImpl.authenticatedUser();
         assertThat( userDto ).isNotNull();
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#authenticatedUser()}
+     */
+    @Test
+    @WithMockUser()
+    void testAuthenticatedUser2() throws Exception {
+        // TODO: Complete this test.
+        when( userRepository.findByEmail( any() ) ).thenReturn( Optional.empty( ) );
+        assertThatThrownBy(  () ->userServiceImpl.authenticatedUser()).isInstanceOf( Exception.class );
     }
 }
 
