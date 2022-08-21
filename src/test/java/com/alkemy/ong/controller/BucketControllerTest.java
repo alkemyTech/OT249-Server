@@ -1,7 +1,6 @@
 package com.alkemy.ong.controller;
 
-import com.alkemy.ong.service.AmazonClient;
-import com.alkemy.ong.utils.CustomMultipartFile;
+import com.alkemy.ong.service.impl.AmazonClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -19,8 +18,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.MultipartFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = BucketController.class)
@@ -28,14 +27,14 @@ import static org.mockito.Mockito.*;
 class BucketControllerTest {
 
     @MockBean
-    AmazonClient amazonClient;
+    AmazonClientImpl amazonClientImpl;
 
     BucketController bucketController;
 
     @BeforeEach
     void setUp() {
 
-        bucketController = new BucketController( amazonClient );
+        bucketController = new BucketController( amazonClientImpl );
 
     }
 
@@ -46,7 +45,7 @@ class BucketControllerTest {
 
     void testUploadFile() throws Exception {
 
-        when( amazonClient.uploadFile( any() ) ).thenReturn( "Result" );
+        when( amazonClientImpl.uploadFile( any() ) ).thenReturn( "Result" );
 
         MockMultipartFile mockMultipartFile = new MockMultipartFile( "file","file.text",
                 MediaType.MULTIPART_FORM_DATA_VALUE, "test data".getBytes() );

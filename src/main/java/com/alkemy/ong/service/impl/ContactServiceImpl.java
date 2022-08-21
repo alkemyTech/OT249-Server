@@ -4,7 +4,6 @@ import com.alkemy.ong.dto.ContactDto;
 import com.alkemy.ong.model.Contact;
 import com.alkemy.ong.repository.ContactRepository;
 import com.alkemy.ong.service.ContactService;
-import com.alkemy.ong.service.EmailService;
 
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,7 +23,7 @@ public class ContactServiceImpl implements ContactService {
     ContactRepository contactRepository;
     
     @Autowired
-    private EmailService emailService;
+    private EmailServiceImpl emailServiceImpl;
     
     @Override
     public Contact getContact() {
@@ -37,7 +36,7 @@ public class ContactServiceImpl implements ContactService {
         modelMapper.map(contactDto,contact);
         contact.setDeleted(false);
         contactRepository.save(contact);
-        emailService.sendEmailToContact(contactDto.getEmail(), contactDto.getName());
+        emailServiceImpl.sendEmailToContact(contactDto.getEmail(), contactDto.getName());
         return contactDto;
     }
 

@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import javax.validation.Valid;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import com.alkemy.ong.service.ActivityService;
 
 
 @RestController
+@AllArgsConstructor
 public class ActivityController {
 
 	@Autowired

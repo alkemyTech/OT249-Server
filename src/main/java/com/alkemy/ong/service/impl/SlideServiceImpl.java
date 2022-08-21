@@ -19,7 +19,6 @@ import com.alkemy.ong.dto.SlideDto;
 import com.alkemy.ong.dto.SlideRequestDto;
 import com.alkemy.ong.model.Slide;
 import com.alkemy.ong.repository.SlideRepository;
-import com.alkemy.ong.service.AmazonClient;
 import com.alkemy.ong.service.OrganizationService;
 import com.alkemy.ong.service.SlideService;
 
@@ -37,7 +36,7 @@ public class SlideServiceImpl implements SlideService {
     private OrganizationService organizationService;
 
     @Autowired
-    AmazonClient amazonClient;
+    AmazonClientImpl amazonClientImpl;
 
     @Autowired
     OrganizationRepository organizationRepository;
@@ -70,7 +69,7 @@ public class SlideServiceImpl implements SlideService {
 
         if (slideRequestDto.getBase64Img()!=null){
             CustomMultipartFile customMultipartFile = new CustomMultipartFile();
-            String fileUrl = amazonClient.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
+            String fileUrl = amazonClientImpl.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
             slide.setImageUrl(fileUrl);
         }
         if (slideRequestDto.getText()!=null){
@@ -112,7 +111,7 @@ public class SlideServiceImpl implements SlideService {
     @Override
     public SlideResponseDto save(SlideRequestDto slideRequestDto) {
         CustomMultipartFile customMultipartFile = new CustomMultipartFile();
-        String fileUrl = amazonClient.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
+        String fileUrl = amazonClientImpl.uploadFile(customMultipartFile.base64ToMultipart(slideRequestDto.getBase64Img()));
         if(slideRequestDto.getPosition() == null) {
             slideRequestDto.setPosition(this.lastPosition() + 1);
         }

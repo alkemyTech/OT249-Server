@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,7 +35,7 @@ public class JwtUtil {
             @Value("${jwt.authorities.key}") String AUTHORITIES_KEY,
             @Value("${jwt.secret}") String SECRET_KEY,
             @Value("${jwt.expiration}") int EXPIRATION_TIME,
-            UserService userService) {
+            @Lazy UserService userService) {
 
         this.AUTHORITIES_KEY = AUTHORITIES_KEY;
         this.SECRET_KEY = SECRET_KEY;

@@ -1,28 +1,14 @@
 package com.alkemy.ong.controller;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.alkemy.ong.dto.CreateCommentDto;
-import com.alkemy.ong.model.Category;
-import com.alkemy.ong.model.Comment;
-import com.alkemy.ong.model.News;
-import com.alkemy.ong.model.Role;
-import com.alkemy.ong.model.User;
+import com.alkemy.ong.model.*;
 import com.alkemy.ong.service.CommentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,6 +16,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {CommentController.class})
 @ExtendWith(SpringExtension.class)
@@ -169,6 +163,98 @@ class CommentControllerTest {
                                         + "\"timestamp\":10,\"deleted\":true},\"comments\":[],\"softDelete\":true}}" ) );
     }
 
+
+    /**
+     * Method under test: {@link CommentController#actualizarComment(String, CreateCommentDto)}
+     */
+    @Test
+    void testActualizarComment3() throws Exception {
+
+        Category category = new Category();
+        category.setDeleted( true );
+        category.setDescription( "The characteristics of someone or something" );
+        category.setId( "42" );
+        category.setImage( "Image" );
+        category.setName( "Name" );
+        category.setTimestamp( mock( Timestamp.class ) );
+
+        News news = new News();
+        news.setCategory( category );
+        news.setComments( new HashSet<>() );
+        news.setContent( "Not all who wander are lost" );
+        news.setId( "42" );
+        news.setImage( "Image" );
+        news.setName( "Name" );
+        news.setSoftDelete( true );
+        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+
+        Role role = new Role();
+        role.setDescription( "The characteristics of someone or something" );
+        role.setId( "42" );
+        role.setName( "Name" );
+        role.setTimestamp( mock( Timestamp.class ) );
+        role.setUsers( new HashSet<>() );
+
+        User user = new User();
+        user.setDeleted( true );
+        user.setEmail( "jane.doe@example.org" );
+        user.setFirstName( "Jane" );
+        user.setId( "42" );
+        user.setLastName( "Doe" );
+        user.setPassword( "iloveyou" );
+        user.setPhoto( "alice.liddell@example.org" );
+        user.setRole( role );
+        user.setTimestamp( mock( Timestamp.class ) );
+
+        Comment comment = new Comment();
+        comment.setBody( "Not all who wander are lost" );
+        comment.setDeleted( true );
+        comment.setId( "42" );
+        comment.setNews( news );
+        comment.setTimestamp( mock( Timestamp.class ) );
+        comment.setUser( user );
+        Timestamp timestamp = mock( Timestamp.class );
+        when( timestamp.getTime() ).thenReturn( 10L );
+
+
+        when( commentService.actualizarComment( any() ) ).thenThrow( new DataIntegrityViolationException("Error") );
+        when( commentService.findById( anyString() ) ).thenReturn( comment );
+
+        CreateCommentDto createCommentDto = new CreateCommentDto();
+        createCommentDto.setBody( "Not all who wander are lost" );
+        createCommentDto.setNews( "News" );
+        createCommentDto.setUser( "User" );
+        String content = (new ObjectMapper()).writeValueAsString( createCommentDto );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/comments/{id}", "42" )
+                .contentType( MediaType.APPLICATION_JSON )
+                .content( content );
+        MockMvcBuilders.standaloneSetup( commentController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( MockMvcResultMatchers.status().is5xxServerError() );
+    }
+    /**
+     * Method under test: {@link CommentController#actualizarComment(String, CreateCommentDto)}
+     */
+    @Test
+    void testActualizarComment2() throws Exception {
+
+        when( commentService.findById( anyString() ) ).thenReturn( null );
+
+        CreateCommentDto createCommentDto = new CreateCommentDto();
+        createCommentDto.setBody( "Not all who wander are lost" );
+        createCommentDto.setNews( "News" );
+        createCommentDto.setUser( "User" );
+        String content = (new ObjectMapper()).writeValueAsString( createCommentDto );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.put( "/comments/{id}", "42" )
+                .contentType( MediaType.APPLICATION_JSON )
+                .content( content );
+        MockMvcBuilders.standaloneSetup( commentController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( MockMvcResultMatchers.status().isNotFound() );
+    }
+
     /**
      * Method under test: {@link CommentController#commentsInThePost(String)}
      */
@@ -270,6 +356,62 @@ class CommentControllerTest {
                 .build()
                 .perform( requestBuilder )
                 .andExpect( MockMvcResultMatchers.status().isOk() );
+    }
+    /**
+     * Method under test: {@link CommentController#eliminarComment(String)}
+     */
+    @Test
+    void testEliminarComment2() throws Exception {
+
+        Category category = new Category();
+        category.setDeleted( true );
+        category.setDescription( "The characteristics of someone or something" );
+        category.setId( "42" );
+        category.setImage( "Image" );
+        category.setName( "Name" );
+        category.setTimestamp( mock( Timestamp.class ) );
+
+        News news = new News();
+        news.setCategory( category );
+        news.setComments( new HashSet<>() );
+        news.setContent( "Not all who wander are lost" );
+        news.setId( "42" );
+        news.setImage( "Image" );
+        news.setName( "Name" );
+        news.setSoftDelete( true );
+        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+
+        Role role = new Role();
+        role.setDescription( "The characteristics of someone or something" );
+        role.setId( "42" );
+        role.setName( "Name" );
+        role.setTimestamp( mock( Timestamp.class ) );
+        role.setUsers( new HashSet<>() );
+
+        User user = new User();
+        user.setDeleted( true );
+        user.setEmail( "jane.doe@example.org" );
+        user.setFirstName( "Jane" );
+        user.setId( "42" );
+        user.setLastName( "Doe" );
+        user.setPassword( "iloveyou" );
+        user.setPhoto( "alice.liddell@example.org" );
+        user.setRole( role );
+        user.setTimestamp( mock( Timestamp.class ) );
+
+        Comment comment = new Comment();
+        comment.setBody( "Not all who wander are lost" );
+        comment.setDeleted( true );
+        comment.setId( "42" );
+        comment.setNews( news );
+        comment.setTimestamp( mock( Timestamp.class ) );
+        comment.setUser( user );
+        when( commentService.findById( anyString() ) ).thenReturn( null );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.delete( "/comments/{id}", "42" );
+        MockMvcBuilders.standaloneSetup( commentController )
+                .build()
+                .perform( requestBuilder )
+                .andExpect( MockMvcResultMatchers.status().isNotFound() );
     }
 
     /**

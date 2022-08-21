@@ -1,35 +1,40 @@
 package com.alkemy.ong.service.impl;
 
 import com.alkemy.ong.dto.LoginRequestDTO;
+import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.dto.RoleDto;
 import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.model.Role;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
-import com.alkemy.ong.service.EmailService;
 import com.alkemy.ong.utils.JwtUtil;
+import com.alkemy.ong.utils.PageUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -41,18 +46,20 @@ class UserServiceImplTest {
     private AuthenticationManager authenticationManager;
 
     @MockBean
-    private EmailService emailService;
+    private EmailServiceImpl emailServiceImpl;
 
     @MockBean
     private JwtUtil jwtUtil;
 
-    @MockBean
+    @SpyBean
     private ModelMapper modelMapper;
 
     @MockBean
     private UserRepository userRepository;
 
+
     @Autowired
+    @InjectMocks
     private UserServiceImpl userServiceImpl;
 
     /**
@@ -61,7 +68,7 @@ class UserServiceImplTest {
     @Test
     void testGuardarUsuario()  {
 
-        doNothing().when( emailService ).WelcomeMail( anyString(), anyString() );
+        doNothing().when( emailServiceImpl ).WelcomeMail( anyString(), anyString() );
 
         Role role = new Role();
         role.setDescription( "The characteristics of someone or something" );
@@ -100,7 +107,7 @@ class UserServiceImplTest {
         user1.setRole( role1 );
         user1.setTimestamp( mock( Timestamp.class ) );
         assertSame( user, userServiceImpl.guardarUsuario( user1 ) );
-        verify( emailService ).WelcomeMail( anyString(), anyString() );
+        verify( emailServiceImpl ).WelcomeMail( anyString(), anyString() );
         verify( userRepository ).save( any() );
     }
 
@@ -110,7 +117,7 @@ class UserServiceImplTest {
     @Test
     void testGuardarUsuario2()  {
 
-        doThrow( new UsernameNotFoundException( "Msg" ) ).when( emailService ).WelcomeMail( anyString(), anyString() );
+        doThrow( new UsernameNotFoundException( "Msg" ) ).when( emailServiceImpl ).WelcomeMail( anyString(), anyString() );
 
         Role role = new Role();
         role.setDescription( "The characteristics of someone or something" );
@@ -149,7 +156,7 @@ class UserServiceImplTest {
         user1.setRole( role1 );
         user1.setTimestamp( mock( Timestamp.class ) );
         assertThrows( UsernameNotFoundException.class, () -> userServiceImpl.guardarUsuario( user1 ) );
-        verify( emailService ).WelcomeMail( anyString(), anyString() );
+        verify( emailServiceImpl ).WelcomeMail( anyString(), anyString() );
         verify( userRepository ).save( any() );
     }
 
@@ -157,12 +164,15 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#getAllUsers(int, String)}
      */
     @Test
-    @Disabled("TODO: Complete this test")
     void testGetAllUsers() {
         // TODO: Complete this test.
 
-        when( userRepository.findAll( (Pageable) any() ) ).thenReturn( new PageImpl<>( new ArrayList<>() ) );
-        userServiceImpl.getAllUsers( 1, "Order" );
+        ArrayList<User> arrayList = new ArrayList<>();
+        arrayList.add( new User() );
+        when( userRepository.findAll( any( Pageable.class) )).thenReturn( new PageImpl<>( arrayList, PageUtils.getPageable( 0,"" ),0 ) );
+        PageDto<UserDto> actualPage = userServiceImpl.getAllUsers( 1, "Order" );
+        assertThat(actualPage).isNotNull();
+
     }
 
     /**
@@ -244,6 +254,36 @@ class UserServiceImplTest {
         user.setTimestamp( mock( Timestamp.class ) );
         assertThrows( UsernameNotFoundException.class, () -> userServiceImpl.loadUserByUsername( "foo" ) );
         verifyNoInteractions( modelMapper );
+        verify( userRepository ).findByEmail(  any() );
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#loadUserByUsername(String)}
+     */
+    @Test
+    void testLoadUserByUsername3() throws UsernameNotFoundException {
+
+
+        Role role = new Role();
+        role.setDescription( "The characteristics of someone or something" );
+        role.setId( "42" );
+        role.setName( "Name" );
+        role.setTimestamp( mock( Timestamp.class ) );
+        role.setUsers( new HashSet<>() );
+        User user = new User();
+        user.setDeleted( false );
+        user.setEmail( "jane.doe@example.org" );
+        user.setFirstName( "Jane" );
+        user.setId( "42" );
+        user.setLastName( "Doe" );
+        user.setPassword( "iloveyou" );
+        user.setPhoto( "alice.liddell@example.org" );
+        user.setRole( role );
+        user.setTimestamp( mock( Timestamp.class ) );
+        when( userRepository.findByEmail( any() ) ).thenReturn( Optional.of( user ) );
+
+        assertThat( userServiceImpl.loadUserByUsername( "foo" ) ).isNotNull();
+        verify( modelMapper, atLeast( 2 )).map( any(), any() );
         verify( userRepository ).findByEmail(  any() );
     }
 
@@ -405,22 +445,64 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#validarId(String)}
      */
     @Test
-    @Disabled("TODO: Complete this test")
+    @WithMockUser(roles = {"ADMIN"})
     void testValidarId() throws Exception {
         // TODO: Complete this test.
-
-        userServiceImpl.validarId( "42" );
+        User user = new User();
+        Role role = new Role();
+        role.setName( "ADMIN" );
+        user.setRole( role );
+        when( userRepository.findByEmail( anyString() ) ).
+        thenReturn( Optional.of( user ) );
+        boolean validarId = userServiceImpl.validarId( "42" );
+        assertThat( validarId ).isTrue();
     }
 
+    /**
+     * Method under test: {@link UserServiceImpl#validarId(String)}
+     */
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void testValidarId3() throws Exception {
+        // TODO: Complete this test.
+        User user = new User();
+        user.setId( "ddd" );
+        Role role = new Role();
+        role.setName( "USER" );
+        user.setRole( role );
+        when( userRepository.findByEmail( anyString() ) ).
+                thenReturn( Optional.of( user ) );
+        boolean validarId = userServiceImpl.validarId( "42" );
+        assertThat( validarId ).isFalse();
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#validarId(String)}
+     */
+    @Test
+    @WithMockUser(roles = {"ADMIN"})
+    void testValidarId2() throws Exception {
+        // TODO: Complete this test.
+        User user = new User();
+        user.setId( "42" );
+        Role role = new Role();
+        role.setName( "USER" );
+        user.setRole( role );
+        when( userRepository.findByEmail( anyString() ) ).
+                thenReturn( Optional.of( user ) );
+        boolean validarId = userServiceImpl.validarId( "42" );
+        assertThat( validarId ).isTrue();
+    }
     /**
      * Method under test: {@link UserServiceImpl#authenticatedUser()}
      */
     @Test
-    @Disabled("TODO: Complete this test")
+    @WithMockUser()
     void testAuthenticatedUser() throws Exception {
         // TODO: Complete this test.
-
-        userServiceImpl.authenticatedUser();
+when( userRepository.findByEmail( any() ) ).thenReturn( Optional.of( new User() ) );
+        UserDto userDto = userServiceImpl.authenticatedUser();
+        assertThat( userDto ).isNotNull();
     }
 }
 

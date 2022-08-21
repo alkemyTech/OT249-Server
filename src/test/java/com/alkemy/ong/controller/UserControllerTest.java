@@ -261,12 +261,18 @@ class UserControllerTest {
         UserDto userDto = new UserDto();
         User value = new User();
         when( userService.findById( anyString() ) ).thenReturn( Optional.of( value ) );
+        when( userService.guardarUsuario( any() ) ).thenReturn(  value );
+        String writeValueAsString = (new ObjectMapper()).writeValueAsString( userDto );
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.patch( "/users/{id}", "42" )
-                .contentType( MediaType.APPLICATION_JSON ).content( (new ObjectMapper()).writeValueAsString( userDto ) );
+                .contentType( MediaType.APPLICATION_JSON ).content( writeValueAsString );
         ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( userController )
                 .build()
                 .perform( requestBuilder );
-        actualPerformResult.andExpect( MockMvcResultMatchers.status().is( 200 ) );
+        actualPerformResult.
+                andExpect( MockMvcResultMatchers.status().is( 200 ) )
+                .andExpect( MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON) )
+                .andExpect( MockMvcResultMatchers.content().json(writeValueAsString) )
+        ;
     }
 
     /**

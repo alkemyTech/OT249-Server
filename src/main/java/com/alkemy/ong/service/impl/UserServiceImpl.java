@@ -1,13 +1,9 @@
 package com.alkemy.ong.service.impl;
 
 
-import com.alkemy.ong.dto.LoginRequestDTO;
-import com.alkemy.ong.dto.RoleDto;
-import com.alkemy.ong.dto.UserDto;
-import com.alkemy.ong.dto.UserResponseDto;
+import com.alkemy.ong.dto.*;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
-import com.alkemy.ong.service.EmailService;
 import com.alkemy.ong.service.UserService;
 import com.alkemy.ong.utils.JwtUtil;
 import com.alkemy.ong.utils.PageUtils;
@@ -35,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepo;
 
 	@Autowired
-	private EmailService emailService;
+	private EmailServiceImpl emailServiceImpl;
 
 	@Autowired
     private AuthenticationManager authenticationManager;
@@ -52,13 +48,13 @@ public class UserServiceImpl implements UserService {
 
 		User userSaved = userRepo.save(user);
 
-		emailService.WelcomeMail(userSaved.getEmail(), user.getFirstName());
+		emailServiceImpl.WelcomeMail(userSaved.getEmail(), user.getFirstName());
 
 		return userSaved;
 	}
 
 	@Override
-	public Page<UserDto> getAllUsers(int page, String order) {
+	public PageDto<UserDto> getAllUsers(int page, String order) {
 
 		Page<User> users = userRepo.findAll( PageUtils.getPageable( page, order ) );
 		return PageUtils.getPageDto( users.map( user -> modelMapper.map( user, UserDto.UserPagedDto.class ) ), "users");

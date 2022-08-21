@@ -7,13 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.alkemy.ong.dto.CommentDto;
 import com.alkemy.ong.dto.CreateCommentDto;
@@ -474,6 +468,63 @@ class CommentServiceImplTest {
         createCommentDto.setUser( "User" );
         assertThrows( RecordException.RecordNotFoundException.class, () -> commentServiceImpl.create( createCommentDto ) );
         verify( commentRepository ).save( any() );
+        verify( newsRepository ).findById( anyString() );
+        verify( userRepository ).findById( anyString() );
+    }
+
+
+    /**
+     * Method under test: {@link CommentServiceImpl#create(CreateCommentDto)}
+     */
+    @Test
+    void testCreate4() {
+
+
+        Category category = new Category();
+        category.setDeleted( true );
+        category.setDescription( "The characteristics of someone or something" );
+        category.setId( "42" );
+        category.setImage( "Image" );
+        category.setName( "Name" );
+        category.setTimestamp( mock( Timestamp.class ) );
+
+        News news = new News();
+        news.setCategory( category );
+        news.setComments( new HashSet<>() );
+        news.setContent( "Not all who wander are lost" );
+        news.setId( "42" );
+        news.setImage( "Image" );
+        news.setName( "Name" );
+        news.setSoftDelete( true );
+        news.setTimestamp( LocalDateTime.of( 1, 1, 1, 1, 1 ) );
+        Optional<News> ofResult = Optional.of( news );
+        when( newsRepository.findById( anyString() ) ).thenReturn( ofResult );
+
+        Role role = new Role();
+        role.setDescription( "The characteristics of someone or something" );
+        role.setId( "42" );
+        role.setName( "Name" );
+        role.setTimestamp( mock( Timestamp.class ) );
+        role.setUsers( new HashSet<>() );
+
+        User user = new User();
+        user.setDeleted( true );
+        user.setEmail( "jane.doe@example.org" );
+        user.setFirstName( "Jane" );
+        user.setId( "42" );
+        user.setLastName( "Doe" );
+        user.setPassword( "iloveyou" );
+        user.setPhoto( "alice.liddell@example.org" );
+        user.setRole( role );
+        user.setTimestamp( mock( Timestamp.class ) );
+        when( userRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
+
+        CreateCommentDto createCommentDto = new CreateCommentDto();
+        createCommentDto.setBody( "Not all who wander are lost" );
+        createCommentDto.setNews( "News" );
+        createCommentDto.setUser( "User" );
+        assertThrows( RecordException.RecordNotFoundException.class, () -> commentServiceImpl.create( createCommentDto ) );
+        verify( commentRepository , atMost( 0 )).save( any() );
         verify( newsRepository ).findById( anyString() );
         verify( userRepository ).findById( anyString() );
     }

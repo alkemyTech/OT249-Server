@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,8 +27,6 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
     private final CustomAuthorizationFilter customAuthorizationFilter;
     private final JwtUtil jwtUtil;
 
-    private final AuthenticationConfiguration authenticationConfiguration;
-
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
 
@@ -38,7 +35,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBeam(authenticationConfiguration), jwtUtil);
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean(), jwtUtil);
         customAuthenticationFilter.setFilterProcessesUrl(LOGIN_URL);
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -47,13 +44,13 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore( customAuthorizationFilter, CustomAuthenticationFilter.class );
         http.authorizeRequests().antMatchers(LOGIN_URL,REGISTER_URL).permitAll();
         http.authorizeRequests().antMatchers(SWAGGER_URL).permitAll();
-//        http.authorizeRequests().antMatchers("/organization/public/**").hasRole("ADMIN");
         http.authorizeRequests().anyRequest().hasAnyRole( "USER", "ADMIN" );
     }
+
+    @Override
     @Bean
-    public AuthenticationManager authenticationManagerBeam(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
 
-        return authenticationConfiguration.getAuthenticationManager();
+        return super.authenticationManagerBean();
     }
-
 }

@@ -3,7 +3,6 @@ package com.alkemy.ong.service.impl;
 import com.alkemy.ong.dto.ContactDto;
 import com.alkemy.ong.model.Contact;
 import com.alkemy.ong.repository.ContactRepository;
-import com.alkemy.ong.service.EmailService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
@@ -31,12 +30,12 @@ class ContactServiceImplTest {
     @BeforeEach
     void setUp() {
 
-        contactServiceImpl = new ContactServiceImpl( modelMapper, contactRepository, emailService );
+        contactServiceImpl = new ContactServiceImpl( modelMapper, contactRepository, emailServiceImpl );
 
     }
 
     @MockBean
-    private EmailService emailService;
+    private EmailServiceImpl emailServiceImpl;
 
     @SpyBean
     private ModelMapper modelMapper;
@@ -47,7 +46,7 @@ class ContactServiceImplTest {
     @Test
     void testSaveContact() {
 
-        doNothing().when( emailService ).sendEmailToContact( any(), any() );
+        doNothing().when( emailServiceImpl ).sendEmailToContact( any(), any() );
 
         Contact contact = new Contact();
         contact.setDeleted( true );
@@ -61,7 +60,7 @@ class ContactServiceImplTest {
                 "Not all who wander are lost" );
 
         assertSame( contactDto, contactServiceImpl.saveContact( contactDto ) );
-        verify( emailService ).sendEmailToContact( any(), any() );
+        verify( emailServiceImpl ).sendEmailToContact( any(), any() );
         verify( modelMapper, atMostOnce() ).map( any(), any() );
         verify( contactRepository ).save( any() );
     }
@@ -74,7 +73,7 @@ class ContactServiceImplTest {
     void testSaveContact2() {
         // TODO: Complete this test.
 
-        doNothing().when( emailService ).sendEmailToContact( any(), any() );
+        doNothing().when( emailServiceImpl ).sendEmailToContact( any(), any() );
 
         Contact contact = new Contact();
         contact.setDeleted( true );
