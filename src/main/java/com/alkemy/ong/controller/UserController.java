@@ -163,4 +163,18 @@ public class UserController {
 
 		return new ResponseEntity<>(userService.authenticatedUser(),HttpStatus.OK);
 	}
+
+	@Operation(summary = "User Login")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "User created",
+					content = { @Content(mediaType = "application/json",
+							schema = @Schema(implementation = UserDto.class)) }),
+			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
+					content = @Content),
+			@ApiResponse(responseCode = "404", description = "User not found",
+					content = @Content) })
+	@PostMapping("/auth/login")
+	public void login (@RequestBody LoginRequestDTO loginRequestDTO){}
+
+
 }

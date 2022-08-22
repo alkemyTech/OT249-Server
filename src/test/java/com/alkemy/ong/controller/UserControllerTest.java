@@ -1,5 +1,6 @@
 package com.alkemy.ong.controller;
 
+import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.RoleDto;
 import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.dto.UserResponseDto;
@@ -8,6 +9,7 @@ import com.alkemy.ong.model.User;
 import com.alkemy.ong.service.IRoleService;
 import com.alkemy.ong.service.UserService;
 import com.alkemy.ong.utils.PageUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -281,6 +283,18 @@ class UserControllerTest {
                 .build()
                 .perform( requestBuilder );
         actualPerformResult.andExpect( MockMvcResultMatchers.status().is( HttpStatus.NOT_FOUND.value() ) );
+    }
+
+    @Test
+    void login() throws Exception {
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/auth/login")
+                .contentType( MediaType.APPLICATION_JSON ).content( (new ObjectMapper()).writeValueAsString( new LoginRequestDTO()) );
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup( userController )
+                .build()
+                .perform( requestBuilder );
+        actualPerformResult.andExpect( MockMvcResultMatchers.status().is( HttpStatus.OK.value() ) );
+
     }
 }
 
