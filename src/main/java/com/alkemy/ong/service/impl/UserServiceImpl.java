@@ -1,16 +1,13 @@
 package com.alkemy.ong.service.impl;
 
 
-import com.alkemy.ong.utils.JwtUtil;
-import com.alkemy.ong.utils.PageUtils;
-import com.alkemy.ong.dto.LoginRequestDTO;
-import com.alkemy.ong.dto.RoleDto;
-import com.alkemy.ong.dto.UserDto;
-import com.alkemy.ong.dto.UserResponseDto;
+import com.alkemy.ong.dto.*;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.repository.UserRepository;
 import com.alkemy.ong.service.EmailService;
 import com.alkemy.ong.service.UserService;
+import com.alkemy.ong.utils.JwtUtil;
+import com.alkemy.ong.utils.PageUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,7 +21,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -49,7 +45,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	@Transactional
-	public User guardarUsuario(User user) throws IOException {
+	public User guardarUsuario(User user) {
 
 		User userSaved = userRepo.save(user);
 
@@ -59,7 +55,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<UserDto> getAllUsers(int page, String order) {
+	public PageDto<UserDto> getAllUsers(int page, String order) {
 
 		Page<User> users = userRepo.findAll( PageUtils.getPageable( page, order ) );
 		return PageUtils.getPageDto( users.map( user -> modelMapper.map( user, UserDto.UserPagedDto.class ) ), "users");

@@ -4,8 +4,8 @@ import com.alkemy.ong.dto.ContactDto;
 import com.alkemy.ong.model.Contact;
 import com.alkemy.ong.repository.ContactRepository;
 import com.alkemy.ong.service.ContactService;
-import com.alkemy.ong.service.EmailService;
 
+import com.alkemy.ong.service.EmailService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

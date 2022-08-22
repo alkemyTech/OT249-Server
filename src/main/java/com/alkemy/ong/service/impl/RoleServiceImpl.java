@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import com.alkemy.ong.repository.RoleRepository;
 import com.alkemy.ong.service.IRoleService;
 
 @Service
+@AllArgsConstructor
 public class RoleServiceImpl implements IRoleService{
 
 	@Autowired
