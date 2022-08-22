@@ -5,12 +5,14 @@ import com.alkemy.ong.dto.PageDto;
 import com.alkemy.ong.model.Category;
 import com.alkemy.ong.repository.CategoryRepository;
 import com.alkemy.ong.utils.PageUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -24,7 +26,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {CategoryServiceImpl.class})
@@ -56,12 +57,13 @@ class CategoryServiceImplTest {
      * Method under test: {@link CategoryServiceImpl#getCategory(String)}
      */
     @Test
-    void test_GetCategory() {
+    void GetCategory_al_existir_la_entidad_devuelve_la_entidad() {
 
         Category category = getCategory();
         Optional<Category> ofResult = Optional.of( category );
         when( categoryRepository.findById( any() ) ).thenReturn( ofResult );
-        assertSame( category, categoryServiceImpl.getCategory( "42" ) );
+        assertThat(  categoryServiceImpl.getCategory( "42" ) ).isSameAs( category );
+
         verify( categoryRepository ).findById( any() );
     }
 
@@ -81,7 +83,7 @@ class CategoryServiceImplTest {
      * Method under test: {@link CategoryServiceImpl#getAllCategories()}
      */
     @Test
-    void test_GetAllCategories() {
+    void GetAllCategories_al_no_estar_implementado_siempre_devuelve_nulo() {
         // TODO: Complete this test.
         // Act
         List<Category> actualAllCategories = categoryServiceImpl.getAllCategories();
@@ -96,7 +98,7 @@ class CategoryServiceImplTest {
      * Method under test: {@link CategoryServiceImpl#getAllCategories(int, String)}
      */
     @Test
-    void test_GetAllCategories2() {
+    void GetAllCategories_al_pasar_lo_requerido_devuelve_los_elementos_existentes() {
         // TODO: Complete this test.
 
         // Arrange
@@ -106,17 +108,18 @@ class CategoryServiceImplTest {
         category.setName( "Name" );
         categories.add( category );
         categories.add( category );
-        when( categoryRepository.findAll( any( Pageable.class ) ) ).thenReturn( new PageImpl<>( categories, PageUtils.getPageable( 1, "asc" ), 1 ) );
+        when( categoryRepository.findAll( any( Pageable.class ) ) ).thenReturn( new PageDto<>( categories, PageUtils.getPageable( 1, "asc" ), 1 ) );
         PageDto<Map<String, String>> allCategories = categoryServiceImpl.getAllCategories( 1, "asc" );
 
         assertThat( allCategories ).isNotNull();
+        assertThat( allCategories.getTotalElements() ).isEqualTo( 2 );
     }
 
     /**
      * Method under test: {@link CategoryServiceImpl#deleteCategory(String)}
      */
     @Test
-    void test_DeleteCategory() {
+    void DeleteCategory_al_eliminar_categorias_deberia_no_devolver_nada_ni_tirar_una_excepcion_si_existe() {
 
         Category category = getCategory();
         Optional<Category> ofResult = Optional.of( category );
@@ -131,7 +134,7 @@ class CategoryServiceImplTest {
      * Method under test: {@link CategoryServiceImpl#updateCategory(CategoryDto, String)}
      */
     @Test
-    void test_UpdateCategory2() {
+    void UpdateCategory_al_actualizar_si_la_entidad_existe_deberia_no_tirar_excepcion() {
 
         Category category = getCategory();
         when( entityManager.merge( any() ) ).thenReturn( "Merge" );
@@ -145,13 +148,11 @@ class CategoryServiceImplTest {
      * Method under test: {@link CategoryServiceImpl#createCategory(Category)}
      */
     @Test
-    void test_CreateCategory() {
+    void CreateCategory_al_crear_la_entidad_deberia_no_tirar_excepcion_y_devolver_la_entidad() {
 
         Category category = getCategory();
         when( categoryRepository.save( any() ) ).thenReturn( category );
-
-        Category category1 = getCategory();
-        assertSame( category, categoryServiceImpl.createCategory( category1 ) );
+        assertThat(  categoryServiceImpl.createCategory( category )).isNotNull().isSameAs( category );
         verify( categoryRepository ).save( any() );
     }
 
