@@ -18,7 +18,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,13 +35,12 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {UserServiceImpl.class})
 @ExtendWith(SpringExtension.class)
-@DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
-
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserServiceImplTest {
 
     @MockBean
@@ -69,7 +67,7 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#guardarUsuario(User)}
      */
     @Test
-    void testGuardarUsuario()  {
+    void GuardarUsuario_al_guardar_devuelve_el_mismo_usuario_creado() {
 
         doNothing().when( emailServiceImpl ).WelcomeMail( anyString(), anyString() );
 
@@ -90,20 +88,15 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#guardarUsuario(User)}
      */
     @Test
-    void testGuardarUsuario2()  {
+    void GuardarUsuario_al_tirar_una_excepcion_no_se_envia_el_correo_eletronico() {
 
-        doThrow( new UsernameNotFoundException( "Msg" ) ).when( emailServiceImpl ).WelcomeMail( anyString(), anyString() );
-
-        Role role = getRole();
-
-        User user = getUser( true, role );
-        when( userRepository.save( any() ) ).thenReturn( user );
-
+        when( userRepository.save( any() ) ).thenThrow( new UsernameNotFoundException( "Msg" ) );
         Role role1 = getRole();
-
         User user1 = getUser( true, role1 );
-        assertThrows( UsernameNotFoundException.class, () -> userServiceImpl.guardarUsuario( user1 ) );
-        verify( emailServiceImpl ).WelcomeMail( anyString(), anyString() );
+        assertThatThrownBy( () -> userServiceImpl.guardarUsuario( user1 ) )
+                .isInstanceOf( UsernameNotFoundException.class )
+                .hasMessage( "Msg" );
+        verifyNoInteractions( emailServiceImpl );
         verify( userRepository ).save( any() );
     }
 
@@ -111,14 +104,15 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#getAllUsers(int, String)}
      */
     @Test
-    void testGetAllUsers() {
+    void GetAllUsers_al_solicitar_devuelve_todos_los_usuarios_disponibles() {
         // TODO: Complete this test.
 
         ArrayList<User> arrayList = new ArrayList<>();
         arrayList.add( new User() );
-        when( userRepository.findAll( any( Pageable.class) )).thenReturn( new PageImpl<>( arrayList, PageUtils.getPageable( 0,"" ),0 ) );
+        when( userRepository.findAll( any( Pageable.class ) ) ).thenReturn( new PageDto<>( arrayList, PageUtils.getPageable( 0, "" ), 0 ) );
         PageDto<UserDto> actualPage = userServiceImpl.getAllUsers( 1, "Order" );
-        assertThat(actualPage).isNotNull();
+        assertThat( actualPage ).isNotNull();
+        assertThat( actualPage.getContent().size() ).isNotNull().isEqualTo( 1 );
 
     }
 
@@ -127,14 +121,14 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#loadUserByUsername(String)}
      */
     @Test
-    void testLoadUserByUsername() throws UsernameNotFoundException {
+    void LoadUserByUsername_cuando_el_usuario_esta_eliminado_tira_una_excepcion() throws UsernameNotFoundException {
 
         Role role = getRole();
 
         User user = getUser( true, role );
         Optional<User> ofResult = Optional.of( user );
         when( userRepository.findByEmail( anyString() ) ).thenReturn( ofResult );
-        assertThrows( UsernameNotFoundException.class, () -> userServiceImpl.loadUserByUsername( "foo" ) );
+        assertThatThrownBy( () -> userServiceImpl.loadUserByUsername( "foo" ) ).isInstanceOf( UsernameNotFoundException.class ).hasMessage( "NOT FOUND" );
         verify( userRepository ).findByEmail( anyString() );
     }
 
@@ -142,22 +136,20 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#loadUserByUsername(String)}
      */
     @Test
-    void testLoadUserByUsername2() throws UsernameNotFoundException {
+    void LoadUserByUsername_cuando_el_usuario_no_existe_tira_una_excepcion() throws UsernameNotFoundException {
 
         when( userRepository.findByEmail( any() ) ).thenReturn( Optional.empty() );
 
-        Role role = getRole();
-        getUser( true, role );
-        assertThrows( UsernameNotFoundException.class, () -> userServiceImpl.loadUserByUsername( "foo" ) );
+        assertThatThrownBy( () -> userServiceImpl.loadUserByUsername( "foo" ) ).isInstanceOf( UsernameNotFoundException.class ).hasMessage( "NOT FOUND" );
         verifyNoInteractions( modelMapper );
-        verify( userRepository ).findByEmail(  any() );
+        verify( userRepository ).findByEmail( any() );
     }
 
     /**
      * Method under test: {@link UserServiceImpl#loadUserByUsername(String)}
      */
     @Test
-    void testLoadUserByUsername3() throws UsernameNotFoundException {
+    void LoadUserByUsername_cuando_el_usuario_existe_y_no_esta_eliminado_no_tira_una_excepcion_y_devuelve_el_usuario() throws UsernameNotFoundException {
 
 
         Role role = getRole();
@@ -165,15 +157,15 @@ class UserServiceImplTest {
         when( userRepository.findByEmail( any() ) ).thenReturn( Optional.of( user ) );
 
         assertThat( userServiceImpl.loadUserByUsername( "foo" ) ).isNotNull();
-        verify( modelMapper, atLeast( 2 )).map( any(), any() );
-        verify( userRepository ).findByEmail(  any() );
+        verify( modelMapper, atLeast( 2 ) ).map( any(), any() );
+        verify( userRepository ).findByEmail( any() );
     }
 
     /**
      * Method under test: {@link UserServiceImpl#findById(String)}
      */
     @Test
-    void testFindById() {
+    void FindById_al_encontrar_el_usuario_devuelve_el_usuario_no_nulo() {
 
         Role role = getRole();
 
@@ -181,8 +173,8 @@ class UserServiceImplTest {
         Optional<User> ofResult = Optional.of( user );
         when( userRepository.findById( anyString() ) ).thenReturn( ofResult );
         Optional<User> actualFindByIdResult = userServiceImpl.findById( "42" );
-        assertSame( ofResult, actualFindByIdResult );
-        assertTrue( actualFindByIdResult.isPresent() );
+        assertThat( actualFindByIdResult ).isPresent();
+        assertThat( actualFindByIdResult.get() ).isNotNull().isSameAs( ofResult.get() );
         verify( userRepository ).findById( anyString() );
     }
 
@@ -216,10 +208,10 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#findById(String)}
      */
     @Test
-    void testFindById2() {
+    void findById_al_no_encontrar_el_usuario_devuelve_un_opcional_vacio() {
 
-        when( userRepository.findById( anyString() ) ).thenThrow( new UsernameNotFoundException( "Msg" ) );
-        assertThrows( UsernameNotFoundException.class, () -> userServiceImpl.findById( "42" ) );
+        when( userRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
+        assertThat( userServiceImpl.findById( "42" ) ).isNotNull().isNotPresent();
         verify( userRepository ).findById( anyString() );
     }
 
@@ -227,10 +219,10 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#deleteUser(String)}
      */
     @Test
-    void testDeleteUser() {
+    void DeleteUser_al_eliminar_el_usuario_devuelve_un_boleano_true() {
 
         doNothing().when( userRepository ).deleteById( anyString() );
-        assertTrue( userServiceImpl.deleteUser( "42" ) );
+        assertThat( userServiceImpl.deleteUser( "42" ) ).isTrue();
         verify( userRepository ).deleteById( anyString() );
     }
 
@@ -238,10 +230,10 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#deleteUser(String)}
      */
     @Test
-    void testDeleteUser2() {
+    void DeleteUser_al_eliminar_al_tirar_una_excepcion_devuelve_un_boleano_false() {
 
         doThrow( new UsernameNotFoundException( "Msg" ) ).when( userRepository ).deleteById( anyString() );
-        assertFalse( userServiceImpl.deleteUser( "42" ) );
+        assertThat( userServiceImpl.deleteUser( "42" ) ).isNotNull().isFalse();
         verify( userRepository ).deleteById( anyString() );
     }
 
@@ -249,7 +241,7 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#login(LoginRequestDTO)}
      */
     @Test
-    void testLogin() throws AuthenticationException {
+    void Login_al_iniciar_sesion_devuelve_el_jwt_no_nulo() throws AuthenticationException {
 
         when( jwtUtil.generateToken( any() ) ).thenReturn( "ABC123" );
 
@@ -258,7 +250,7 @@ class UserServiceImplTest {
                 "Credentials" );
 
         when( authenticationManager.authenticate( any() ) ).thenReturn( testingAuthenticationToken );
-        assertEquals( "ABC123", userServiceImpl.login( new LoginRequestDTO( "jane.doe@example.org", "iloveyou" ) ).getJwt() );
+        assertThat( userServiceImpl.login( new LoginRequestDTO( "jane.doe@example.org", "iloveyou" ) ).getJwt() ).isEqualTo( "ABC123" );
         verify( jwtUtil ).generateToken( any() );
         verify( authenticationManager ).authenticate( any() );
     }
@@ -268,20 +260,13 @@ class UserServiceImplTest {
      * Method under test: {@link UserServiceImpl#login(LoginRequestDTO)}
      */
     @Test
-    void testLogin4() throws AuthenticationException {
+    void Login_al_iniciar_sesion_con_credenciales_incorrectas_tira_una_excepcion() throws AuthenticationException {
 
         when( jwtUtil.generateToken( any() ) ).thenReturn( "ABC123" );
 
-        UserDto.UserPagedDto userPagedDto = getUserPagedDto();
-        TestingAuthenticationToken testingAuthenticationToken = new TestingAuthenticationToken( userPagedDto,
-                "Credentials" );
-
-        when( authenticationManager.authenticate( any() ) ).thenReturn( testingAuthenticationToken );
-        LoginRequestDTO loginRequestDTO = mock( LoginRequestDTO.class );
-        when( loginRequestDTO.getEmail() ).thenThrow( new BadCredentialsException( "Msg" ) );
-        when( loginRequestDTO.getPassword() ).thenThrow( new BadCredentialsException( "Msg" ) );
-        assertThrows( BadCredentialsException.class, () -> userServiceImpl.login( loginRequestDTO ) );
-        verify( loginRequestDTO ).getEmail();
+        when( authenticationManager.authenticate( any() ) ).thenThrow( new BadCredentialsException( "Error" ) );
+        LoginRequestDTO loginRequestDTO = new LoginRequestDTO();
+        assertThatThrownBy( () -> userServiceImpl.login( loginRequestDTO ) ).isInstanceOf( BadCredentialsException.class ).hasMessage( "Email o contraseña incorrecta " );
     }
 
     private static UserDto.UserPagedDto getUserPagedDto() {
@@ -302,14 +287,14 @@ class UserServiceImplTest {
      */
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    void testValidarId() throws Exception {
+    void ValidarId_al_usuario_con_rol_ADMIN_siempre_devuelve_un_booleano_true() throws Exception {
         // TODO: Complete this test.
         User user = new User();
         Role role = new Role();
         role.setName( "ADMIN" );
         user.setRole( role );
         when( userRepository.findByEmail( anyString() ) ).
-        thenReturn( Optional.of( user ) );
+                thenReturn( Optional.of( user ) );
         boolean validarId = userServiceImpl.validarId( "42" );
         assertThat( validarId ).isTrue();
     }
@@ -319,7 +304,7 @@ class UserServiceImplTest {
      */
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    void testValidarId3() throws Exception {
+    void ValidarId_al_usuario_con_rol_USER_con_distinto_id_devuelve_false() throws Exception {
         // TODO: Complete this test.
         User user = new User();
         user.setId( "ddd" );
@@ -337,7 +322,7 @@ class UserServiceImplTest {
      */
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    void testValidarId4() {
+    void ValidarId_al_usuario_no_encontrarse_tira_una_excepcion() {
         // TODO: Complete this test.
         User user = new User();
         user.setId( "ddd" );
@@ -345,8 +330,8 @@ class UserServiceImplTest {
         role.setName( "USER" );
         user.setRole( role );
         when( userRepository.findByEmail( anyString() ) ).
-                thenReturn( Optional.empty( ) );
-        assertThatThrownBy(  () ->userServiceImpl.validarId( "42" )).isInstanceOf( Exception.class );
+                thenReturn( Optional.empty() );
+        assertThatThrownBy( () -> userServiceImpl.validarId( "42" ) ).isInstanceOf( Exception.class );
     }
 
     /**
@@ -354,7 +339,7 @@ class UserServiceImplTest {
      */
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    void testValidarId2() throws Exception {
+    void ValidarId_al_usuario_con_rol_USER_con_igual_id_devuelve_true() throws Exception {
         // TODO: Complete this test.
         User user = new User();
         user.setId( "42" );
@@ -365,17 +350,7 @@ class UserServiceImplTest {
                 thenReturn( Optional.of( user ) );
         boolean validarId = userServiceImpl.validarId( "42" );
         assertThat( validarId ).isTrue();
-    }
-    /**
-     * Method under test: {@link UserServiceImpl#authenticatedUser()}
-     */
-    @Test
-    @WithMockUser()
-    void testAuthenticatedUser() throws Exception {
-        // TODO: Complete this test.
-when( userRepository.findByEmail( any() ) ).thenReturn( Optional.of( new User() ) );
-        UserDto userDto = userServiceImpl.authenticatedUser();
-        assertThat( userDto ).isNotNull();
+        verify( userRepository ).findByEmail( anyString() );
     }
 
     /**
@@ -383,10 +358,23 @@ when( userRepository.findByEmail( any() ) ).thenReturn( Optional.of( new User() 
      */
     @Test
     @WithMockUser()
-    void testAuthenticatedUser2() {
+    void AuthenticatedUser_al_existir_el_usuario_debe_devolver_un_usuario_no_nulo() throws Exception {
         // TODO: Complete this test.
-        when( userRepository.findByEmail( any() ) ).thenReturn( Optional.empty( ) );
-        assertThatThrownBy(  () ->userServiceImpl.authenticatedUser()).isInstanceOf( Exception.class );
+        when( userRepository.findByEmail( any() ) ).thenReturn( Optional.of( new User() ) );
+        UserDto userDto = userServiceImpl.authenticatedUser();
+        assertThat( userDto ).isNotNull();
+        verify( userRepository ).findByEmail( anyString() );
+    }
+
+    /**
+     * Method under test: {@link UserServiceImpl#authenticatedUser()}
+     */
+    @Test
+    @WithMockUser()
+    void AuthenticatedUser_al_no_existir_el_usuario_debe_tirar_una_excepcion() {
+        // TODO: Complete this test.
+        when( userRepository.findByEmail( any() ) ).thenReturn( Optional.empty() );
+        assertThatThrownBy( () -> userServiceImpl.authenticatedUser() ).isInstanceOf( Exception.class );
     }
 }
 

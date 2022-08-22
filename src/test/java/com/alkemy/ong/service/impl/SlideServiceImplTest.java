@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -25,13 +26,13 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {SlideServiceImpl.class})
 @ExtendWith(SpringExtension.class)
 @DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
-
 class SlideServiceImplTest {
 
     @MockBean
@@ -62,10 +63,10 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#getAll()}
      */
     @Test
-    void testGetAll() {
+    void GetAll_al_listar_y_no_encontrar_elementos_debe_devolver_una_lista_vacia() {
 
         when( slideRepository.findAll() ).thenReturn( new ArrayList<>() );
-        assertTrue( slideServiceImpl.getAll().isEmpty() );
+        assertThat( slideServiceImpl.getAll() ).isEmpty();
         verify( slideRepository ).findAll();
     }
 
@@ -74,7 +75,7 @@ class SlideServiceImplTest {
      */
     @Test
 
-    void testGetAll2() {
+    void GetAll_al_listar_y_encontrar_elementos_debe_devolver_una_lista_con_los_elementos() {
 
         Organization organization = getOrganization();
 
@@ -92,7 +93,7 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#getAll()}
      */
     @Test
-    void testGetAll3() {
+    void GetAll_al_listar_y_encontrar_elementos_debe_devolver_una_lista_con_exactamente_los_elementos() {
 
         Organization organization = getOrganization();
 
@@ -106,26 +107,8 @@ class SlideServiceImplTest {
         slideList.add( slide1 );
         slideList.add( slide );
         when( slideRepository.findAll() ).thenReturn( slideList );
-        assertEquals( 2, slideServiceImpl.getAll().size() );
+        assertThat(  slideServiceImpl.getAll().size() ).isEqualTo( 2 );
         verify( modelMapper, atLeast( 1 ) ).map( any(), any() );
-        verify( slideRepository ).findAll();
-    }
-
-    /**
-     * Method under test: {@link SlideServiceImpl#getAll()}
-     */
-    @Test
-    void testGetAll4() {
-
-        Organization organization = getOrganization();
-
-        Slide slide = getSlide( organization );
-
-        ArrayList<Slide> slideList = new ArrayList<>();
-        slideList.add( slide );
-        when( slideRepository.findAll() ).thenReturn( slideList );
-        assertNotNull( slideServiceImpl.getAll() );
-        verify( modelMapper ).map( any(), any() );
         verify( slideRepository ).findAll();
     }
 
@@ -133,7 +116,7 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#getById(String)}
      */
     @Test
-    void testGetById() {
+    void GetById_al_buscar_un_slide_y_encontrarlo_devuelve_el_slide_no_nulo() {
 
         Slide slide = new
                 Slide();
@@ -149,7 +132,7 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#delete(String)}
      */
     @Test
-    void testDelete() {
+    void Delete_al_eliminar_un_slide_debe_buscar_el_slide_y_al_encontrarlo_no_tirar_excepcion() {
 
         Organization organization = getOrganization();
 
@@ -160,59 +143,41 @@ class SlideServiceImplTest {
         slideServiceImpl.delete( "42" );
         verify( slideRepository ).findById( anyString() );
         verify( slideRepository ).delete( any() );
-        assertTrue( slideServiceImpl.getAll().isEmpty() );
     }
 
     /**
      * Method under test: {@link SlideServiceImpl#delete(String)}
      */
     @Test
-    void testDelete2() {
+    void Delete_al_eliminar_un_slide_debe_buscar_el_slide_y_al_no_encontrarlo_tirar_excepcion() {
 
-        Organization organization = getOrganization();
-
-        Slide slide = getSlide( organization );
-        Optional<Slide> ofResult = Optional.of( slide );
-        doThrow( new RecordException.RecordNotFoundException( "An error occurred" ) ).when( slideRepository )
-                .delete( any() );
-        when( slideRepository.findById( anyString() ) ).thenReturn( ofResult );
-        assertThrows( RecordException.RecordNotFoundException.class, () -> slideServiceImpl.delete( "42" ) );
+        when( slideRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
+        assertThatThrownBy(  () -> slideServiceImpl.delete( "42" ) ).isInstanceOf( RecordException.RecordNotFoundException.class ).hasMessage( "Slide not found" );
         verify( slideRepository ).findById( anyString() );
         verify( slideRepository ).delete( any() );
     }
 
     /**
-     * Method under test: {@link SlideServiceImpl#delete(String)}
-     */
-    @Test
-    void testDelete3() {
-
-        doNothing().when( slideRepository ).delete( any() );
-        when( slideRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
-        assertThrows( RecordException.RecordNotFoundException.class, () -> slideServiceImpl.delete( "42" ) );
-        verify( slideRepository ).findById( anyString() );
-    }
-
-    /**
      * Method under test: {@link SlideServiceImpl#update(String, SlideRequestDto)}
      */
     @Test
-    void testUpdate()  {
+    void Update_al_actualizar_y_no_encontrar_tira_una_excepcion_sin_guardar()  {
 
         when( slideRepository.save( any() ) )
                 .thenReturn( Optional.empty());
         when( slideRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
-        assertThrows( Exception.class,
-                () -> slideServiceImpl.update( "42", new SlideRequestDto() ) );
+        assertThatThrownBy(
+                () -> slideServiceImpl.update( "42", new SlideRequestDto() ) ).isInstanceOf( Exception.class ).hasMessage( "Slide not Found" );
         verify( slideRepository, atMost( 0 ) ).save( any() );
         verify( slideRepository ).findById( anyString() );
+        verify( slideRepository, atMost( 0 ) ).save( any() );
     }
 
     /**
      * Method under test: {@link SlideServiceImpl#update(String, SlideRequestDto)}
      */
     @Test
-    void testUpdate2() throws Exception {
+    void Update_al_actualizar_y_encontrar_actualiza_los_valores_no_nulos() throws Exception {
         // TODO: Complete this test.
 
         Organization organization = getOrganization();
@@ -221,18 +186,32 @@ class SlideServiceImplTest {
         Optional<Slide> ofResult = Optional.of( slide );
 
 
-        Organization organization1 = getOrganization();
-
-        Slide slide1 = getSlide( organization1 );
+        Slide slide1 = getSlide( organization );
         when( slideRepository.save( any() ) ).thenReturn( slide1 );
 
-        when(organizationRepository.findById( anyString() ) ).thenReturn( Optional.of( new Organization() ) );
+        when(organizationRepository.findById( anyString() ) ).thenReturn( Optional.of( organization ) );
         when( slideRepository.findById( anyString() ) ).thenReturn( ofResult );
         SlideRequestDto slideRequestDto = getRequestDto();
         SlideResponseDto slideResponseDto = slideServiceImpl.update( "42", slideRequestDto );
 
 
         assertThat( slideResponseDto ).isNotNull();
+        slide.setOrganization( organization );
+        assertThat( slideResponseDto.getText() ).isEqualTo( slide.getText() );
+        assertThat( slideResponseDto.getPosition() ).isEqualTo( slide.getPosition() );
+        assertThat( slideResponseDto.getImageUrl() ).isEqualTo( slide.getImageUrl() );
+        assertThat( slideResponseDto.getId() ).isEqualTo( slide.getId() );
+
+        ArgumentCaptor<Slide> argCapture = ArgumentCaptor.forClass( Slide.class );
+        verify( slideRepository ).save( argCapture.capture() );
+        Slide captureValue = argCapture.getValue();
+        assertThat( captureValue.getText() ).isEqualTo( slide.getText() );
+        assertThat( captureValue.getPosition() ).isEqualTo( slide.getPosition() );
+        assertThat( captureValue.getImageUrl() ).isEqualTo( slide.getImageUrl() );
+        Organization captureValueOrganization = captureValue.getOrganization();
+        assertThat( captureValueOrganization.getName() )
+                .isSameAs( slide.getOrganization().getName() );
+
     }
 
     private static SlideRequestDto getRequestDto() {
@@ -280,7 +259,7 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#update(String, SlideRequestDto)}
      */
     @Test
-    void testUpdate4() throws Exception {
+    void Update_al_actualizar_y_encontrar_no_actualiza_los_valores_nulos() throws Exception {
         // TODO: Complete this test.
 
         Organization organization = getOrganization();
@@ -300,12 +279,29 @@ class SlideServiceImplTest {
 
 
         assertThat( slideResponseDto ).isNotNull();
+        SlideResponseDto expected = modelMapper.map( slide, SlideResponseDto.class );
+        assertThat( slideResponseDto.getText() ).isSameAs( expected.getText() );
+        assertThat( slideResponseDto.getPosition() ).isEqualTo( expected.getPosition() );
+        assertThat( slideResponseDto.getImageUrl() ).isEqualTo( expected.getImageUrl() );
+        assertThat( slideResponseDto.getId() ).isEqualTo( expected.getId() );
+
+
+        ArgumentCaptor<Slide> argCapture = ArgumentCaptor.forClass( Slide.class );
+        verify( slideRepository ).save( argCapture.capture() );
+        Slide captureValue = argCapture.getValue();
+        assertThat( captureValue.getText() ).isNotNull();
+        assertThat( captureValue.getPosition() ).isNotNull();
+        assertThat( captureValue.getImageUrl() ).isNotNull();
+        Organization captureValueOrganization = captureValue.getOrganization();
+        assertThat( captureValueOrganization.getName() )
+                .isNotNull();
+
     }
     /**
      * Method under test: {@link SlideServiceImpl#update(String, SlideRequestDto)}
      */
     @Test
-    void testUpdate3() {
+    void Update_al_actualizar_y_no_encontrar_tira_una_excepcion() {
         // TODO: Complete this test.
 
         Organization organization = getOrganization();
@@ -328,7 +324,7 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#slideForOng(String)}
      */
     @Test
-    void testSlideForOng()  {
+    void SlideForOng_al_buscar_slide_para_una_organizacion_y_obtener_lista_vacia_deberia_tirar_excepcion()  {
 
         Organization organization = getOrganization();
         Optional<Organization> ofResult = Optional.of( organization );
@@ -344,7 +340,7 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#slideForOng(String)}
      */
     @Test
-    void testSlideForOng2() throws Exception {
+    void SlideForOng_al_buscar_slide_para_una_organizacion_y_obtener_lista_no_vacia_deberia_devolver_la_lista() throws Exception {
 
         Organization organization = getOrganization();
         Optional<Organization> ofResult = Optional.of( organization );
@@ -363,7 +359,7 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#slideForOng(String)}
      */
     @Test
-    void testSlideForOng3()  {
+    void SlideForOng_al_buscar_slide_para_una_organizacion_inexistente_deberia_tirar_excepcion()  {
 
         when( organizationRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
         when( slideRepository.findByOrganization_idLikeOrderByPositionDesc( anyString() ) ).thenReturn( new ArrayList<>() );
@@ -376,7 +372,7 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#save(SlideRequestDto)}
      */
     @Test
-    void testSave() {
+    void Save_al_guardar_sin_posicion_no_deberia_buscar_la_posicion_y_devolver_el_dto_no_nulo() {
         // TODO: Complete this test.
 
         when( amazonClientImpl.uploadFile( any() ) ).thenReturn( "algo" );
@@ -398,13 +394,15 @@ class SlideServiceImplTest {
         assertThat( responseDto.getPosition() ).isEqualTo( expected.getPosition() + 1 );
         assertThat( responseDto.getImageUrl() ).isEqualTo( "algo" );
         assertThat( responseDto.getId() ).isEqualTo( expected.getId() );
+        verify( slideRepository, atMost( 1 ) ).findTopByOrderByPositionDesc( );
+        verify( slideRepository ).save( any() );
     }
 
     /**
      * Method under test: {@link SlideServiceImpl#save(SlideRequestDto)}
      */
     @Test
-    void testSave2() {
+    void Save_al_guardar_con_posicion_no_deberia_buscar_la_posicion_y_devolver_el_dto_no_nulo() {
         // TODO: Complete this test.
         when( amazonClientImpl.uploadFile( any() ) ).thenReturn( "algo" );
         Slide slide = new Slide();
@@ -426,6 +424,8 @@ class SlideServiceImplTest {
         assertThat( responseDto.getPosition() ).isEqualTo( expected.getPosition() );
         assertThat( responseDto.getImageUrl() ).isEqualTo( "algo" );
         assertThat( responseDto.getId() ).isEqualTo( expected.getId() );
+        verify( slideRepository, atMost( 0 ) ).findTopByOrderByPositionDesc( );
+        verify( slideRepository ).save( any() );
 
     }
 
@@ -433,26 +433,15 @@ class SlideServiceImplTest {
      * Method under test: {@link SlideServiceImpl#lastPosition()}
      */
     @Test
-    void testLastPosition() {
+    void LastPosition_al_buscar_la_posicion_devuelve_la_posicion() {
 
         Organization organization = getOrganization();
 
         Slide slide = getSlide( organization );
         when( slideRepository.findTopByOrderByPositionDesc() ).thenReturn( slide );
-        assertEquals( 1, slideServiceImpl.lastPosition().intValue() );
+        assertThat(  slideServiceImpl.lastPosition() ).isEqualTo( 1 );
         verify( slideRepository ).findTopByOrderByPositionDesc();
     }
 
-    /**
-     * Method under test: {@link SlideServiceImpl#lastPosition()}
-     */
-    @Test
-    void testLastPosition2() {
-
-        when( slideRepository.findTopByOrderByPositionDesc() )
-                .thenThrow( new RecordException.RecordNotFoundException( "An error occurred" ) );
-        assertThrows( RecordException.RecordNotFoundException.class, () -> slideServiceImpl.lastPosition() );
-        verify( slideRepository ).findTopByOrderByPositionDesc();
-    }
 }
 

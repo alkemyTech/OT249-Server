@@ -42,7 +42,7 @@ class RoleServiceImplTest {
      * Method under test: {@link RoleServiceImpl#getRoleById(String)}
      */
     @Test
-    void test_GetRoleById_deberia_devolver_entidad_completa_al_encontrar_el_resultado() {
+    void GetRoleById_deberia_devolver_entidad_completa_al_encontrar_el_resultado() {
 
         Role role = getRole();
         Optional<Role> ofResult = Optional.of( role );
@@ -66,7 +66,7 @@ class RoleServiceImplTest {
      * Method under test: {@link RoleServiceImpl#getRoleById(String)}
      */
     @Test
-    void test_GetRoleById_deberia_devolver_nulo_al_no_encontrar_la_entidad() {
+    void GetRoleById_deberia_devolver_nulo_al_no_encontrar_la_entidad() {
 
         when( roleRepository.findById( any() ) ).thenReturn( Optional.empty() );
         assertNull( roleServiceImpl.getRoleById( "42" ) );
@@ -77,7 +77,7 @@ class RoleServiceImplTest {
      * Method under test: {@link RoleServiceImpl#getAllRoles()}
      */
     @Test
-    void test_GetAllRoles_deberia_devolver_nulo_y_no_interactuar_con_la_base() {
+    void GetAllRoles_deberia_devolver_nulo_y_no_interactuar_con_la_base() {
 
         when( roleRepository.findById( any() ) ).thenReturn( Optional.empty() );
         assertNull( roleServiceImpl.getAllRoles() );
@@ -88,7 +88,7 @@ class RoleServiceImplTest {
      * Method under test: {@link RoleServiceImpl#deleteRoleById(String)}
      */
     @Test
-    void test_DeleteRoleById_no_implementado_no_deberia_interactuar_con_la_base_de_datos() {
+    void DeleteRoleById_no_implementado_no_deberia_interactuar_con_la_base_de_datos() {
 
         roleServiceImpl.deleteRoleById( "" );
         verifyNoInteractions( roleRepository );
@@ -98,7 +98,7 @@ class RoleServiceImplTest {
      * Method under test: {@link RoleServiceImpl#updateRole(Role, String)}
      */
     @Test
-    void test_update_role_no_deberia_interactuar_con_la_base_de_datos() {
+    void update_role_no_deberia_interactuar_con_la_base_de_datos() {
 
         roleServiceImpl.updateRole( new Role(), "" );
         verifyNoInteractions( roleRepository );
@@ -108,7 +108,7 @@ class RoleServiceImplTest {
      * Method under test: {@link RoleServiceImpl#updateRole(Role, String)}
      */
     @Test
-    void test_GetRoleByName_deberia_devolver_nulo() {
+    void GetRoleByName_deberia_devolver_nulo() {
 
         when( roleRepository.findByName( anyString() ) ).thenReturn( new Role() );
         Role roleByName = roleServiceImpl.getRoleByName( "" );
