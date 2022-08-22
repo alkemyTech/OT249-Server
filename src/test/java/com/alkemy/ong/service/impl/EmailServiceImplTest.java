@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 @DisplayNameGeneration( DisplayNameGenerator.ReplaceUnderscores.class )
 
-class EmailServiceTest {
+class EmailServiceImplTest {
 
     private EmailServiceImpl emailService;
 

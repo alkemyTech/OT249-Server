@@ -35,7 +35,7 @@ class AmazonClientImplTest {
     @BeforeEach
     void setUp() {
 
-        amazonClientImpl = new AmazonClientImpl( "amazon", "bucket", "secretKeyAccess", "SecretKeyReal" );
+        amazonClientImpl = new AmazonClientImpl( "endpointUrl", "bucketName", "AccessKey", "SecretKeyRealSuperSecret" );
         amazonClientImpl.setAmazonS3( amazonS3 );
     }
 
@@ -43,34 +43,23 @@ class AmazonClientImplTest {
      * Method under test: {@link AmazonClientImpl#uploadFile(MultipartFile)}
      */
     @Test
-    void testUploadFile() {
-
-        CustomMultipartFile actual = new CustomMultipartFile( "AABB".getBytes(), "aa/bbb" );
-        String actualFile = amazonClientImpl.uploadFile( actual );
-        assertThat( actualFile ).isNotNull().isNotBlank().endsWith( ".bbb" );
-
-
-        CustomMultipartFile actual1 = new CustomMultipartFile( "CC".getBytes(), "ccc/ddd" );
-
-        String actualFile2 = amazonClientImpl
-                .uploadFile( actual1 );
-        assertThat( actualFile2 ).isNotNull().isNotBlank().endsWith( ".ddd" );
-
-    }
-
-    /**
-     * Method under test: {@link AmazonClientImpl#uploadFile(MultipartFile)}
-     */
-    @Test
-    void testUploadFile3() {
+    void UploadFile_cuando_tira_una_excepcion_devuelve_el_nombre_de_archivo() {
 
         String message = "Error1";
-        MockMultipartFile mockMultipartFile =  new MockMultipartFile( "aaa/aaaa", "aaa", null, "aaa".getBytes() );
+        MockMultipartFile actualMultipartFile =  new MockMultipartFile( "aaa/aaaa", "aaa.txt", null, "aaa".getBytes() );
         when( amazonS3.putObject( any() ) ).thenThrow( new SdkClientException( message ) );
-        String actualFile = amazonClientImpl
-                .uploadFile( mockMultipartFile );
-        assertThat( actualFile ).isNotNull();
-        File file = Path.of( "aaa" ).toFile();
+
+        String actualFile = amazonClientImpl.uploadFile( actualMultipartFile );
+        assertThat( actualFile ).isNotNull().isNotBlank().endsWith( "aaa.txt" );
+
+
+        MockMultipartFile actualMultipartFile1 =  new MockMultipartFile( "aaa/aaaa", "bbb.txt", null, "aaa".getBytes() );
+
+        String actualFile2 = amazonClientImpl
+                .uploadFile( actualMultipartFile1 );
+        assertThat( actualFile2 ).isNotNull().isNotBlank().endsWith( "bbb.txt" );
+        File file = Path.of( "bbb.txt" ).toFile();
+        assertThat( file ).exists();
         if(file.exists())
             if(!file.delete())
                 file.deleteOnExit();
@@ -81,15 +70,39 @@ class AmazonClientImplTest {
      * Method under test: {@link AmazonClientImpl#uploadFile(MultipartFile)}
      */
     @Test
-    void testUploadFile2() throws IOException {
+    void UploadFile_cuando_no_tira_una_excepcion_devuelve_el_nombre_de_archivo_y_el_archivo_existe() {
 
-        amazonClientImpl.setAmazonS3( amazonS3 );
+        String message = "Error1";
+        MockMultipartFile mockMultipartFile =  new MockMultipartFile( "aaa/aaaa", "ccc.txt", null, "aaa".getBytes() );
+        when( amazonS3.putObject( any() ) ).thenThrow( new SdkClientException( message ) );
+        String actualFile = amazonClientImpl.uploadFile( mockMultipartFile );
+        assertThat( actualFile ).isNotNull();
+        File file = Path.of( "ccc.txt" ).toFile();
+        assertThat( file ).exists();
+        if(file.exists())
+            if(!file.delete())
+                file.deleteOnExit();
+
+    }
+
+    /**
+     * Method under test: {@link AmazonClientImpl#uploadFile(MultipartFile)}
+     */
+    @Test
+    void UploadFile_cuando_no_tira_una_excepcion_devuelve_el_nombre_de_archivo_y_el_archivo_no_existe() throws IOException {
+
         CustomMultipartFile customMultipartFile = mock( CustomMultipartFile.class );
         when( customMultipartFile.getOriginalFilename() ).thenReturn( "foo.txt" );
         when( customMultipartFile.getBytes() ).thenReturn( "".getBytes() );
         String actual = amazonClientImpl.uploadFile( customMultipartFile );
         assertThat( actual ).isNotNull().isNotBlank().endsWith( "-foo.txt" );
         verify( customMultipartFile, atLeast( 2 ) ).getOriginalFilename();
+        File file = Path.of( "foo.txt" ).toFile();
+        assertThat( file ).doesNotExist();
+        if(file.exists())
+            if(!file.delete())
+                file.deleteOnExit();
+
     }
 
 
