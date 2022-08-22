@@ -51,6 +51,11 @@ class AmazonClientImplTest {
 
         String actualFile = amazonClientImpl.uploadFile( actualMultipartFile );
         assertThat( actualFile ).isNotNull().isNotBlank().endsWith( "aaa.txt" );
+        File file1 = Path.of( "aaa.txt" ).toFile();
+        assertThat( file1 ).exists();
+        if(file1.exists())
+            if(!file1.delete())
+                file1.deleteOnExit();
 
 
         MockMultipartFile actualMultipartFile1 =  new MockMultipartFile( "aaa/aaaa", "bbb.txt", null, "aaa".getBytes() );
