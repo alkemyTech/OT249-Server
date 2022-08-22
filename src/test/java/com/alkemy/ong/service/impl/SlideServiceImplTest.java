@@ -154,7 +154,7 @@ class SlideServiceImplTest {
         when( slideRepository.findById( anyString() ) ).thenReturn( Optional.empty() );
         assertThatThrownBy(  () -> slideServiceImpl.delete( "42" ) ).isInstanceOf( RecordException.RecordNotFoundException.class ).hasMessage( "Slide not found" );
         verify( slideRepository ).findById( anyString() );
-        verify( slideRepository ).delete( any() );
+        verify( slideRepository, atMost( 0 ) ).delete( any() );
     }
 
     /**
