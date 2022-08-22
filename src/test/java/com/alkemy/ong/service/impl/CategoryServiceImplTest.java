@@ -112,7 +112,7 @@ class CategoryServiceImplTest {
         PageDto<Map<String, String>> allCategories = categoryServiceImpl.getAllCategories( 1, "asc" );
 
         assertThat( allCategories ).isNotNull();
-        assertThat( allCategories.getTotalElements() ).isEqualTo( 2 );
+        assertThat( allCategories.getTotalElements() ).isEqualTo( 12 );
     }
 
     /**
