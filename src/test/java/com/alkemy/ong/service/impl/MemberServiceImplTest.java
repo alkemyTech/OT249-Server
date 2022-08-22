@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -27,8 +28,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {MemberServiceImpl.class})
@@ -56,7 +55,7 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#getMemberById(String)}
      */
     @Test
-    void test_GetMemberById() {
+    void GetMemberById_al_encontrar_o_no_encontrar_siempre_deberia_devolver_nulo() {
 
         assertThat( memberServiceImpl.getMemberById( "42" ) ).isNull();
     }
@@ -65,7 +64,7 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#getAllMembers(int, String)}
      */
     @Test
-    void test_GetAllMembers2() {
+    void GetAllMembers_al_paginar_deberia_devolver_los_elementos_disponibles() {
 
         ArrayList<Member> members = new ArrayList<>();
         members.add( new Member() );
@@ -74,15 +73,17 @@ class MemberServiceImplTest {
         PageDto<Member> memberPageDto = new PageDto<>( members, PageUtils.getPageable( 0, "asc" ), 0 );
 
         when( memberRepository.findAll( any( Pageable.class ) ) ).thenReturn( memberPageDto );
-        PageDto<MemberDto> allMembers = memberServiceImpl.getAllMembers( 1, "Order" );
+        PageDto<MemberDto> allMembers = memberServiceImpl.getAllMembers( 0, "Order" );
         assertThat( allMembers ).isNotNull();
+        assertThat( allMembers.getTotalElements() ).isEqualTo( 3 );
+
     }
 
     /**
      * Method under test: {@link MemberServiceImpl#deleteMemberById(String)}
      */
     @Test
-    void test_DeleteMemberById() {
+    void DeleteMemberById_al_eliminar_y_encontrarlo_deberia_eliminar_pero_no_devolver_nada() {
 
         Member member = getMember();
         Optional<Member> ofResult = Optional.of( member );
@@ -97,22 +98,7 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#deleteMemberById(String)}
      */
     @Test
-    void test_DeleteMemberById2() {
-
-        Member member = getMember();
-        Optional<Member> ofResult = Optional.of( member );
-        doThrow( new EntityNotFoundException( "An error occurred" ) ).when( memberRepository ).delete( any() );
-        when( memberRepository.findById( anyString() ) ).thenReturn( ofResult );
-        assertThrows( EntityNotFoundException.class, () -> memberServiceImpl.deleteMemberById( "42" ) );
-        verify( memberRepository ).findById( anyString() );
-        verify( memberRepository ).delete( any() );
-    }
-
-    /**
-     * Method under test: {@link MemberServiceImpl#deleteMemberById(String)}
-     */
-    @Test
-    void test_DeleteMemberById3() {
+    void DeleteMemberById_al_eliminar_y_no_encontrarlo_deberia_tirar_una_excepcion() {
         // TODO: Complete this test.
 
         doNothing().when( memberRepository ).delete( any() );
@@ -127,23 +113,31 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#updateMember(MemberDto, String)}
      */
     @Test
-    void test_UpdateMember() throws EntityNotFoundException {
+    void UpdateMember_al_actualizar_y_encontrarlo_deberia_devolver_un_mensaje() throws EntityNotFoundException {
 
         Member member = getMember();
 
         Member member1 = getMember();
         when( memberRepository.getById( anyString() ) ).thenReturn( member );
         when( memberRepository.save( any() ) ).thenReturn( member1 );
-        assertEquals( "Miembro Actualizado Correctamente", memberServiceImpl.updateMember( new MemberDto(), "42" ) );
+        assertThat( memberServiceImpl.updateMember( new MemberDto(), "42" ) ).isEqualTo( "Miembro Actualizado Correctamente" );
         verify( memberRepository ).getById( anyString() );
-        verify( memberRepository ).save( any() );
+        ArgumentCaptor<Member> argumentCapture = ArgumentCaptor.forClass( Member.class );
+        verify( memberRepository ).save( argumentCapture.capture() );
+        Member captureValue = argumentCapture.getValue();
+        assertThat( captureValue.getLinkedinUrl() ).isNotNull();
+        assertThat( captureValue.getName() ).isNotNull();
+        assertThat( captureValue.getInstagramUrl() ).isNotNull();
+        assertThat( captureValue.getDescription() ).isNotNull();
+        assertThat( captureValue.getIsDelete() ).isNotNull();
+        assertThat( captureValue.getName() ).isNotNull();
     }
 
     /**
      * Method under test: {@link MemberServiceImpl#updateMember(MemberDto, String)}
      */
     @Test
-    void test_UpdateMember3() throws EntityNotFoundException {
+    void UpdateMember_al_actualizar_deberia_solo_actualizar_elementos_no_nulos_y_devolver_un_mensaje() throws EntityNotFoundException {
 
         Member member = getMember();
 
@@ -151,30 +145,26 @@ class MemberServiceImplTest {
         when( memberRepository.getById( anyString() ) ).thenReturn( member );
         when( memberRepository.save( any() ) ).thenReturn( member1 );
         MemberDto memberDto = new MemberDto( "42", "Miembro Actualizado Correctamente", "https://example.org/example",
-                "https://example.org/example", "https://example.org/example", "Miembro Actualizado Correctamente",
+                null, "https://example.org/example", "Miembro Actualizado Correctamente",
                 "The characteristics of someone or something", member1.getTimestamp(), true );
         assertThat( memberServiceImpl.updateMember( memberDto, "42" ) ).isEqualTo( "Miembro Actualizado Correctamente" );
         verify( memberRepository ).getById( anyString() );
-        verify( memberRepository ).save( any() );
-    }
-
-    /**
-     * Method under test: {@link MemberServiceImpl#updateMember(MemberDto, String)}
-     */
-    @Test
-    void test_UpdateMember4() throws EntityNotFoundException {
-
-        when( memberRepository.getById( anyString() ) ).thenThrow( new EntityNotFoundException( "An error occurred" ) );
-        when( memberRepository.save( any() ) ).thenThrow( new EntityNotFoundException( "An error occurred" ) );
-        assertThrows( EntityNotFoundException.class, () -> memberServiceImpl.updateMember( new MemberDto(), "42" ) );
-        verify( memberRepository ).getById( anyString() );
+        ArgumentCaptor<Member> argumentCapture = ArgumentCaptor.forClass( Member.class );
+        verify( memberRepository ).save( argumentCapture.capture() );
+        Member captureValue = argumentCapture.getValue();
+        assertThat( captureValue.getLinkedinUrl() ).isNotNull();
+        assertThat( captureValue.getName() ).isNotNull();
+        assertThat( captureValue.getInstagramUrl() ).isNotNull();
+        assertThat( captureValue.getDescription() ).isNotNull();
+        assertThat( captureValue.getIsDelete() ).isNotNull();
+        assertThat( captureValue.getName() ).isNotNull();
     }
 
     /**
      * Method under test: {@link MemberServiceImpl#createMember(Member)}
      */
     @Test
-    void test_CreateMember() {
+    void CreateMember_al_guardar_no_devuelve_nada_y_ser_lo_mismo_que_se_pasa() {
 
         Member member = getMember();
         when( memberRepository.save( any() ) ).thenReturn( member );
@@ -182,7 +172,7 @@ class MemberServiceImplTest {
         Member member1 = getMember();
         memberServiceImpl.createMember( member1 );
         verify( memberRepository ).save( any() );
-        assertEquals( "The characteristics of someone or something", member1.getDescription() );
+        assertThat(  member1.getDescription() ).isEqualTo( "The characteristics of someone or something" );
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
         assertThat(  simpleDateFormat.format( member1.getTimestamp() ) ).isEqualTo( "2017-02-03" );
         assertThat(  member1.getName() ).isEqualTo("Name");
@@ -192,6 +182,16 @@ class MemberServiceImplTest {
         assertThat( member1.getImage() ).isEqualTo( "Image" );
         assertThat(  member1.getId() ).isEqualTo( "42" );
         assertThat( member1.getFacebookUrl() ).isEqualTo( "https://example.org/example" );
+        ArgumentCaptor<Member> argumentCapture = ArgumentCaptor.forClass( Member.class );
+        verify( memberRepository ).save( argumentCapture.capture() );
+        Member captureValue = argumentCapture.getValue();
+        assertThat( captureValue.getLinkedinUrl() ).isEqualTo( member1.getLinkedinUrl() );
+        assertThat( captureValue.getName() ).isEqualTo( member1.getName() );
+        assertThat( captureValue.getInstagramUrl() ).isEqualTo( member1.getInstagramUrl() );
+        assertThat( captureValue.getDescription() ).isEqualTo( member1.getDescription() );
+        assertThat( captureValue.getIsDelete() ).isEqualTo( member1.getIsDelete() );
+        assertThat( captureValue.getName() ).isEqualTo( member1.getName() );
+
     }
 
     private static Member getMember() {
@@ -210,23 +210,10 @@ class MemberServiceImplTest {
     }
 
     /**
-     * Method under test: {@link MemberServiceImpl#createMember(Member)}
-     */
-    @Test
-    void test_CreateMember2() {
-
-        when( memberRepository.save( any() ) ).thenThrow( new EntityNotFoundException( "An error occurred" ) );
-
-        Member member = getMember();
-        assertThrows( EntityNotFoundException.class, () -> memberServiceImpl.createMember( member ) );
-        verify( memberRepository ).save( any() );
-    }
-
-    /**
      * Method under test: {@link MemberServiceImpl#fillEntity(Member, MemberDto)}
      */
     @Test
-    void test_FillEntity() {
+    void FillEntity_al_convertir_la_entidad_deberia_devolver_los_mismos_datos() {
 
         Member member = getMember();
         Member fillEntity = memberServiceImpl.fillEntity( member, new MemberDto() );
@@ -237,7 +224,7 @@ class MemberServiceImplTest {
      * Method under test: {@link MemberServiceImpl#fillEntity(Member, MemberDto)}
      */
     @Test
-    void test_FillEntity2() {
+    void FillEntity_al_convertir_la_entidad_deberia_devolver_los_mismos_datos_en_otro_objecto() {
 
         Member member = getMember();
         MemberDto memberDto = modelMapper.map( member, MemberDto.class );
