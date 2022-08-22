@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import com.alkemy.ong.repository.UserRepository;
 import com.alkemy.ong.service.CommentService;
 
 @Service
+@AllArgsConstructor
 public class CommentServiceImpl implements CommentService{
 	
 	@Autowired

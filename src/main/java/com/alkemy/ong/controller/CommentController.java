@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import com.alkemy.ong.model.Comment;
 import com.alkemy.ong.service.CommentService;
 
 @RestController
+@AllArgsConstructor
 public class CommentController {
 	
 	@Autowired

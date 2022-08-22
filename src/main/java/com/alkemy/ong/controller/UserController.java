@@ -1,13 +1,11 @@
 package com.alkemy.ong.controller;
 
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.sql.Timestamp;
-import java.util.Map;
-
-import javax.validation.Valid;
-
-import com.alkemy.ong.dto.TestimonialDto;
+import com.alkemy.ong.dto.LoginRequestDTO;
+import com.alkemy.ong.dto.UserDto;
+import com.alkemy.ong.model.Role;
+import com.alkemy.ong.model.User;
+import com.alkemy.ong.service.IRoleService;
+import com.alkemy.ong.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -15,31 +13,24 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import com.alkemy.ong.utils.JwtUtil;
-import com.alkemy.ong.dto.LoginRequestDTO;
-import com.alkemy.ong.dto.UserDto;
-import com.alkemy.ong.model.Role;
-import com.alkemy.ong.model.User;
-import com.alkemy.ong.service.IRoleService;
-import com.alkemy.ong.service.UserService;
-
-import org.springframework.util.ReflectionUtils;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.sql.Timestamp;
+import java.util.Map;
 
 @RestController
+@AllArgsConstructor
 public class UserController {
 
 	@Autowired
@@ -51,12 +42,6 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncode;
 
-	@Autowired
-	AuthenticationManager authenticationManager;
-
-	@Autowired
-	JwtUtil jwtUtil;
-	
 	@Autowired
 	ModelMapper modelMapper;
 
