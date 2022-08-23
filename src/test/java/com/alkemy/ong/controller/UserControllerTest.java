@@ -4,6 +4,7 @@ import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.RoleDto;
 import com.alkemy.ong.dto.UserDto;
 import com.alkemy.ong.dto.UserResponseDto;
+import com.alkemy.ong.exceptions.CustomExceptionController;
 import com.alkemy.ong.model.Role;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.service.IRoleService;
@@ -158,9 +159,38 @@ class UserControllerTest {
         MockMvcBuilders.standaloneSetup( userController )
                 .build()
                 .perform( requestBuilder )
-                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.status().isCreated() )
                 .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
                 .andExpect( MockMvcResultMatchers.content().json( "{\"jwt\":\"Jwt\"}" ) );
+    }
+
+    @Test
+    void testRegistrarUsuario_cuando_se_pasa_un_campo_vacio() throws Exception {
+
+        Role role = getRole();
+        when( iRoleService.getRoleById( anyString() ) ).thenReturn( role );
+
+        Role role1 = getRole();
+
+        User user = getUser( role1 );
+        when( userService.login( any() ) ).thenReturn( new UserResponseDto( "Jwt" ) );
+        when( userService.guardarUsuario( any() ) ).thenReturn( user );
+        when( passwordEncoder.encode( any() ) ).thenReturn( "secret" );
+
+        UserDto userDto = getUserDto();
+        userDto.setFirstName("");
+        String content = (new ObjectMapper()).writeValueAsString( userDto );
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post( "/auth/register" )
+                .contentType( MediaType.APPLICATION_JSON )
+                .content( content );
+
+
+        MockMvcBuilders.standaloneSetup( userController ).setControllerAdvice(new CustomExceptionController())
+                .build()
+                .perform( requestBuilder )
+                .andExpect( MockMvcResultMatchers.status().isBadRequest() )
+                .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
+                .andExpect( MockMvcResultMatchers.content().json( "{\"errorMessage\":\"Hay errores en lo enviado\",\"errorCode\":\"CLIENT_ERROR\",\"errorFields\":[{\"field\":\"firstName\",\"message\":\"must not be blank\",\"code\":\"NotBlank\"}]}\n" ) );
     }
 
     private static UserDto getUserDto() {
@@ -226,7 +256,7 @@ class UserControllerTest {
         MockMvcBuilders.standaloneSetup( userController )
                 .build()
                 .perform( requestBuilder )
-                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.status().isCreated() )
                 .andExpect( MockMvcResultMatchers.content().contentType( "application/json" ) )
                 .andExpect( MockMvcResultMatchers.content().string( "{\"jwt\":\"Jwt\"}" ) );
     }

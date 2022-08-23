@@ -26,7 +26,7 @@ public class TestimonialController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Endpoint to create Testimony")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Testimonial created",
+            @ApiResponse(responseCode = "201", description = "Testimonial created",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = TestimonialDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Invalid id supplied",
@@ -64,7 +64,7 @@ public class TestimonialController {
 
     @Operation(summary = "Endpoint to delete Testimony")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Testimonial deleted",
+            @ApiResponse(responseCode = "204", description = "Testimonial deleted",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = TestimonialDto.class)) }),
             @ApiResponse(responseCode = "400", description = "Invalid id supplied",
