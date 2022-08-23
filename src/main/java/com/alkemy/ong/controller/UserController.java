@@ -2,6 +2,7 @@ package com.alkemy.ong.controller;
 
 import com.alkemy.ong.dto.LoginRequestDTO;
 import com.alkemy.ong.dto.UserDto;
+import com.alkemy.ong.exceptions.BindingResultException;
 import com.alkemy.ong.model.Role;
 import com.alkemy.ong.model.User;
 import com.alkemy.ong.service.IRoleService;
@@ -21,11 +22,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.BindException;
 import java.sql.Timestamp;
 import java.util.Map;
 
@@ -47,7 +50,7 @@ public class UserController {
 
 	@Operation(summary = "Endpoint to Register User")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "User created",
+			@ApiResponse(responseCode = "201", description = "User created",
 					content = { @Content(mediaType = "application/json",
 							schema = @Schema(implementation = UserDto.class)) }),
 			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
@@ -57,14 +60,17 @@ public class UserController {
 			@ApiResponse(responseCode = "403", description = "Forbidden - Acceso no autorizado",
 					content = @Content) })
 	@PostMapping("/auth/register")
-	public ResponseEntity<?> registrarUsuario(@Valid @RequestBody UserDto userDto) throws IOException {
+	public ResponseEntity<?> registrarUsuario(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) throws IOException {
+		if (bindingResult.hasFieldErrors()){
+			throw new BindingResultException(bindingResult);
+		}
 		Role rol = roleService.getRoleById(userDto.getRole().getId());
 		boolean deleted = false;
 		User user =  new User(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), passwordEncode.encode(userDto.getPassword()), userDto.getPhoto(), rol, new Timestamp(System.currentTimeMillis()), deleted);
 		userService.guardarUsuario(user);
 		
 		LoginRequestDTO loginReqDto = new LoginRequestDTO(userDto.getEmail(), userDto.getPassword());
-		return new ResponseEntity<>(userService.login(loginReqDto), HttpStatus.OK);
+		return new ResponseEntity<>(userService.login(loginReqDto), HttpStatus.CREATED);
 	}
 
 
@@ -166,10 +172,10 @@ public class UserController {
 
 	@Operation(summary = "User Login")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "User created",
+			@ApiResponse(responseCode = "200", description = "Ok",
 					content = { @Content(mediaType = "application/json",
 							schema = @Schema(implementation = UserDto.class)) }),
-			@ApiResponse(responseCode = "400", description = "Invalid id supplied",
+			@ApiResponse(responseCode = "400", description = "Bad Request",
 					content = @Content),
 			@ApiResponse(responseCode = "404", description = "User not found",
 					content = @Content) })
